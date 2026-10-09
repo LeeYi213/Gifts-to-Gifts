@@ -4,91 +4,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#c0392b">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>人情簿 · 份子钱与人情往来记录</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#f6f3ee;
-  --bg-grad:radial-gradient(1200px 600px at 8% -10%,#fff7ee,transparent),radial-gradient(900px 500px at 100% 0%,#fdf0ee,transparent);
-  --panel:#fff;--panel-2:#fbf9f6;--text:#2a2521;--text-2:#6b6259;--muted:#9a9086;
+  --bg:#f6f3ee;--panel:#fff;--panel-2:#fbf9f6;--text:#2a2521;--text-2:#6b6259;--muted:#9a9086;
   --border:#ece6dd;--primary:#c0392b;--primary-2:#e2604f;--primary-soft:#fdeeeb;
   --gold:#c8952f;--gold-soft:#fdf6e6;--green:#2f8f5b;--green-soft:#e9f6ef;
   --blue:#3b6fb6;--blue-soft:#eaf1fb;
   --shadow-sm:0 1px 2px rgba(70,50,30,.05),0 2px 8px rgba(70,50,30,.05);
   --shadow-md:0 4px 16px rgba(70,50,30,.08),0 1px 3px rgba(70,50,30,.04);
-  --radius:16px;
-  --nav-h:64px;
+  --radius:16px;--nav-h:64px;
 }
 html[data-theme="dark"]{
-  --bg:#141210;
-  --bg-grad:radial-gradient(1200px 600px at 8% -10%,#2a1d16,transparent),radial-gradient(900px 500px at 100% 0%,#2a1618,transparent);
-  --panel:#1e1b17;--panel-2:#252119;--text:#f2ece2;--text-2:#c3b8a9;--muted:#8d8377;
+  --bg:#141210;--panel:#1e1b17;--panel-2:#252119;--text:#f2ece2;--text-2:#c3b8a9;--muted:#8d8377;
   --border:#332d25;--primary:#e2685a;--primary-2:#f0836f;--primary-soft:#3a221e;
   --gold:#e0b355;--gold-soft:#332a18;--green:#5cb98a;--green-soft:#1c2c23;
   --blue:#7aa6e0;--blue-soft:#1b2430;
   --shadow-sm:0 1px 2px rgba(0,0,0,.3);--shadow-md:0 6px 20px rgba(0,0,0,.35);
 }
 html,body{height:100%}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-  background-color:var(--bg);background-image:var(--bg-grad);background-attachment:fixed;
-  color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.5;
-  transition:background-color .25s ease,color .25s ease;
-}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background-color:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.5;transition:background-color .25s,color .25s}
 .app{display:flex;min-height:100vh}
-
-/* ========== 桌面侧边栏 ========== */
-.sidebar{
-  width:230px;flex:0 0 230px;padding:22px 14px 18px;
-  border-right:1px solid var(--border);background:var(--panel);
-  position:sticky;top:0;height:100vh;display:flex;flex-direction:column;
-}
+.sidebar{width:230px;flex:0 0 230px;padding:22px 14px 18px;border-right:1px solid var(--border);background:var(--panel);position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
 .brand{display:flex;align-items:center;gap:11px;padding:4px 8px 22px}
-.brand-logo{
-  width:40px;height:40px;border-radius:13px;flex:0 0 40px;
-  background:linear-gradient(135deg,#c0392b,#d9a441);
-  display:grid;place-items:center;color:#fff;font-weight:700;font-size:17px;
-  box-shadow:0 4px 14px rgba(192,57,43,.32);letter-spacing:1px;
-}
+.brand-logo{width:40px;height:40px;border-radius:13px;flex:0 0 40px;background:linear-gradient(135deg,#c0392b,#d9a441);display:grid;place-items:center;color:#fff;font-weight:700;font-size:17px;letter-spacing:1px}
 .brand-name{font-size:15.5px;font-weight:700}
 .brand-sub{font-size:11.5px;color:var(--muted);margin-top:-1px}
 .nav{display:flex;flex-direction:column;gap:4px;flex:1}
-.nav-item{
-  display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:12px;
-  color:var(--text-2);cursor:pointer;font-size:14px;font-weight:500;transition:.18s;
-  border:none;background:none;width:100%;text-align:left;font-family:inherit;
-}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:12px;color:var(--text-2);cursor:pointer;font-size:14px;font-weight:500;transition:.18s;border:none;background:none;width:100%;text-align:left;font-family:inherit}
 .nav-item:hover{background:var(--panel-2);color:var(--text)}
 .nav-item.active{background:var(--primary-soft);color:var(--primary);font-weight:650}
 .nav-item svg{width:18px;height:18px;flex:0 0 18px}
 .sidebar-foot{padding-top:12px;border-top:1px solid var(--border);margin-top:8px;display:flex;flex-direction:column;gap:8px}
-.sync-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
-.sync-dot.ok{background:var(--green)}
-.sync-dot.err{background:var(--primary)}
-.sync-dot.idle{background:var(--muted)}
-.sync-dot.busy{background:var(--gold);animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .sync-label{font-size:11.5px;color:var(--muted);padding:0 8px 4px;display:flex;align-items:center}
-
-/* ========== 主区域 ========== */
+.sync-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+.sync-dot.ok{background:var(--green)}.sync-dot.busy{background:var(--gold);animation:pulse 1s infinite}
+.sync-dot.idle{background:var(--muted)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 main{flex:1;min-width:0;padding:26px 30px 70px}
-.view[hidden]{display:none}
-.view{animation:fadeUp .26s ease}
+.view[hidden]{display:none}.view{animation:fadeUp .26s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 .topbar{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
 .page-title{font-size:22px;font-weight:750;letter-spacing:-.4px}
 .page-sub{font-size:13px;color:var(--muted);margin-top:2px}
 .spacer{flex:1}
-
-/* ========== 按钮 ========== */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  padding:9px 16px;border-radius:11px;border:1px solid var(--border);
-  background:var(--panel);color:var(--text);font-size:13.5px;font-weight:550;
-  cursor:pointer;transition:.18s;font-family:inherit;white-space:nowrap;
-}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;border-radius:11px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:13.5px;font-weight:550;cursor:pointer;transition:.18s;font-family:inherit;white-space:nowrap}
 .btn:hover{border-color:#d8cec1;transform:translateY(-1px);box-shadow:var(--shadow-sm)}
 .btn:active{transform:translateY(0)}
 .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(192,57,43,.26)}
@@ -96,73 +58,45 @@ main{flex:1;min-width:0;padding:26px 30px 70px}
 .btn-ghost{background:transparent;border-color:transparent;color:var(--text-2)}
 .btn-ghost:hover{background:var(--panel-2);box-shadow:none;border-color:transparent}
 .btn-sm{padding:6px 11px;font-size:12.5px;border-radius:9px}
-.btn-danger{color:var(--primary)}
-.btn-danger:hover{background:var(--primary-soft);border-color:var(--primary)}
+.btn-danger{color:var(--primary)}.btn-danger:hover{background:var(--primary-soft);border-color:var(--primary)}
 .btn-block{width:100%;justify-content:center}
-
-/* ========== 统计卡 ========== */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:16px;margin-bottom:18px}
-.stat{
-  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
-  padding:18px 20px;box-shadow:var(--shadow-sm);transition:.2s;
-}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow-sm);transition:.2s}
 .stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
 .stat-label{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:7px;margin-bottom:9px;font-weight:550}
 .stat-value{font-size:26px;font-weight:750;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
 .stat-foot{font-size:12px;color:var(--muted);margin-top:7px}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:0 0 8px}
-
-/* ========== 卡片 ========== */
 .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden}
 .card-head{padding:15px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
 .card-title{font-size:14.5px;font-weight:650}
-.card-body{padding:16px 20px}
-.card-body.p0{padding:0}
+.card-body{padding:16px 20px}.card-body.p0{padding:0}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
 .grid-2-3{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
 .mb16{margin-bottom:16px}
-
-/* ========== 表格 ========== */
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
-th{
-  text-align:left;font-weight:600;color:var(--muted);font-size:11.5px;letter-spacing:.5px;
-  padding:11px 14px;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--panel-2);
-}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:11.5px;letter-spacing:.5px;padding:11px 14px;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--panel-2)}
 td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle;white-space:nowrap}
-tbody tr{transition:background .14s}
-tbody tr:hover{background:var(--panel-2)}
-tbody tr:last-child td{border-bottom:none}
-.td-name{font-weight:650}
-.td-note{color:var(--muted);font-size:12.5px;white-space:normal;max-width:200px}
+tbody tr{transition:background .14s}tbody tr:hover{background:var(--panel-2)}tbody tr:last-child td{border-bottom:none}
+.td-name{font-weight:650}.td-note{color:var(--muted);font-size:12.5px;white-space:normal;max-width:200px}
 .amt{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:14px}
-.amt-in{color:var(--green)}
-.amt-out{color:var(--primary)}
-
-/* ========== 标签 ========== */
+.amt-in{color:var(--green)}.amt-out{color:var(--primary)}
 .tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap;line-height:1.6}
 .tag-in{background:var(--green-soft);color:var(--green)}
 .tag-out{background:var(--primary-soft);color:var(--primary)}
 .tag-plain{background:var(--panel-2);color:var(--text-2);border:1px solid var(--border)}
 .tag-gold{background:var(--gold-soft);color:var(--gold)}
 .tag-blue{background:var(--blue-soft);color:var(--blue)}
-
-/* ========== 工具栏 ========== */
 .toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .search{position:relative;flex:1;min-width:190px}
 .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted);pointer-events:none}
 .search input{padding-left:35px}
-input,select,textarea{
-  font-family:inherit;font-size:16px;padding:10px 12px;border-radius:11px;
-  border:1px solid var(--border);background:var(--panel-2);color:var(--text);
-  outline:none;transition:.16s;width:100%;
-}
+input,select,textarea{font-family:inherit;font-size:16px;padding:10px 12px;border-radius:11px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);outline:none;transition:.16s;width:100%}
 @media(min-width:861px){input,select,textarea{font-size:13.5px}}
 input:focus,select:focus,textarea:focus{border-color:var(--primary);background:var(--panel);box-shadow:0 0 0 3px var(--primary-soft)}
 .toolbar select{width:auto;min-width:112px}
 textarea{resize:vertical;min-height:70px}
-
-/* ========== 人物卡片 ========== */
 .people{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
 .person{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;transition:.2s}
 .person:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
@@ -182,10 +116,7 @@ textarea{resize:vertical;min-height:70px}
 .pd-row:last-child{border-bottom:none}
 .pd-date{color:var(--muted);font-variant-numeric:tabular-nums;flex:0 0 76px}
 .pd-event{flex:1;color:var(--text-2)}
-
-/* ========== 图表 ========== */
-canvas{width:100%;height:230px;display:block}
-canvas.donut{height:200px}
+canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
 .legend{display:flex;flex-direction:column;gap:9px;font-size:13px}
 .legend-item{display:flex;align-items:center;gap:8px}
 .legend-val{margin-left:auto;color:var(--text-2);font-weight:600;font-variant-numeric:tabular-nums;font-size:12.5px}
@@ -197,16 +128,11 @@ canvas.donut{height:200px}
 .seg{display:flex;gap:6px;background:var(--panel-2);padding:4px;border-radius:12px;border:1px solid var(--border)}
 .seg-btn{flex:1;padding:9px;border-radius:9px;border:none;background:transparent;color:var(--text-2);font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:.16s}
 .seg-btn.active{background:var(--panel);color:var(--text);box-shadow:var(--shadow-sm)}
-.seg-btn[data-dir="in"].active{color:var(--green)}
-.seg-btn[data-dir="out"].active{color:var(--primary)}
-
-/* ========== 空状态 ========== */
+.seg-btn[data-dir="in"].active{color:var(--green)}.seg-btn[data-dir="out"].active{color:var(--primary)}
 .empty{text-align:center;padding:46px 20px;color:var(--muted)}
 .empty-icon{font-size:38px;margin-bottom:12px;opacity:.55}
 .empty-title{font-size:14.5px;font-weight:600;color:var(--text-2);margin-bottom:5px}
 .empty-sub{font-size:12.5px}
-
-/* ========== 弹窗 ========== */
 .overlay{position:fixed;inset:0;background:rgba(40,30,20,.45);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}
 .overlay.show{display:flex;animation:fade .18s ease}
 @keyframes fade{from{opacity:0}to{opacity:1}}
@@ -219,179 +145,98 @@ canvas.donut{height:200px}
 .modal-body{padding:20px 22px}
 .modal-foot{padding:16px 22px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border)}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
-.field{display:flex;flex-direction:column;gap:6px}
-.field.full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
 .field label{font-size:12.5px;font-weight:600;color:var(--text-2)}
 .req{color:var(--primary)}
 .hint{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.6}
-
-/* ========== Toast ========== */
 .toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);background:var(--text);color:var(--bg);padding:11px 22px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:.26s;z-index:200;box-shadow:0 10px 28px rgba(0,0,0,.22);max-width:80vw;text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-
-/* ========== 数据页 ========== */
 .data-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
 .dl{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--border);font-size:13.5px}
-.dl:last-child{border-bottom:none}
-.dl dt{color:var(--muted)}
-.dl dd{font-weight:650;font-variant-numeric:tabular-nums}
+.dl:last-child{border-bottom:none}.dl dt{color:var(--muted)}.dl dd{font-weight:650;font-variant-numeric:tabular-nums}
 .kv-big{font-size:24px;font-weight:750;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
-
-/* ========== 移动端专属组件（默认隐藏） ========== */
 .mobile-nav,.mobile-topbar{display:none}
-
-/* ========== 移动端样式 ========== */
 @media(max-width:860px){
-  .sidebar{display:none}
-  .app{flex-direction:column}
-
-  /* 顶部条 */
-  .mobile-topbar{
-    display:flex;align-items:center;gap:10px;
-    padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top));
-    background:var(--panel);border-bottom:1px solid var(--border);
-    position:sticky;top:0;z-index:40;
-  }
-  .mobile-topbar .brand-logo{width:32px;height:32px;flex:0 0 32px;font-size:14px;border-radius:10px;box-shadow:none}
-  .mobile-topbar .brand-name{font-size:15px}
-  .mobile-topbar .spacer{flex:1}
-
-  main{padding:0}
-  .view{padding:16px 15px calc(var(--nav-h) + 24px + env(safe-area-inset-bottom))}
-  .topbar{margin-bottom:14px;gap:8px}
-  .page-title{font-size:19px}
-  .page-sub{font-size:12px}
+  .sidebar{display:none}.app{flex-direction:column}
+  .mobile-topbar{display:flex;align-items:center;gap:10px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top));background:var(--panel);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40}
+  .mobile-topbar .brand-logo{width:32px;height:32px;flex:0 0 32px;font-size:14px;border-radius:10px}
+  .mobile-topbar .brand-name{font-size:15px}.mobile-topbar .spacer{flex:1}
+  main{padding:0}.view{padding:16px 15px calc(var(--nav-h) + 24px + env(safe-area-inset-bottom))}
+  .topbar{margin-bottom:14px;gap:8px}.page-title{font-size:19px}.page-sub{font-size:12px}
   .topbar .btn-primary{padding:8px 14px;font-size:13px}
-
-  /* 统计卡：2 列 */
   .stats{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-  .stat{padding:14px 14px}
-  .stat-label{font-size:11.5px;margin-bottom:6px}
-  .stat-value{font-size:19px}
-  .stat-foot{font-size:11px;margin-top:5px}
-
-  /* 卡片全宽 */
+  .stat{padding:14px 14px}.stat-label{font-size:11.5px;margin-bottom:6px}
+  .stat-value{font-size:19px}.stat-foot{font-size:11px;margin-top:5px}
   .grid-2,.grid-2-3{grid-template-columns:1fr;gap:14px}
-  .card-head{padding:13px 16px}
-  .card-title{font-size:14px}
-  .card-body{padding:14px 16px}
-  .card-body.p0{padding:0}
-
-  /* 表格变卡片 */
-  .table-wrap{overflow:visible}
-  table{font-size:14px}
-  table thead{display:none}
-  table,tbody,tr,td{display:block;width:100%}
-  tbody tr{
-    border-bottom:1px solid var(--border);
-    padding:14px 16px 12px;
-    position:relative;
-    white-space:normal;
-  }
-  tbody tr:last-child{border-bottom:none}
-  tbody tr:hover{background:transparent}
+  .card-head{padding:13px 16px}.card-title{font-size:14px}
+  .card-body{padding:14px 16px}.card-body.p0{padding:0}
+  .table-wrap{overflow:visible}table{font-size:14px}
+  table thead{display:none}table,tbody,tr,td{display:block;width:100%}
+  tbody tr{border-bottom:1px solid var(--border);padding:14px 16px 12px;position:relative;white-space:normal}
+  tbody tr:last-child{border-bottom:none}tbody tr:hover{background:transparent}
   td{padding:2px 0;border:none;white-space:normal;text-align:left!important}
   td:empty{display:none}
-  td[data-label]::before{
-    content:attr(data-label);color:var(--muted);font-size:11px;
-    display:inline-block;min-width:44px;margin-right:6px;font-weight:500;
-  }
+  td[data-label]::before{content:attr(data-label);color:var(--muted);font-size:11px;display:inline-block;min-width:44px;margin-right:6px;font-weight:500}
   .td-name{font-size:15.5px;font-weight:700;padding-right:90px;margin-bottom:4px}
   .td-name::before{display:none}
-  td.td-amount{
-    position:absolute;top:14px;right:16px;font-size:16px;
-    padding:0;text-align:right!important;
-  }
+  td.td-amount{position:absolute;top:14px;right:16px;font-size:16px;padding:0;text-align:right!important}
   td.td-amount::before{display:none}
-  .td-actions{
-    display:flex!important;gap:8px;justify-content:flex-end;
-    margin-top:10px;padding-top:8px;border-top:1px dashed var(--border);
-  }
-  .td-actions::before{display:none!important}
-  .td-actions .btn{padding:6px 12px;font-size:12.5px}
+  .td-actions{display:flex!important;gap:8px;justify-content:flex-end;margin-top:10px;padding-top:8px;border-top:1px dashed var(--border)}
+  .td-actions::before{display:none!important}.td-actions .btn{padding:6px 12px;font-size:12.5px}
   .td-note{max-width:none;font-size:12.5px}
-
-  /* 人物卡片 */
   .people{grid-template-columns:1fr;gap:12px}
-  .person-head{padding:14px 16px}
-  .person-nums{gap:6px}
-  .pnum{padding:7px 4px}
-  .pnum-label{font-size:10.5px}
-  .pnum-val{font-size:12.5px}
-
-  /* 弹窗全屏 */
+  .person-head{padding:14px 16px}.person-nums{gap:6px}.pnum{padding:7px 4px}
+  .pnum-label{font-size:10.5px}.pnum-val{font-size:12.5px}
   .overlay{padding:0;align-items:flex-end}
-  .modal{
-    max-width:100%;max-height:94vh;
-    border-radius:22px 22px 0 0;
-    animation:slideUp .3s cubic-bezier(.2,.9,.3,1.05);
-  }
+  .modal{max-width:100%;max-height:94vh;border-radius:22px 22px 0 0;animation:slideUp .3s cubic-bezier(.2,.9,.3,1.05)}
   @keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
   .modal-head{padding:16px 18px;border-radius:22px 22px 0 0}
-  .modal-body{padding:18px}
-  .modal-foot{padding:14px 18px calc(14px + env(safe-area-inset-bottom))}
-  .modal-foot .btn{flex:1;padding:12px}
-  .form-grid{grid-template-columns:1fr;gap:12px;margin-top:14px}
-
-  /* 工具栏 */
-  .toolbar{gap:8px}
-  .toolbar select{flex:1;min-width:0;font-size:14px}
+  .modal-body{padding:18px}.modal-foot{padding:14px 18px calc(14px + env(safe-area-inset-bottom))}
+  .modal-foot .btn{flex:1;padding:12px}.form-grid{grid-template-columns:1fr;gap:12px;margin-top:14px}
+  .toolbar{gap:8px}.toolbar select{flex:1;min-width:0;font-size:14px}
   .search{flex:1 0 100%;min-width:0}
   input,select,textarea{padding:11px 12px;font-size:16px;border-radius:12px}
-
-  /* 图表 */
-  canvas{height:200px}
-  canvas.donut{height:170px}
-  .legend{font-size:12px;gap:8px}
-  .legend-val{font-size:11.5px}
-
-  /* 数据页 */
+  canvas{height:200px}canvas.donut{height:170px}
+  .legend{font-size:12px;gap:8px}.legend-val{font-size:11.5px}
   .data-grid{grid-template-columns:1fr;gap:12px}
-
-  /* 底部导航 */
-  .mobile-nav{
-    display:flex;
-    position:fixed;left:0;right:0;bottom:0;
-    padding:6px 6px calc(6px + env(safe-area-inset-bottom));
-    background:var(--panel);
-    border-top:1px solid var(--border);
-    z-index:50;
-    box-shadow:0 -4px 20px rgba(70,50,30,.08);
-  }
-  .mobile-nav-item{
-    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-    padding:8px 4px;border-radius:12px;border:none;background:transparent;
-    color:var(--text-2);font-size:10.5px;font-weight:600;font-family:inherit;cursor:pointer;
-    transition:.16s;
-  }
+  .mobile-nav{display:flex;position:fixed;left:0;right:0;bottom:0;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:var(--panel);border-top:1px solid var(--border);z-index:50;box-shadow:0 -4px 20px rgba(70,50,30,.08)}
+  .mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;border-radius:12px;border:none;background:transparent;color:var(--text-2);font-size:10.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:.16s}
   .mobile-nav-item svg{width:21px;height:21px}
   .mobile-nav-item.active{color:var(--primary);background:var(--primary-soft)}
   .mobile-nav-item:active{transform:scale(.95)}
 }
-
-/* 移动端主题切换按钮（顶栏里的圆形按钮） */
-.theme-fab{
-  width:36px;height:36px;border-radius:12px;border:none;
-  background:var(--panel-2);color:var(--text);
-  cursor:pointer;display:grid;place-items:center;
-  font-size:17px;line-height:1;transition:.18s;flex:0 0 36px;
-}
-.theme-fab:hover{background:var(--primary-soft);color:var(--primary)}
-.theme-fab:active{transform:scale(.92)}
+.theme-fab{width:36px;height:36px;border-radius:12px;border:none;background:var(--panel-2);color:var(--text);cursor:pointer;display:grid;place-items:center;font-size:17px;line-height:1;transition:.18s;flex:0 0 36px}
+.theme-fab:hover{background:var(--primary-soft);color:var(--primary)}.theme-fab:active{transform:scale(.92)}
+.auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background-color:var(--bg)}
 </style>
 </head>
 <body>
 
-<!-- ============ 应用主体 ============ -->
-<div class="app">
-  <!-- 桌面侧边栏 -->
+<!-- 登录/注册界面（默认显示） -->
+<div id="authScreen" class="auth-screen">
+  <div class="card" style="width:100%;max-width:400px;padding:28px">
+    <div style="text-align:center;margin-bottom:22px">
+      <div class="brand-logo" style="margin:0 auto 12px;width:48px;height:48px;font-size:20px">簿</div>
+      <h2 style="font-size:20px;font-weight:750">人情簿</h2>
+      <p style="font-size:13px;color:var(--muted);margin-top:6px">登录后手机电脑自动同步</p>
+    </div>
+    <div class="field"><label>邮箱</label><input id="authEmail" type="email" placeholder="you@example.com" autocomplete="email"></div>
+    <div class="field" style="margin-top:12px"><label>密码</label><input id="authPassword" type="password" placeholder="至少 6 位密码" autocomplete="current-password"></div>
+    <div id="authError" style="color:var(--primary);font-size:12.5px;margin-top:10px;min-height:18px"></div>
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button class="btn btn-primary" style="flex:1" onclick="handleAuth('signin')">登录</button>
+      <button class="btn" style="flex:1" onclick="handleAuth('signup')">注册</button>
+    </div>
+    <div class="hint" style="margin-top:16px;text-align:center">首次使用请先点「注册」创建账号</div>
+  </div>
+</div>
+
+<!-- 主应用（登录后显示） -->
+<div class="app" id="appContainer" style="display:none">
   <aside class="sidebar">
     <div class="brand">
       <div class="brand-logo">簿</div>
-      <div>
-        <div class="brand-name">人情簿</div>
-        <div class="brand-sub">份子钱往来记录</div>
-      </div>
+      <div><div class="brand-name">人情簿</div><div class="brand-sub">份子钱往来记录</div></div>
     </div>
     <nav class="nav">
       <button class="nav-item active" data-view="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>概览</span></button>
@@ -401,21 +246,18 @@ canvas.donut{height:200px}
       <button class="nav-item" data-view="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg><span>数据</span></button>
     </nav>
     <div class="sidebar-foot">
-      <div class="sync-label" id="syncLabel"><span class="sync-dot idle"></span>未开启云同步</div>
+      <div class="sync-label" id="syncLabel"><span class="sync-dot ok"></span>已登录</div>
       <button class="btn btn-ghost btn-block btn-sm" id="themeToggle">🌙 深色模式</button>
     </div>
   </aside>
 
-  <!-- 主内容 -->
   <main>
-    <!-- 移动端顶部条 -->
     <div class="mobile-topbar">
       <div class="brand-logo">簿</div>
       <div class="brand-name">人情簿</div>
       <div class="spacer"></div>
-      <button class="theme-fab" id="themeToggleMobile" title="切换主题">🌙</button>
+      <button class="theme-fab" id="themeToggleMobile">🌙</button>
     </div>
-
     <section class="view" id="view-dashboard"></section>
     <section class="view" id="view-records" hidden></section>
     <section class="view" id="view-people" hidden></section>
@@ -424,38 +266,17 @@ canvas.donut{height:200px}
   </main>
 </div>
 
-<!-- 移动端底部导航 -->
 <nav class="mobile-nav">
-  <button class="mobile-nav-item active" data-view="dashboard">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
-    <span>概览</span>
-  </button>
-  <button class="mobile-nav-item" data-view="records">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.6" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg>
-    <span>记录</span>
-  </button>
-  <button class="mobile-nav-item" data-view="people">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    <span>账簿</span>
-  </button>
-  <button class="mobile-nav-item" data-view="stats">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
-    <span>统计</span>
-  </button>
-  <button class="mobile-nav-item" data-view="data">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg>
-    <span>数据</span>
-  </button>
+  <button class="mobile-nav-item active" data-view="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>概览</span></button>
+  <button class="mobile-nav-item" data-view="records"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.6" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg><span>记录</span></button>
+  <button class="mobile-nav-item" data-view="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>账簿</span></button>
+  <button class="mobile-nav-item" data-view="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg><span>统计</span></button>
+  <button class="mobile-nav-item" data-view="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg><span>数据</span></button>
 </nav>
 
-<!-- ============ 记录弹窗 ============ -->
 <div class="overlay" id="overlay">
-  <div class="modal" role="dialog" aria-modal="true">
-    <div class="modal-head">
-      <h3 id="modalTitle">添加记录</h3>
-      <div class="spacer"></div>
-      <button class="icon-btn" id="modalClose" type="button" aria-label="关闭">&times;</button>
-    </div>
+  <div class="modal" role="dialog">
+    <div class="modal-head"><h3 id="modalTitle">添加记录</h3><div class="spacer"></div><button class="icon-btn" id="modalClose" type="button">&times;</button></div>
     <form id="recordForm">
       <div class="modal-body">
         <div class="seg" id="dirSeg">
@@ -463,308 +284,209 @@ canvas.donut{height:200px}
           <button type="button" class="seg-btn active" data-dir="out">送礼 · 我送别人</button>
         </div>
         <div class="form-grid">
-          <div class="field"><label for="f-name">姓名 <span class="req">*</span></label><input id="f-name" list="nameList" placeholder="如：张三" required autocomplete="off"><datalist id="nameList"></datalist></div>
-          <div class="field"><label for="f-relation">关系</label><select id="f-relation"></select></div>
-          <div class="field"><label for="f-event">事由</label><select id="f-event"></select></div>
-          <div class="field"><label for="f-amount">金额（元）<span class="req">*</span></label><input id="f-amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required></div>
-          <div class="field"><label for="f-date">日期 <span class="req">*</span></label><input id="f-date" type="date" required></div>
-          <div class="field"><label for="f-method">方式</label><select id="f-method"></select></div>
-          <div class="field full"><label for="f-location">地点</label><input id="f-location" placeholder="如：金满楼酒店"></div>
-          <div class="field full"><label for="f-note">备注</label><textarea id="f-note" placeholder="如：大学室友、随礼 800 元…"></textarea></div>
+          <div class="field"><label>姓名 <span class="req">*</span></label><input id="f-name" list="nameList" placeholder="如：张三" required autocomplete="off"><datalist id="nameList"></datalist></div>
+          <div class="field"><label>关系</label><select id="f-relation"></select></div>
+          <div class="field"><label>事由</label><select id="f-event"></select></div>
+          <div class="field"><label>金额（元）<span class="req">*</span></label><input id="f-amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required></div>
+          <div class="field"><label>日期 <span class="req">*</span></label><input id="f-date" type="date" required></div>
+          <div class="field"><label>方式</label><select id="f-method"></select></div>
+          <div class="field full"><label>地点</label><input id="f-location" placeholder="如：金满楼酒店"></div>
+          <div class="field full"><label>备注</label><textarea id="f-note" placeholder="如：大学室友…"></textarea></div>
         </div>
       </div>
-      <div class="modal-foot">
-        <button type="button" class="btn" id="btnCancel">取消</button>
-        <button type="submit" class="btn btn-primary" id="btnSave">保存</button>
-      </div>
+      <div class="modal-foot"><button type="button" class="btn" id="btnCancel">取消</button><button type="submit" class="btn btn-primary">保存</button></div>
     </form>
   </div>
 </div>
-
-<!-- ============ 云同步设置弹窗 ============ -->
-<div class="overlay" id="syncOverlay">
-  <div class="modal">
-    <div class="modal-head">
-      <h3>☁️ 云同步设置</h3>
-      <div class="spacer"></div>
-      <button class="icon-btn" id="syncClose" type="button">&times;</button>
-    </div>
-    <div class="modal-body">
-      <p class="hint" style="margin-bottom:14px">
-        使用 <b>jsonbin.io</b> 免费服务，5 分钟即可实现手机 / 电脑数据同步：<br>
-        ① 到 <a href="https://jsonbin.io" target="_blank" style="color:var(--primary)">jsonbin.io</a> 注册（免费）<br>
-        ② 新建一个 Bin，内容填 <code>{"records":[]}</code><br>
-        ③ 把 Bin 地址里的 ID 填到下面「Bin ID」<br>
-        ④ 到 API Keys 页面复制 Master Key 填到下面
-      </p>
-      <div class="field"><label>Bin ID</label><input id="s-binId" placeholder="如：65f8a1b2c3d4e5f6a7b8c9d0"></div>
-      <div class="field" style="margin-top:12px"><label>Master Key</label><input id="s-key" placeholder="$2a$10$..." autocomplete="off"></div>
-      <div class="field" style="margin-top:12px"><label>自动同步</label>
-        <select id="s-auto">
-          <option value="off">关闭（仅手动同步）</option>
-          <option value="on">开启（每次修改后自动推送）</option>
-        </select>
-      </div>
-      <div id="syncState" class="hint" style="margin-top:14px"></div>
-    </div>
-    <div class="modal-foot">
-      <button type="button" class="btn" id="btnSyncPull">⬇️ 从云端拉取</button>
-      <button type="button" class="btn" id="btnSyncPush">⬆️ 推送到云端</button>
-      <button type="button" class="btn btn-primary" id="btnSyncSave">保存设置</button>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 /* ============================================================
- *  常量与工具
+ *  1. Supabase 配置（请修改下面两行！）
  * ============================================================ */
-const STORAGE_KEY = 'fenzi_db_v1';
-const THEME_KEY   = 'fenzi_theme';
-const SYNC_KEY    = 'fenzi_sync_cfg';
+const SUPABASE_URL = '你的 Project URL';
+const SUPABASE_ANON_KEY = '你的 anon public key';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+/* ============================================================
+ *  2. 常量与工具
+ * ============================================================ */
+const THEME_KEY = 'fenzi_theme';
 const EVENT_TYPES = ['婚礼','订婚','满月百日','生日寿宴','乔迁新居','升学升职','开业庆典','丧事白事','探病慰问','节日问候','其他'];
-const RELATIONS   = ['亲属','亲戚','朋友','同事','同学','邻居','客户生意','其他'];
-const METHODS     = ['现金','微信','支付宝','银行转账','实物礼品','其他'];
-const PALETTE     = ['#c0392b','#d97b2b','#c8a02e','#5b9e6b','#3b7fb6','#7a6bb5','#c2557f','#4fa3a3','#8d6e63','#9aa05b','#6c7a89'];
-
-let db = { records: [], updatedAt: 0 };
-let currentView = 'dashboard';
-let editingId   = null;
-let formDirection = 'out';
-let chartMode   = 'year';
+const RELATIONS = ['亲属','亲戚','朋友','同事','同学','邻居','客户生意','其他'];
+const METHODS = ['现金','微信','支付宝','银行转账','实物礼品','其他'];
+const PALETTE = ['#c0392b','#d97b2b','#c8a02e','#5b9e6b','#3b7fb6','#7a6bb5','#c2557f','#4fa3a3','#8d6e63','#9aa05b','#6c7a89'];
+let db = { records: [] };
+let currentView = 'dashboard', editingId = null, formDirection = 'out', chartMode = 'year';
+let currentUserEmail = '';
 const expandedPeople = new Set();
 
-const $  = (s, p = document) => p.querySelector(s);
-const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money = n => { n = Number(n) || 0; return (n < 0 ? '-' : '') + '¥' + Math.abs(n).toLocaleString('zh-CN', { maximumFractionDigits: 2 }); };
-const shortNum = n => { n = Number(n) || 0; const a = Math.abs(n); if (a >= 1e8) return (n/1e8).toFixed(2).replace(/\.?0+$/,'') + '亿'; if (a >= 1e4) return (n/1e4).toFixed(1).replace(/\.0$/,'') + '万'; return n.toLocaleString('zh-CN', { maximumFractionDigits: 0 }); };
-const today = () => { const d = new Date(), p = n => String(n).padStart(2,'0'); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; };
+const $ = (s,p=document) => p.querySelector(s);
+const $$ = (s,p=document) => Array.from(p.querySelectorAll(s));
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => { n = Number(n)||0; return (n<0?'-':'')+'¥'+Math.abs(n).toLocaleString('zh-CN',{maximumFractionDigits:2}); };
+const shortNum = n => { n=Number(n)||0; const a=Math.abs(n); if(a>=1e8) return (n/1e8).toFixed(2).replace(/\.?0+$/,'')+'亿'; if(a>=1e4) return (n/1e4).toFixed(1).replace(/\.0$/,'')+'万'; return n.toLocaleString('zh-CN',{maximumFractionDigits:0}); };
+const today = () => { const d=new Date(),p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; };
 const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const hashColor = s => { let h = 0; for (let i = 0; i < String(s).length; i++) h = (h*31 + String(s).charCodeAt(i)) >>> 0; return PALETTE[h % PALETTE.length]; };
-
+const hashColor = s => { let h=0; for(let i=0;i<String(s).length;i++) h=(h*31+String(s).charCodeAt(i))>>>0; return PALETTE[h%PALETTE.length]; };
 let toastTimer;
-function toast(msg){
-  const t = $('#toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
-}
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2400); }
 
 /* ============================================================
- *  本地存储
+ *  3. 认证相关
  * ============================================================ */
-function loadLocal(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw){
-      const p = JSON.parse(raw);
-      if (p && Array.isArray(p.records)) db = p;
-    }
-  }catch(e){ console.warn(e); }
-  if (!Array.isArray(db.records)) db.records = [];
-  if (!db.updatedAt) db.updatedAt = 0;
-  // 兼容旧数据（补 updatedAt）
-  db.records.forEach(r => { if (!r.updatedAt) r.updatedAt = r.createdAt || Date.now(); });
-}
-function saveLocal(){
-  db.updatedAt = Date.now();
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }
-  catch(e){ toast('本地存储失败：空间可能已满'); }
-}
-
-/* ============================================================
- *  云同步模块（jsonbin.io v3）
- * ============================================================ */
-const Sync = {
-  cfg: { binId: '', key: '', auto: 'off' },
-  status: 'idle',   // idle | busy | ok | err
-  busy: false,
-  pushTimer: null,
-
-  load(){
-    try{
-      const c = JSON.parse(localStorage.getItem(SYNC_KEY) || '{}');
-      this.cfg = Object.assign({ binId:'', key:'', auto:'off' }, c);
-    }catch(e){ this.cfg = { binId:'', key:'', auto:'off' }; }
-    this.updateUI();
-  },
-  save(){
-    localStorage.setItem(SYNC_KEY, JSON.stringify(this.cfg));
-    this.updateUI();
-  },
-  enabled(){ return !!(this.cfg.binId && this.cfg.key); },
-
-  updateUI(){
-    const el = $('#syncLabel');
-    if (!el) return;
-    if (!this.enabled()){
-      el.innerHTML = '<span class="sync-dot idle"></span>未开启云同步';
-      return;
-    }
-    const map = {
-      idle: ['ok',   '已连接 · 待同步'],
-      busy: ['busy', '同步中…'],
-      ok:   ['ok',   '已同步 · ' + new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})],
-      err:  ['err',  '同步失败，请检查设置']
-    };
-    const [cls, txt] = map[this.status] || map.idle;
-    el.innerHTML = `<span class="sync-dot ${cls}"></span>${txt}`;
-  },
-
-  async _fetch(path, opts = {}){
-    const url = `https://api.jsonbin.io/v3/b/${this.cfg.binId}${path}`;
-    const headers = Object.assign({
-      'X-Master-Key': this.cfg.key,
-      'Content-Type': 'application/json'
-    }, opts.headers || {});
-    const res = await fetch(url, Object.assign({}, opts, { headers }));
-    if (!res.ok){
-      const txt = await res.text().catch(() => '');
-      throw new Error(`HTTP ${res.status} ${txt.slice(0,120)}`);
-    }
-    return res.json();
-  },
-
-  async pull(silent){
-    if (!this.enabled()) { if (!silent) toast('请先在「数据 → 云同步」中配置'); return false; }
-    if (this.busy) return false;
-    this.busy = true; this.status = 'busy'; this.updateUI();
-    try{
-      const data = await this._fetch('/latest', { headers: { 'X-Bin-Meta': 'false' } });
-      const remote = data.record || data;
-      const remoteRecords = Array.isArray(remote.records) ? remote.records : [];
-      const remoteAt = remote.updatedAt || 0;
-
-      if (!db.records.length || remoteAt > db.updatedAt){
-        db.records = remoteRecords;
-        db.updatedAt = remoteAt || Date.now();
-        db.records.forEach(r => { if (!r.updatedAt) r.updatedAt = r.createdAt || Date.now(); });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-        render();
-        if (!silent) toast(`已从云端拉取 ${remoteRecords.length} 条记录`);
-      } else if (db.updatedAt > remoteAt) {
-        // 本地较新，自动推送
-        this.busy = false;
-        await this.push(true);
-        return true;
-      } else {
-        if (!silent) toast('云端已是最新');
-      }
-      this.status = 'ok';
-      return true;
-    }catch(e){
-      console.error('[Sync pull]', e);
-      this.status = 'err';
-      if (!silent) toast('拉取失败：' + e.message);
-      return false;
-    }finally{
-      this.busy = false;
-      this.updateUI();
-    }
-  },
-
-  async push(silent){
-    if (!this.enabled()) { if (!silent) toast('请先在「数据 → 云同步」中配置'); return false; }
-    if (this.busy) return false;
-    this.busy = true; this.status = 'busy'; this.updateUI();
-    try{
-      await this._fetch('', {
-        method: 'PUT',
-        body: JSON.stringify({ records: db.records, updatedAt: db.updatedAt || Date.now() })
-      });
-      this.status = 'ok';
-      if (!silent) toast('已推送到云端');
-      return true;
-    }catch(e){
-      console.error('[Sync push]', e);
-      this.status = 'err';
-      if (!silent) toast('推送失败：' + e.message);
-      return false;
-    }finally{
-      this.busy = false;
-      this.updateUI();
-    }
-  },
-
-  schedulePush(){
-    if (!this.enabled() || this.cfg.auto !== 'on') return;
-    clearTimeout(this.pushTimer);
-    this.pushTimer = setTimeout(() => this.push(true), 1500);
+async function checkAuth(){
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session){
+    currentUserEmail = session.user.email;
+    $('#authScreen').style.display = 'none';
+    $('#appContainer').style.display = 'flex';
+    await loadRecordsFromSupabase();
+    return true;
+  } else {
+    $('#authScreen').style.display = 'flex';
+    $('#appContainer').style.display = 'none';
+    return false;
   }
-};
+}
+
+async function handleAuth(mode){
+  const email = $('#authEmail').value.trim();
+  const password = $('#authPassword').value;
+  const errEl = $('#authError');
+  errEl.textContent = '';
+  if (!email || !password){ errEl.textContent = '请填写邮箱和密码'; return; }
+  if (mode === 'signup' && password.length < 6){ errEl.textContent = '密码至少 6 位'; return; }
+  errEl.textContent = '处理中…';
+  const { error } = mode === 'signup'
+    ? await supabase.auth.signUp({ email, password })
+    : await supabase.auth.signInWithPassword({ email, password });
+  if (error){ errEl.textContent = error.message; return; }
+  errEl.textContent = '';
+  await checkAuth();
+  if (mode === 'signup') toast('注册成功！如提示需要确认，请查收邮件');
+  else toast('登录成功');
+}
+
+async function signOut(){
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_OUT'){
+    $('#authScreen').style.display = 'flex';
+    $('#appContainer').style.display = 'none';
+    db = { records: [] };
+  }
+});
 
 /* ============================================================
- *  业务计算
+ *  4. Supabase 数据读写
  * ============================================================ */
-const sumBy = (rs, dir) => rs.filter(r => r.direction === dir).reduce((s, r) => s + (Number(r.amount) || 0), 0);
+async function loadRecordsFromSupabase(){
+  const { data, error } = await supabase.from('records').select('*').order('date',{ascending:false});
+  if (error){ toast('加载失败：'+error.message); return; }
+  db.records = (data||[]).map(r => ({
+    id: r.id, name: r.name, relation: r.relation, event: r.event,
+    direction: r.direction, amount: Number(r.amount)||0, date: r.date,
+    method: r.method||'', location: r.location||'', note: r.note||'',
+    createdAt: new Date(r.created_at).getTime(), updatedAt: Date.now()
+  }));
+  render();
+}
 
+async function saveRecord(e){
+  e.preventDefault();
+  const name = $('#f-name').value.trim();
+  const amount = parseFloat($('#f-amount').value);
+  if (!name){ toast('请填写姓名'); return; }
+  if (!(amount >= 0)){ toast('请填写正确金额'); return; }
+  const payload = {
+    name, relation: $('#f-relation').value||'其他',
+    event: $('#f-event').value||'其他', direction: formDirection,
+    amount, date: $('#f-date').value||today(),
+    method: $('#f-method').value||'', location: $('#f-location').value.trim(),
+    note: $('#f-note').value.trim()
+  };
+  const btn = $('#recordForm button[type="submit"]');
+  btn.disabled = true; btn.textContent = '保存中…';
+  let error;
+  if (editingId){
+    ({ error } = await supabase.from('records').update(payload).eq('id', editingId));
+  } else {
+    ({ error } = await supabase.from('records').insert(payload));
+  }
+  btn.disabled = false; btn.textContent = '保存';
+  if (error){ toast('保存失败：'+error.message); return; }
+  closeModal();
+  await loadRecordsFromSupabase();
+  toast(editingId ? '已更新' : '已添加');
+}
+
+async function deleteRecord(id){
+  const rec = db.records.find(r => r.id === id);
+  if (!rec) return;
+  if (!confirm(`确定删除「${rec.name} · ${rec.event} · ${money(rec.amount)}」？`)) return;
+  const { error } = await supabase.from('records').delete().eq('id', id);
+  if (error){ toast('删除失败：'+error.message); return; }
+  await loadRecordsFromSupabase();
+  toast('已删除');
+}
+
+/* ============================================================
+ *  5. 业务计算
+ * ============================================================ */
+const sumBy = (rs,dir) => rs.filter(r=>r.direction===dir).reduce((s,r)=>s+(Number(r.amount)||0),0);
 function personStats(){
   const map = new Map();
   db.records.forEach(r => {
-    const k = (r.name || '未知').trim();
-    if (!map.has(k)) map.set(k, { name: k, relation: r.relation || '其他', in: 0, out: 0, count: 0, records: [], last: '' });
+    const k = (r.name||'未知').trim();
+    if (!map.has(k)) map.set(k,{name:k,relation:r.relation||'其他',in:0,out:0,count:0,records:[],last:''});
     const p = map.get(k);
     p.records.push(r); p.count++;
-    if (r.direction === 'in') p.in += Number(r.amount) || 0;
-    else p.out += Number(r.amount) || 0;
+    if (r.direction==='in') p.in += Number(r.amount)||0; else p.out += Number(r.amount)||0;
     if (r.relation) p.relation = r.relation;
-    if (!p.last || (r.date || '') > p.last) p.last = r.date || '';
+    if (!p.last || (r.date||'')>p.last) p.last = r.date||'';
   });
-  return Array.from(map.values()).map(p => Object.assign(p, { net: p.in - p.out }))
-    .sort((a, b) => Math.abs(b.net) - Math.abs(a.net) || b.count - a.count);
+  return Array.from(map.values()).map(p=>Object.assign(p,{net:p.in-p.out}))
+    .sort((a,b)=>Math.abs(b.net)-Math.abs(a.net)||b.count-a.count);
 }
-
-const sortRecordsDesc = list => list.slice().sort((a, b) =>
-  (b.date || '').localeCompare(a.date || '') || ((b.createdAt || 0) - (a.createdAt || 0))
-);
+const sortRecordsDesc = list => list.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')||((b.createdAt||0)-(a.createdAt||0)));
 
 /* ============================================================
- *  导航
+ *  6. 导航与渲染
  * ============================================================ */
 function navigate(view){
   currentView = view;
   $$('.nav-item, .mobile-nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === view));
-  $$('.view').forEach(el => { el.hidden = (el.id !== 'view-' + view); });
+  $$('.view').forEach(el => { el.hidden = (el.id !== 'view-'+view); });
   render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({top:0, behavior:'smooth'});
 }
-
 function render(){
-  if (currentView === 'dashboard')      renderDashboard();
-  else if (currentView === 'records')   renderRecords();
-  else if (currentView === 'people')    renderPeople();
-  else if (currentView === 'stats')     renderStats();
-  else if (currentView === 'data')      renderData();
+  if (currentView==='dashboard') renderDashboard();
+  else if (currentView==='records') renderRecords();
+  else if (currentView==='people') renderPeople();
+  else if (currentView==='stats') renderStats();
+  else if (currentView==='data') renderData();
 }
 
-/* ============================================================
- *  视图：概览
- * ============================================================ */
 function renderDashboard(){
   const recs = db.records;
-  const totalIn = sumBy(recs, 'in'), totalOut = sumBy(recs, 'out'), net = totalIn - totalOut;
+  const totalIn = sumBy(recs,'in'), totalOut = sumBy(recs,'out'), net = totalIn-totalOut;
   const people = personStats();
-  const inCount = recs.filter(r => r.direction === 'in').length;
+  const inCount = recs.filter(r=>r.direction==='in').length;
   const outCount = recs.length - inCount;
-  const oweList = people.filter(p => p.net > 0.001).sort((a, b) => b.net - a.net).slice(0, 5);
-  const recent = sortRecordsDesc(recs).slice(0, 8);
+  const oweList = people.filter(p=>p.net>0.001).sort((a,b)=>b.net-a.net).slice(0,5);
+  const recent = sortRecordsDesc(recs).slice(0,8);
 
-  const oweHTML = oweList.length ? oweList.map(p => `
+  const oweHTML = oweList.length ? oweList.map(p=>`
     <div class="pd-row" style="padding:11px 0">
       <div class="avatar" style="width:34px;height:34px;flex:0 0 34px;font-size:13px;border-radius:11px;background:${hashColor(p.name)}">${esc(p.name.slice(0,1))}</div>
-      <div style="flex:1;min-width:0">
-        <div style="font-weight:650;font-size:13.5px">${esc(p.name)}</div>
-        <div style="font-size:11.5px;color:var(--muted)">${esc(p.relation)} · ${p.count} 次往来</div>
-      </div>
-      <div style="text-align:right;margin-right:4px">
-        <div class="amt amt-out" style="font-size:13.5px">${money(p.net)}</div>
-      </div>
+      <div style="flex:1;min-width:0"><div style="font-weight:650;font-size:13.5px">${esc(p.name)}</div><div style="font-size:11.5px;color:var(--muted)">${esc(p.relation)} · ${p.count} 次往来</div></div>
+      <div style="text-align:right;margin-right:4px"><div class="amt amt-out" style="font-size:13.5px">${money(p.net)}</div></div>
       <button class="btn btn-sm" data-act="quickAdd" data-name="${esc(p.name)}" data-relation="${esc(p.relation)}">记一笔</button>
     </div>`).join('')
     : `<div class="empty" style="padding:28px 10px"><div class="empty-icon">⚖️</div><div class="empty-title">人情两清</div><div class="empty-sub">目前没有需要偿还的人情</div></div>`;
@@ -772,24 +494,19 @@ function renderDashboard(){
   const recentHTML = recent.length ? `
     <div class="table-wrap"><table>
       <thead><tr><th>日期</th><th>姓名</th><th>事由</th><th style="text-align:right">金额</th></tr></thead>
-      <tbody>
-      ${recent.map(r => `
+      <tbody>${recent.map(r=>`
         <tr data-act="edit" data-id="${r.id}" style="cursor:pointer">
           <td data-label="日期" style="color:var(--muted);font-variant-numeric:tabular-nums">${esc((r.date||'').slice(5))}</td>
           <td data-label="姓名" class="td-name">${esc(r.name)}</td>
           <td data-label="事由"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收':'送'}</span> ${esc(r.event)}</td>
           <td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td>
-        </tr>`).join('')}
-      </tbody>
+        </tr>`).join('')}</tbody>
     </table></div>`
     : `<div class="empty" style="padding:34px 10px"><div class="empty-icon">📖</div><div class="empty-title">还没有记录</div><div class="empty-sub">点击右上角「添加记录」开始记账</div></div>`;
 
   $('#view-dashboard').innerHTML = `
     <div class="topbar">
-      <div>
-        <div class="page-title">概览</div>
-        <div class="page-sub">${recs.length ? `已记录 ${recs.length} 笔 · ${people.length} 位亲友` : '记录每一份人情，往来有数'}</div>
-      </div>
+      <div><div class="page-title">概览</div><div class="page-sub">${recs.length?`已记录 ${recs.length} 笔 · ${people.length} 位亲友`:'记录每一份人情，往来有数'}</div></div>
       <div class="spacer"></div>
       <button class="btn btn-primary" data-act="add">＋ 添加记录</button>
     </div>
@@ -800,211 +517,110 @@ function renderDashboard(){
       <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--blue)"></span>往来人数</div><div class="stat-value" style="color:var(--blue)">${people.length}<span style="font-size:15px;font-weight:600;color:var(--muted)"> 人</span></div><div class="stat-foot">${people.filter(p=>p.net>0.001).length} 人待还</div></div>
     </div>
     <div class="grid-2">
-      <div class="card">
-        <div class="card-head"><div class="card-title">💌 待还人情</div><div class="spacer"></div><span class="tag tag-out">${people.filter(p=>p.net>0.001).length} 人</span></div>
-        <div class="card-body" style="padding:6px 20px 12px">${oweHTML}</div>
-      </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title">🕒 最近往来</div><div class="spacer"></div><button class="btn btn-sm btn-ghost" data-act="goto" data-view="records">全部 →</button></div>
-        <div class="card-body p0">${recentHTML}</div>
-      </div>
-    </div>
-  `;
+      <div class="card"><div class="card-head"><div class="card-title">💌 待还人情</div><div class="spacer"></div><span class="tag tag-out">${people.filter(p=>p.net>0.001).length} 人</span></div><div class="card-body" style="padding:6px 20px 12px">${oweHTML}</div></div>
+      <div class="card"><div class="card-head"><div class="card-title">🕒 最近往来</div><div class="spacer"></div><button class="btn btn-sm btn-ghost" data-act="goto" data-view="records">全部 →</button></div><div class="card-body p0">${recentHTML}</div></div>
+    </div>`;
 }
 
-/* ============================================================
- *  视图：往来记录
- * ============================================================ */
 function renderRecords(){
   const all = db.records;
-  const years = Array.from(new Set(all.map(r => (r.date||'').slice(0,4)).filter(Boolean))).sort().reverse();
-  const events = Array.from(new Set(all.map(r => r.event).filter(Boolean)));
-
+  const years = Array.from(new Set(all.map(r=>(r.date||'').slice(0,4)).filter(Boolean))).sort().reverse();
+  const events = Array.from(new Set(all.map(r=>r.event).filter(Boolean)));
   $('#view-records').innerHTML = `
-    <div class="topbar">
-      <div><div class="page-title">往来记录</div><div class="page-sub" id="recCount">共 ${all.length} 条</div></div>
-      <div class="spacer"></div>
-      <button class="btn btn-primary" data-act="add">＋ 添加</button>
-    </div>
+    <div class="topbar"><div><div class="page-title">往来记录</div><div class="page-sub" id="recCount">共 ${all.length} 条</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div>
     <div class="toolbar">
-      <div class="search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-        <input id="searchInput" placeholder="搜索姓名 / 事由 / 备注…" autocomplete="off">
-      </div>
+      <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="searchInput" placeholder="搜索姓名 / 事由 / 备注…" autocomplete="off"></div>
       <select id="filterDir"><option value="all">全部方向</option><option value="in">收礼</option><option value="out">送礼</option></select>
       <select id="filterEvent"><option value="all">全部事由</option>${events.map(e=>`<option value="${esc(e)}">${esc(e)}</option>`).join('')}</select>
       <select id="filterYear"><option value="all">全部年份</option>${years.map(y=>`<option value="${esc(y)}">${esc(y)} 年</option>`).join('')}</select>
       <button class="btn btn-sm" data-act="clearFilter">重置</button>
     </div>
-    <div id="recTableWrap"></div>
-  `;
+    <div id="recTableWrap"></div>`;
   let t;
   $('#searchInput').addEventListener('input', () => { clearTimeout(t); t = setTimeout(updateRecordsTable, 180); });
   ['filterDir','filterEvent','filterYear'].forEach(id => $('#'+id).addEventListener('change', updateRecordsTable));
   updateRecordsTable();
 }
-
 function filterRecords(){
-  const q = ($('#searchInput')?.value || '').trim().toLowerCase();
-  const dir = $('#filterDir')?.value || 'all';
-  const ev = $('#filterEvent')?.value || 'all';
-  const yr = $('#filterYear')?.value || 'all';
+  const q = ($('#searchInput')?.value||'').trim().toLowerCase();
+  const dir = $('#filterDir')?.value||'all';
+  const ev = $('#filterEvent')?.value||'all';
+  const yr = $('#filterYear')?.value||'all';
   return sortRecordsDesc(db.records.filter(r => {
-    if (dir !== 'all' && r.direction !== dir) return false;
-    if (ev !== 'all' && r.event !== ev) return false;
-    if (yr !== 'all' && (r.date||'').slice(0,4) !== yr) return false;
-    if (q){
-      const hay = [r.name, r.relation, r.event, r.location, r.note, r.method].join(' ').toLowerCase();
-      if (!hay.includes(q)) return false;
-    }
+    if (dir!=='all' && r.direction!==dir) return false;
+    if (ev!=='all' && r.event!==ev) return false;
+    if (yr!=='all' && (r.date||'').slice(0,4)!==yr) return false;
+    if (q){ const hay=[r.name,r.relation,r.event,r.location,r.note,r.method].join(' ').toLowerCase(); if(!hay.includes(q)) return false; }
     return true;
   }));
 }
-
 function updateRecordsTable(){
-  const wrap = $('#recTableWrap');
-  if (!wrap) return;
+  const wrap = $('#recTableWrap'); if (!wrap) return;
   const list = filterRecords();
-  const sIn = sumBy(list, 'in'), sOut = sumBy(list, 'out');
+  const sIn = sumBy(list,'in'), sOut = sumBy(list,'out');
   const countEl = $('#recCount');
   if (countEl) countEl.textContent = `筛选 ${list.length} 条 · 收 ${money(sIn)} · 送 ${money(sOut)}`;
-
-  if (!list.length){
-    wrap.innerHTML = `<div class="card"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">没有找到匹配的记录</div><div class="empty-sub">试试调整筛选条件</div></div></div>`;
-    return;
-  }
+  if (!list.length){ wrap.innerHTML = `<div class="card"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">没有找到匹配的记录</div><div class="empty-sub">试试调整筛选条件</div></div></div>`; return; }
   wrap.innerHTML = `
-    <div class="card">
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>日期</th><th>姓名</th><th>关系</th><th>事由</th><th>方向</th><th style="text-align:right">金额</th><th>方式</th><th>备注</th><th style="text-align:right">操作</th></tr></thead>
-          <tbody>
-          ${list.map(r => `
-            <tr>
-              <td data-label="日期" style="color:var(--muted);font-variant-numeric:tabular-nums">${esc(r.date || '—')}</td>
-              <td data-label="姓名" class="td-name">${esc(r.name)}</td>
-              <td data-label="关系"><span class="tag tag-plain">${esc(r.relation || '其他')}</span></td>
-              <td data-label="事由">${esc(r.event || '—')}</td>
-              <td data-label="方向"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收礼':'送礼'}</span></td>
-              <td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td>
-              <td data-label="方式" style="color:var(--text-2);font-size:12.5px">${esc(r.method || '—')}</td>
-              <td data-label="备注" class="td-note">${esc(r.note || r.location || '')}</td>
-              <td class="td-actions">
-                <button class="btn btn-sm btn-ghost" data-act="edit" data-id="${r.id}">编辑</button>
-                <button class="btn btn-sm btn-ghost btn-danger" data-act="del" data-id="${r.id}">删除</button>
-              </td>
-            </tr>`).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>`;
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>日期</th><th>姓名</th><th>关系</th><th>事由</th><th>方向</th><th style="text-align:right">金额</th><th>方式</th><th>备注</th><th style="text-align:right">操作</th></tr></thead>
+      <tbody>${list.map(r=>`
+        <tr>
+          <td data-label="日期" style="color:var(--muted);font-variant-numeric:tabular-nums">${esc(r.date||'—')}</td>
+          <td data-label="姓名" class="td-name">${esc(r.name)}</td>
+          <td data-label="关系"><span class="tag tag-plain">${esc(r.relation||'其他')}</span></td>
+          <td data-label="事由">${esc(r.event||'—')}</td>
+          <td data-label="方向"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收礼':'送礼'}</span></td>
+          <td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td>
+          <td data-label="方式" style="color:var(--text-2);font-size:12.5px">${esc(r.method||'—')}</td>
+          <td data-label="备注" class="td-note">${esc(r.note||r.location||'')}</td>
+          <td class="td-actions"><button class="btn btn-sm btn-ghost" data-act="edit" data-id="${r.id}">编辑</button><button class="btn btn-sm btn-ghost btn-danger" data-act="del" data-id="${r.id}">删除</button></td>
+        </tr>`).join('')}</tbody>
+    </table></div></div>`;
 }
 
-/* ============================================================
- *  视图：人情账簿
- * ============================================================ */
 function renderPeople(){
   const people = personStats();
-  if (!people.length){
-    $('#view-people').innerHTML = `
-      <div class="topbar"><div><div class="page-title">人情账簿</div><div class="page-sub">按人查看往来明细</div></div></div>
-      <div class="card"><div class="empty"><div class="empty-icon">👥</div><div class="empty-title">还没有往来对象</div><div class="empty-sub">添加记录后自动按人汇总</div></div></div>`;
-    return;
-  }
+  if (!people.length){ $('#view-people').innerHTML = `<div class="topbar"><div><div class="page-title">人情账簿</div><div class="page-sub">按人查看往来明细</div></div></div><div class="card"><div class="empty"><div class="empty-icon">👥</div><div class="empty-title">还没有往来对象</div><div class="empty-sub">添加记录后自动按人汇总</div></div></div>`; return; }
   const cards = people.map(p => {
     const open = expandedPeople.has(p.name);
-    const netCls = p.net > 0.001 ? 'amt-out' : p.net < -0.001 ? 'amt-in' : '';
-    const status = p.net > 0.001 ? `<span class="tag tag-out">我欠人情</span>`
-                  : p.net < -0.001 ? `<span class="tag tag-in">对方欠我</span>`
-                  : `<span class="tag tag-plain">人情已平</span>`;
-    const details = sortRecordsDesc(p.records).map(r => `
-      <div class="pd-row">
-        <span class="pd-date">${esc(r.date || '—')}</span>
-        <span class="pd-event">${esc(r.event || '—')}${r.note?` · <span style="color:var(--muted)">${esc(r.note)}</span>`:''}</span>
-        <span class="amt ${r.direction==='in'?'amt-in':'amt-out'}" style="font-size:12.5px">${r.direction==='in'?'+':'-'}${money(r.amount)}</span>
-      </div>`).join('');
-    return `
-      <div class="person ${open?'open':''}">
-        <div class="person-head" data-act="togglePerson" data-name="${esc(p.name)}">
-          <div class="person-top">
-            <div class="avatar" style="background:${hashColor(p.name)}">${esc(p.name.slice(0,1))}</div>
-            <div style="flex:1;min-width:0">
-              <div class="person-name">${esc(p.name)}</div>
-              <div class="person-meta">${esc(p.relation)} · ${p.count} 次 · 最近 ${esc(p.last || '—')}</div>
-            </div>
-            ${status}
-          </div>
-          <div class="person-nums">
-            <div class="pnum"><div class="pnum-label">我收</div><div class="pnum-val amt-in">${money(p.in)}</div></div>
-            <div class="pnum"><div class="pnum-label">我送</div><div class="pnum-val amt-out">${money(p.out)}</div></div>
-            <div class="pnum"><div class="pnum-label">差额</div><div class="pnum-val ${netCls}">${p.net>0?'+':''}${money(p.net)}</div></div>
-          </div>
-        </div>
-        <div class="person-detail"><div class="person-detail-inner">
-          ${details}
-          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-            <button class="btn btn-sm btn-primary" data-act="quickAdd" data-name="${esc(p.name)}" data-relation="${esc(p.relation)}">＋ 记一笔</button>
-            <button class="btn btn-sm" data-act="filterByPerson" data-name="${esc(p.name)}">筛选记录</button>
-          </div>
-        </div></div>
-      </div>`;
+    const netCls = p.net>0.001?'amt-out':p.net<-0.001?'amt-in':'';
+    const status = p.net>0.001?`<span class="tag tag-out">我欠人情</span>`:p.net<-0.001?`<span class="tag tag-in">对方欠我</span>`:`<span class="tag tag-plain">人情已平</span>`;
+    const details = sortRecordsDesc(p.records).map(r=>`
+      <div class="pd-row"><span class="pd-date">${esc(r.date||'—')}</span><span class="pd-event">${esc(r.event||'—')}${r.note?` · <span style="color:var(--muted)">${esc(r.note)}</span>`:''}</span><span class="amt ${r.direction==='in'?'amt-in':'amt-out'}" style="font-size:12.5px">${r.direction==='in'?'+':'-'}${money(r.amount)}</span></div>`).join('');
+    return `<div class="person ${open?'open':''}">
+      <div class="person-head" data-act="togglePerson" data-name="${esc(p.name)}">
+        <div class="person-top"><div class="avatar" style="background:${hashColor(p.name)}">${esc(p.name.slice(0,1))}</div>
+        <div style="flex:1;min-width:0"><div class="person-name">${esc(p.name)}</div><div class="person-meta">${esc(p.relation)} · ${p.count} 次 · 最近 ${esc(p.last||'—')}</div></div>${status}</div>
+        <div class="person-nums"><div class="pnum"><div class="pnum-label">我收</div><div class="pnum-val amt-in">${money(p.in)}</div></div><div class="pnum"><div class="pnum-label">我送</div><div class="pnum-val amt-out">${money(p.out)}</div></div><div class="pnum"><div class="pnum-label">差额</div><div class="pnum-val ${netCls}">${p.net>0?'+':''}${money(p.net)}</div></div></div>
+      </div>
+      <div class="person-detail"><div class="person-detail-inner">${details}
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn btn-sm btn-primary" data-act="quickAdd" data-name="${esc(p.name)}" data-relation="${esc(p.relation)}">＋ 记一笔</button><button class="btn btn-sm" data-act="filterByPerson" data-name="${esc(p.name)}">筛选记录</button></div>
+      </div></div>
+    </div>`;
   }).join('');
-
-  $('#view-people').innerHTML = `
-    <div class="topbar">
-      <div><div class="page-title">人情账簿</div><div class="page-sub">${people.length} 位亲友 · 点击展开明细</div></div>
-      <div class="spacer"></div>
-      <button class="btn btn-primary" data-act="add">＋ 添加</button>
-    </div>
-    <div class="people">${cards}</div>`;
+  $('#view-people').innerHTML = `<div class="topbar"><div><div class="page-title">人情账簿</div><div class="page-sub">${people.length} 位亲友 · 点击展开明细</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div><div class="people">${cards}</div>`;
 }
 
-/* ============================================================
- *  视图：统计
- * ============================================================ */
 function renderStats(){
-  if (!db.records.length){
-    $('#view-stats').innerHTML = `
-      <div class="topbar"><div><div class="page-title">统计分析</div><div class="page-sub">数据可视化</div></div></div>
-      <div class="card"><div class="empty"><div class="empty-icon">📊</div><div class="empty-title">暂无数据</div><div class="empty-sub">先添加几条记录吧</div></div></div>`;
-    return;
-  }
+  if (!db.records.length){ $('#view-stats').innerHTML = `<div class="topbar"><div><div class="page-title">统计分析</div><div class="page-sub">数据可视化</div></div></div><div class="card"><div class="empty"><div class="empty-icon">📊</div><div class="empty-title">暂无数据</div><div class="empty-sub">先添加几条记录吧</div></div></div>`; return; }
   const evMap = new Map();
   db.records.forEach(r => evMap.set(r.event||'其他', (evMap.get(r.event||'其他')||0) + (Number(r.amount)||0)));
-  const evArr = Array.from(evMap.entries()).map(([label,value]) => ({label,value})).sort((a,b) => b.value - a.value);
-  const evTotal = evArr.reduce((s,i) => s + i.value, 0);
-
-  const legend = evArr.slice(0,8).map((it,i) => `
-    <div class="legend-item">
-      <span class="dot" style="background:${PALETTE[i%PALETTE.length]}"></span>
-      <span>${esc(it.label)}</span>
-      <span class="legend-val">${money(it.value)} · ${(it.value/evTotal*100).toFixed(1)}%</span>
-    </div>`).join('');
-
+  const evArr = Array.from(evMap.entries()).map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);
+  const evTotal = evArr.reduce((s,i)=>s+i.value,0);
+  const legend = evArr.slice(0,8).map((it,i)=>`<div class="legend-item"><span class="dot" style="background:${PALETTE[i%PALETTE.length]}"></span><span>${esc(it.label)}</span><span class="legend-val">${money(it.value)} · ${(it.value/evTotal*100).toFixed(1)}%</span></div>`).join('');
   const relMap = new Map();
   db.records.forEach(r => relMap.set(r.relation||'其他', (relMap.get(r.relation||'其他')||0) + (Number(r.amount)||0)));
-  const relArr = Array.from(relMap.entries()).map(([label,value]) => ({label,value})).sort((a,b) => b.value - a.value);
-  const relMax = Math.max(1, ...relArr.map(r => r.value));
-  const relBars = relArr.map((r,i) => `
-    <div class="bar-row">
-      <div style="color:var(--text-2)">${esc(r.label)}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${(r.value/relMax*100).toFixed(1)}%;background:${PALETTE[i%PALETTE.length]}"></div></div>
-      <div class="bar-value">${money(r.value)}</div>
-    </div>`).join('');
-
+  const relArr = Array.from(relMap.entries()).map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);
+  const relMax = Math.max(1, ...relArr.map(r=>r.value));
+  const relBars = relArr.map((r,i)=>`<div class="bar-row"><div style="color:var(--text-2)">${esc(r.label)}</div><div class="bar-track"><div class="bar-fill" style="width:${(r.value/relMax*100).toFixed(1)}%;background:${PALETTE[i%PALETTE.length]}"></div></div><div class="bar-value">${money(r.value)}</div></div>`).join('');
   const totalIn = sumBy(db.records,'in'), totalOut = sumBy(db.records,'out');
-  const avgIn = totalIn / Math.max(1, db.records.filter(r => r.direction==='in').length);
-  const avgOut = totalOut / Math.max(1, db.records.filter(r => r.direction==='out').length);
-  const maxRec = sortRecordsDesc(db.records).slice().sort((a,b) => (b.amount||0)-(a.amount||0))[0];
-
+  const avgIn = totalIn / Math.max(1, db.records.filter(r=>r.direction==='in').length);
+  const avgOut = totalOut / Math.max(1, db.records.filter(r=>r.direction==='out').length);
+  const maxRec = sortRecordsDesc(db.records).slice().sort((a,b)=>(b.amount||0)-(a.amount||0))[0];
   $('#view-stats').innerHTML = `
-    <div class="topbar">
-      <div><div class="page-title">统计分析</div><div class="page-sub">从数据看清人情往来</div></div>
-      <div class="spacer"></div>
-      <div class="seg" style="width:auto">
-        <button class="seg-btn ${chartMode==='year'?'active':''}" data-act="chartMode" data-mode="year">按年</button>
-        <button class="seg-btn ${chartMode==='month'?'active':''}" data-act="chartMode" data-mode="month">近 12 月</button>
-      </div>
+    <div class="topbar"><div><div class="page-title">统计分析</div><div class="page-sub">从数据看清人情往来</div></div><div class="spacer"></div>
+      <div class="seg" style="width:auto"><button class="seg-btn ${chartMode==='year'?'active':''}" data-act="chartMode" data-mode="year">按年</button><button class="seg-btn ${chartMode==='month'?'active':''}" data-act="chartMode" data-mode="month">近 12 月</button></div>
     </div>
     <div class="stats">
       <div class="stat"><div class="stat-label">收礼总额</div><div class="stat-value" style="color:var(--green);font-size:20px">${money(totalIn)}</div></div>
@@ -1012,608 +628,287 @@ function renderStats(){
       <div class="stat"><div class="stat-label">平均收 / 送</div><div class="stat-value" style="font-size:15px">${money(avgIn)} <span style="color:var(--muted)">/</span> ${money(avgOut)}</div></div>
       <div class="stat"><div class="stat-label">单笔最大</div><div class="stat-value" style="font-size:15px">${money(maxRec?maxRec.amount:0)}</div><div class="stat-foot">${maxRec?esc(maxRec.name)+' · '+esc(maxRec.event):'—'}</div></div>
     </div>
-    <div class="card mb16">
-      <div class="card-head"><div class="card-title">📈 收支趋势</div><div class="spacer"></div><span class="tag tag-in">收礼</span><span class="tag tag-out">送礼</span></div>
-      <div class="card-body"><canvas id="barChart"></canvas></div>
-    </div>
+    <div class="card mb16"><div class="card-head"><div class="card-title">📈 收支趋势</div><div class="spacer"></div><span class="tag tag-in">收礼</span><span class="tag tag-out">送礼</span></div><div class="card-body"><canvas id="barChart"></canvas></div></div>
     <div class="grid-2-3">
-      <div class="card">
-        <div class="card-head"><div class="card-title">🎯 事由分布</div></div>
-        <div class="card-body" style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center">
-          <canvas id="donutChart" class="donut" style="width:150px"></canvas>
-          <div class="legend">${legend}</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title">🤝 关系分布</div></div>
-        <div class="card-body">${relBars}</div>
-      </div>
+      <div class="card"><div class="card-head"><div class="card-title">🎯 事由分布</div></div><div class="card-body" style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center"><canvas id="donutChart" class="donut" style="width:150px"></canvas><div class="legend">${legend}</div></div></div>
+      <div class="card"><div class="card-head"><div class="card-title">🤝 关系分布</div></div><div class="card-body">${relBars}</div></div>
     </div>`;
   requestAnimationFrame(() => {
     const bars = $('#barChart'), donut = $('#donutChart');
     if (bars) drawBars(bars, getBarData(chartMode));
-    if (donut) drawDonut(donut, evArr.slice(0,8).map((it,i) => ({value: it.value, color: PALETTE[i%PALETTE.length]})));
+    if (donut) drawDonut(donut, evArr.slice(0,8).map((it,i)=>({value:it.value,color:PALETTE[i%PALETTE.length]})));
   });
 }
-
 function getBarData(mode){
   const recs = db.records;
   if (mode === 'year'){
     const map = new Map();
     recs.forEach(r => {
-      const y = (r.date||'').slice(0,4) || '未知';
-      if (!map.has(y)) map.set(y, {label:y, income:0, expense:0});
+      const y = (r.date||'').slice(0,4)||'未知';
+      if (!map.has(y)) map.set(y,{label:y,income:0,expense:0});
       const o = map.get(y);
-      if (r.direction === 'in') o.income += Number(r.amount)||0; else o.expense += Number(r.amount)||0;
+      if (r.direction==='in') o.income += Number(r.amount)||0; else o.expense += Number(r.amount)||0;
     });
-    return Array.from(map.values()).sort((a,b) => a.label.localeCompare(b.label));
+    return Array.from(map.values()).sort((a,b)=>a.label.localeCompare(b.label));
   }
   const now = new Date(); const arr = [];
-  for (let i = 11; i >= 0; i--){
-    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
-    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-    arr.push({label: key.slice(2).replace('-','/'), key, income:0, expense:0});
-  }
-  recs.forEach(r => {
-    const k = (r.date||'').slice(0,7);
-    const o = arr.find(a => a.key === k);
-    if (o){ if (r.direction === 'in') o.income += Number(r.amount)||0; else o.expense += Number(r.amount)||0; }
-  });
+  for (let i=11;i>=0;i--){ const d=new Date(now.getFullYear(),now.getMonth()-i,1); const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; arr.push({label:key.slice(2).replace('-','/'),key,income:0,expense:0}); }
+  recs.forEach(r => { const k=(r.date||'').slice(0,7); const o=arr.find(a=>a.key===k); if(o){ if(r.direction==='in') o.income += Number(r.amount)||0; else o.expense += Number(r.amount)||0; } });
   return arr;
 }
 
-/* ============================================================
- *  视图：数据管理
- * ============================================================ */
 function renderData(){
   const size = new Blob([JSON.stringify(db)]).size;
-  const sizeStr = size < 1024 ? size + ' B' : (size/1024).toFixed(1) + ' KB';
-  const dates = db.records.map(r => r.date).filter(Boolean).sort();
-  const syncReady = Sync.enabled();
-
+  const sizeStr = size<1024 ? size+' B' : (size/1024).toFixed(1)+' KB';
+  const dates = db.records.map(r=>r.date).filter(Boolean).sort();
   $('#view-data').innerHTML = `
-    <div class="topbar"><div><div class="page-title">数据管理</div><div class="page-sub">同步、备份与恢复</div></div></div>
-
-    <div class="card mb16" style="border-color:${syncReady?'var(--green)':'var(--border)'}">
-      <div class="card-head">
-        <div class="card-title">☁️ 云同步</div>
-        <div class="spacer"></div>
-        <span class="tag ${syncReady?'tag-in':'tag-plain'}">${syncReady?'已开启':'未开启'}</span>
-      </div>
+    <div class="topbar"><div><div class="page-title">数据管理</div><div class="page-sub">备份与恢复</div></div></div>
+    <div class="card mb16">
+      <div class="card-head"><div class="card-title">👤 账户</div></div>
       <div class="card-body">
-        <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">
-          开启后，手机与电脑会共用同一份数据。每次修改自动推送，打开页面自动拉取。
-        </p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-primary" data-act="openSync">${syncReady?'修改同步设置':'立即开启'}</button>
-          ${syncReady?`<button class="btn" data-act="syncNow">🔄 立即同步</button>`:''}
-        </div>
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">当前登录：<b>${esc(currentUserEmail||'—')}</b><br><span style="font-size:12px;color:var(--muted)">数据已自动云端同步，换设备登录同一账号即可查看。</span></p>
+        <button class="btn btn-danger" onclick="signOut()">退出登录</button>
       </div>
     </div>
-
     <div class="data-grid">
-      <div class="card">
-        <div class="card-head"><div class="card-title">📦 数据概览</div></div>
-        <div class="card-body">
-          <div class="kv-big">${db.records.length} <span style="font-size:14px;font-weight:600;color:var(--muted)">条记录</span></div>
-          <div style="margin-top:14px">
-            <dl class="dl"><dt>往来人数</dt><dd>${personStats().length} 人</dd></dl>
-            <dl class="dl"><dt>收礼总额</dt><dd style="color:var(--green)">${money(sumBy(db.records,'in'))}</dd></dl>
-            <dl class="dl"><dt>送礼总额</dt><dd style="color:var(--primary)">${money(sumBy(db.records,'out'))}</dd></dl>
-            <dl class="dl"><dt>时间跨度</dt><dd>${dates.length ? esc(dates[0]) + ' ~ ' + esc(dates[dates.length-1]) : '—'}</dd></dl>
-            <dl class="dl"><dt>本地占用</dt><dd>${sizeStr}</dd></dl>
-          </div>
+      <div class="card"><div class="card-head"><div class="card-title">📦 数据概览</div></div><div class="card-body">
+        <div class="kv-big">${db.records.length} <span style="font-size:14px;font-weight:600;color:var(--muted)">条记录</span></div>
+        <div style="margin-top:14px">
+          <dl class="dl"><dt>往来人数</dt><dd>${personStats().length} 人</dd></dl>
+          <dl class="dl"><dt>收礼总额</dt><dd style="color:var(--green)">${money(sumBy(db.records,'in'))}</dd></dl>
+          <dl class="dl"><dt>送礼总额</dt><dd style="color:var(--primary)">${money(sumBy(db.records,'out'))}</dd></dl>
+          <dl class="dl"><dt>时间跨度</dt><dd>${dates.length?esc(dates[0])+' ~ '+esc(dates[dates.length-1]):'—'}</dd></dl>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title">💾 导出备份</div></div>
-        <div class="card-body">
-          <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">建议定期导出备份，换设备也能一键导入。</p>
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <button class="btn" data-act="exportJSON">⬇️ 导出 JSON</button>
-            <button class="btn" data-act="exportCSV">📊 导出 CSV</button>
-          </div>
+      </div></div>
+      <div class="card"><div class="card-head"><div class="card-title">💾 导出备份</div></div><div class="card-body">
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">建议定期导出备份。</p>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn" data-act="exportJSON">⬇️ 导出 JSON</button>
+          <button class="btn" data-act="exportCSV">📊 导出 CSV</button>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title">📥 导入数据</div></div>
-        <div class="card-body">
-          <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">选择之前导出的 JSON 文件，可选覆盖或追加。</p>
-          <input type="file" id="importFile" accept=".json,application/json" style="display:none">
-          <button class="btn btn-block" data-act="importJSON">选择文件导入</button>
+      </div></div>
+      <div class="card"><div class="card-head"><div class="card-title">📥 导入数据</div></div><div class="card-body">
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">选择之前导出的 JSON 文件，追加到当前账号。</p>
+        <input type="file" id="importFile" accept=".json,application/json" style="display:none">
+        <button class="btn btn-block" data-act="importJSON">选择文件导入</button>
+      </div></div>
+      <div class="card"><div class="card-head"><div class="card-title">🧪 示例与清理</div></div><div class="card-body">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn" data-act="loadSample">✨ 载入示例数据</button>
+          <button class="btn btn-danger" data-act="clearAll">🗑 清空全部数据</button>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title">🧪 示例与清理</div></div>
-        <div class="card-body">
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <button class="btn" data-act="loadSample">✨ 载入示例数据</button>
-            <button class="btn btn-danger" data-act="clearAll">🗑 清空全部数据</button>
-          </div>
-        </div>
-      </div>
+      </div></div>
     </div>`;
 }
 
 /* ============================================================
- *  Canvas 图表
+ *  7. 图表
  * ============================================================ */
-function prep(cv){
-  const dpr = window.devicePixelRatio || 1;
-  const rect = cv.getBoundingClientRect();
-  const w = Math.max(rect.width, 100), h = Math.max(rect.height, 80);
-  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
-  const ctx = cv.getContext('2d');
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, w, h);
-  return { ctx, w, h };
-}
-function roundRect(ctx, x, y, w, h, r, color){
-  if (h <= 0.5 || w <= 0) return;
-  r = Math.min(r, w/2, h/2);
-  ctx.beginPath();
-  ctx.moveTo(x+r, y); ctx.lineTo(x+w-r, y); ctx.arcTo(x+w, y, x+w, y+r, r);
-  ctx.lineTo(x+w, y+h-r); ctx.arcTo(x+w, y+h, x+w-r, y+h, r);
-  ctx.lineTo(x+r, y+h); ctx.arcTo(x, y+h, x, y+h-r, r);
-  ctx.lineTo(x, y+r); ctx.arcTo(x, y, x+r, y, r);
-  ctx.closePath(); ctx.fillStyle = color; ctx.fill();
-}
-function niceCeil(v){
-  if (v <= 0) return 100;
-  const exp = Math.pow(10, Math.floor(Math.log10(v)));
-  const f = v / exp;
-  let nf; if (f <= 1) nf = 1; else if (f <= 2) nf = 2; else if (f <= 2.5) nf = 2.5; else if (f <= 5) nf = 5; else nf = 10;
-  return nf * exp;
-}
-function drawEmptyCanvas(ctx, w, h, text){
-  ctx.fillStyle = cssVar('--muted'); ctx.font = '13px -apple-system,sans-serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText(text || '暂无数据', w/2, h/2);
-}
-function drawBars(cv, data){
-  const { ctx, w, h } = prep(cv);
-  if (!data.length || data.every(d => !d.income && !d.expense)){ drawEmptyCanvas(ctx, w, h); return; }
-  const pad = { t: 18, r: 14, b: 36, l: 54 };
-  const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
-  const max = Math.max(...data.map(d => Math.max(d.income, d.expense)));
-  const top = niceCeil(max);
-  ctx.font = '11px -apple-system,sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
-  for (let i = 0; i <= 4; i++){
-    const y = pad.t + ch - ch * i / 4;
-    ctx.strokeStyle = cssVar('--border'); ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(pad.l, y+.5); ctx.lineTo(pad.l+cw, y+.5); ctx.stroke();
-    ctx.fillStyle = cssVar('--muted'); ctx.fillText(shortNum(top * i / 4), pad.l - 8, y);
-  }
-  const n = data.length, slot = cw / n;
-  const bw = Math.min(24, Math.max(7, slot * 0.28));
-  const gap = 4;
-  const green = cssVar('--green') || '#2f8f5b', red = cssVar('--primary') || '#c0392b';
-  data.forEach((d, i) => {
-    const cx = pad.l + slot * i + slot / 2;
-    roundRect(ctx, cx-bw-gap/2, pad.t+ch-ch*(d.income/top), bw, ch*(d.income/top), 4, green);
-    roundRect(ctx, cx+gap/2, pad.t+ch-ch*(d.expense/top), bw, ch*(d.expense/top), 4, red);
-    ctx.fillStyle = cssVar('--muted'); ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-    const label = n > 14 ? (i % 2 === 0 ? d.label : '') : d.label;
-    ctx.fillText(label, cx, pad.t + ch + 10);
+function prep(cv){ const dpr=window.devicePixelRatio||1; const rect=cv.getBoundingClientRect(); const w=Math.max(rect.width,100), h=Math.max(rect.height,80); cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr); const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h); return {ctx,w,h}; }
+function roundRect(ctx,x,y,w,h,r,color){ if(h<=0.5||w<=0) return; r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r); ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r); ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath(); ctx.fillStyle=color; ctx.fill(); }
+function niceCeil(v){ if(v<=0) return 100; const exp=Math.pow(10,Math.floor(Math.log10(v))); const f=v/exp; let nf; if(f<=1) nf=1; else if(f<=2) nf=2; else if(f<=2.5) nf=2.5; else if(f<=5) nf=5; else nf=10; return nf*exp; }
+function drawEmptyCanvas(ctx,w,h,text){ ctx.fillStyle=cssVar('--muted'); ctx.font='13px -apple-system,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(text||'暂无数据',w/2,h/2); }
+function drawBars(cv,data){
+  const {ctx,w,h} = prep(cv);
+  if (!data.length || data.every(d=>!d.income&&!d.expense)){ drawEmptyCanvas(ctx,w,h); return; }
+  const pad={t:18,r:14,b:36,l:54}; const cw=w-pad.l-pad.r, ch=h-pad.t-pad.b;
+  const max = Math.max(...data.map(d=>Math.max(d.income,d.expense))); const top=niceCeil(max);
+  ctx.font='11px -apple-system,sans-serif'; ctx.textAlign='right'; ctx.textBaseline='middle';
+  for (let i=0;i<=4;i++){ const y=pad.t+ch-ch*i/4; ctx.strokeStyle=cssVar('--border'); ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(pad.l,y+.5); ctx.lineTo(pad.l+cw,y+.5); ctx.stroke(); ctx.fillStyle=cssVar('--muted'); ctx.fillText(shortNum(top*i/4),pad.l-8,y); }
+  const n=data.length, slot=cw/n; const bw=Math.min(24,Math.max(7,slot*0.28)); const gap=4;
+  const green=cssVar('--green')||'#2f8f5b', red=cssVar('--primary')||'#c0392b';
+  data.forEach((d,i)=>{
+    const cx=pad.l+slot*i+slot/2;
+    roundRect(ctx,cx-bw-gap/2,pad.t+ch-ch*(d.income/top),bw,ch*(d.income/top),4,green);
+    roundRect(ctx,cx+gap/2,pad.t+ch-ch*(d.expense/top),bw,ch*(d.expense/top),4,red);
+    ctx.fillStyle=cssVar('--muted'); ctx.textAlign='center'; ctx.textBaseline='top';
+    const label = n>14 ? (i%2===0?d.label:'') : d.label;
+    ctx.fillText(label,cx,pad.t+ch+10);
   });
 }
-function drawDonut(cv, items){
-  const { ctx, w, h } = prep(cv);
-  const total = items.reduce((s,i) => s + i.value, 0);
-  if (!total){ drawEmptyCanvas(ctx, w, h); return; }
-  const cx = w/2, cy = h/2, R = Math.min(w,h)/2 - 6, r = R * 0.62;
-  let a = -Math.PI / 2;
-  items.forEach(it => {
-    const ang = (it.value / total) * Math.PI * 2;
-    ctx.beginPath();
-    ctx.arc(cx, cy, R, a, a+ang);
-    ctx.arc(cx, cy, r, a+ang, a, true);
-    ctx.closePath();
-    ctx.fillStyle = it.color; ctx.fill();
-    ctx.strokeStyle = cssVar('--panel'); ctx.lineWidth = 2; ctx.stroke();
-    a += ang;
+function drawDonut(cv,items){
+  const {ctx,w,h} = prep(cv);
+  const total = items.reduce((s,i)=>s+i.value,0);
+  if (!total){ drawEmptyCanvas(ctx,w,h); return; }
+  const cx=w/2, cy=h/2, R=Math.min(w,h)/2-6, r=R*0.62;
+  let a=-Math.PI/2;
+  items.forEach(it=>{
+    const ang=(it.value/total)*Math.PI*2;
+    ctx.beginPath(); ctx.arc(cx,cy,R,a,a+ang); ctx.arc(cx,cy,r,a+ang,a,true); ctx.closePath();
+    ctx.fillStyle=it.color; ctx.fill();
+    ctx.strokeStyle=cssVar('--panel'); ctx.lineWidth=2; ctx.stroke();
+    a+=ang;
   });
-  ctx.fillStyle = cssVar('--text'); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.font = '700 17px -apple-system,sans-serif';
-  ctx.fillText(shortNum(total), cx, cy-7);
-  ctx.font = '11px -apple-system,sans-serif'; ctx.fillStyle = cssVar('--muted');
-  ctx.fillText('往来总额', cx, cy+12);
+  ctx.fillStyle=cssVar('--text'); ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.font='700 17px -apple-system,sans-serif'; ctx.fillText(shortNum(total),cx,cy-7);
+  ctx.font='11px -apple-system,sans-serif'; ctx.fillStyle=cssVar('--muted'); ctx.fillText('往来总额',cx,cy+12);
 }
 
 /* ============================================================
- *  表单弹窗
+ *  8. 表单弹窗 & 辅助
  * ============================================================ */
-function fillSelect(el, options, placeholder){
-  el.innerHTML = (placeholder ? `<option value="">${placeholder}</option>` : '')
-    + options.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
-}
-function refreshNameList(){
-  const names = Array.from(new Set(db.records.map(r => r.name).filter(Boolean))).sort();
-  $('#nameList').innerHTML = names.map(n => `<option value="${esc(n)}">`).join('');
-}
-function setDirection(dir){
-  formDirection = dir;
-  $$('#dirSeg .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.dir === dir));
-}
+function fillSelect(el,options,placeholder){ el.innerHTML = (placeholder?`<option value="">${placeholder}</option>`:'') + options.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join(''); }
+function refreshNameList(){ const names = Array.from(new Set(db.records.map(r=>r.name).filter(Boolean))).sort(); $('#nameList').innerHTML = names.map(n=>`<option value="${esc(n)}">`).join(''); }
+function setDirection(dir){ formDirection=dir; $$('#dirSeg .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.dir===dir)); }
 function openModal(id, preset){
-  editingId = id || null;
-  const rec = id ? db.records.find(r => r.id === id) : null;
+  editingId = id||null;
+  const rec = id ? db.records.find(r=>r.id===id) : null;
   $('#modalTitle').textContent = rec ? '编辑记录' : '添加记录';
-  $('#f-name').value = rec ? rec.name : (preset?.name || '');
-  $('#f-relation').value = rec ? (rec.relation || '朋友') : (preset?.relation || '朋友');
-  $('#f-event').value = rec ? (rec.event || '婚礼') : (preset?.event || '婚礼');
+  $('#f-name').value = rec ? rec.name : (preset?.name||'');
+  $('#f-relation').value = rec ? (rec.relation||'朋友') : (preset?.relation||'朋友');
+  $('#f-event').value = rec ? (rec.event||'婚礼') : (preset?.event||'婚礼');
   $('#f-amount').value = rec ? rec.amount : '';
-  $('#f-date').value = rec ? (rec.date || today()) : today();
-  $('#f-method').value = rec ? (rec.method || '微信') : '微信';
-  $('#f-location').value = rec ? (rec.location || '') : '';
-  $('#f-note').value = rec ? (rec.note || '') : '';
-  setDirection(rec ? rec.direction : (preset?.direction || 'out'));
+  $('#f-date').value = rec ? (rec.date||today()) : today();
+  $('#f-method').value = rec ? (rec.method||'微信') : '微信';
+  $('#f-location').value = rec ? (rec.location||'') : '';
+  $('#f-note').value = rec ? (rec.note||'') : '';
+  setDirection(rec ? rec.direction : (preset?.direction||'out'));
   refreshNameList();
   $('#overlay').classList.add('show');
-  setTimeout(() => { if (!rec && !preset?.name) $('#f-name').focus(); }, 80);
+  setTimeout(()=>{ if (!rec && !preset?.name) $('#f-name').focus(); },80);
 }
-function closeModal(){
-  $('#overlay').classList.remove('show');
-  editingId = null;
-  $('#recordForm').reset();
-}
-function saveRecord(e){
-  e.preventDefault();
-  const name = $('#f-name').value.trim();
-  const amount = parseFloat($('#f-amount').value);
-  if (!name){ toast('请填写姓名'); return; }
-  if (!(amount >= 0)){ toast('请填写正确金额'); return; }
-  const old = editingId ? db.records.find(r => r.id === editingId) : null;
-  const rec = {
-    id: editingId || uid(),
-    name,
-    relation: $('#f-relation').value || '其他',
-    event: $('#f-event').value || '其他',
-    direction: formDirection,
-    amount,
-    date: $('#f-date').value || today(),
-    method: $('#f-method').value || '',
-    location: $('#f-location').value.trim(),
-    note: $('#f-note').value.trim(),
-    createdAt: old ? old.createdAt : Date.now(),
-    updatedAt: Date.now()
-  };
-  if (old) db.records[db.records.indexOf(old)] = rec;
-  else db.records.push(rec);
-  saveLocal();
-  Sync.schedulePush();
-  closeModal();
-  render();
-  toast(old ? '已更新' : '已添加');
-}
-function deleteRecord(id){
-  const rec = db.records.find(r => r.id === id);
-  if (!rec) return;
-  if (!confirm(`确定删除「${rec.name} · ${rec.event} · ${money(rec.amount)}」？`)) return;
-  db.records = db.records.filter(r => r.id !== id);
-  saveLocal();
-  Sync.schedulePush();
-  render();
-  toast('已删除');
-}
+function closeModal(){ $('#overlay').classList.remove('show'); editingId=null; $('#recordForm').reset(); }
 
-/* ============================================================
- *  导入导出
- * ============================================================ */
-function download(content, filename, type){
-  const blob = new Blob([content], { type: type || 'application/octet-stream' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-function stamp(){
-  const d = new Date(), p = n => String(n).padStart(2,'0');
-  return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`;
-}
-function exportJSON(){
-  if (!db.records.length){ toast('暂无数据'); return; }
-  download(JSON.stringify(db, null, 2), `人情簿_${stamp()}.json`, 'application/json');
-  toast('JSON 已导出');
-}
-function csvCell(v){
-  v = (v === null || v === undefined) ? '' : String(v);
-  return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v;
-}
+function download(content,filename,type){ const blob=new Blob([content],{type:type||'application/octet-stream'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(url),1000); }
+function stamp(){ const d=new Date(),p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`; }
+function exportJSON(){ if (!db.records.length){ toast('暂无数据'); return; } download(JSON.stringify(db,null,2),`人情簿_${stamp()}.json`,'application/json'); toast('JSON 已导出'); }
+function csvCell(v){ v=(v===null||v===undefined)?'':String(v); return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
 function exportCSV(){
   if (!db.records.length){ toast('暂无数据'); return; }
-  const head = ['日期','姓名','关系','事由','方向','金额','方式','地点','备注'];
-  const rows = sortRecordsDesc(db.records).map(r => [
-    r.date, r.name, r.relation, r.event,
-    r.direction === 'in' ? '收礼' : '送礼',
-    r.amount, r.method, r.location, r.note
-  ]);
-  const csv = [head, ...rows].map(row => row.map(csvCell).join(',')).join('\r\n');
-  download('\uFEFF' + csv, `人情簿_${stamp()}.csv`, 'text/csv;charset=utf-8');
+  const head=['日期','姓名','关系','事由','方向','金额','方式','地点','备注'];
+  const rows = sortRecordsDesc(db.records).map(r=>[r.date,r.name,r.relation,r.event,r.direction==='in'?'收礼':'送礼',r.amount,r.method,r.location,r.note]);
+  const csv = [head, ...rows].map(row=>row.map(csvCell).join(',')).join('\r\n');
+  download('\uFEFF'+csv,`人情簿_${stamp()}.csv`,'text/csv;charset=utf-8');
   toast('CSV 已导出');
 }
 function normalizeRecord(r){
-  if (!r || typeof r !== 'object') return null;
+  if (!r||typeof r!=='object') return null;
   const dirRaw = r.direction ?? r.方向 ?? '';
-  const dir = (dirRaw === 'in' || dirRaw === '收礼' || dirRaw === '收') ? 'in' : 'out';
+  const dir = (dirRaw==='in'||dirRaw==='收礼'||dirRaw==='收')?'in':'out';
   return {
-    id: r.id || uid(),
     name: String(r.name ?? r.姓名 ?? '未知').trim() || '未知',
     relation: r.relation ?? r.关系 ?? '其他',
     event: r.event ?? r.事由 ?? r.事件 ?? '其他',
     direction: dir,
     amount: Number(r.amount ?? r.金额 ?? 0) || 0,
-    date: String(r.date ?? r.日期 ?? today()).slice(0, 10),
+    date: String(r.date ?? r.日期 ?? today()).slice(0,10),
     method: r.method ?? r.方式 ?? '',
     location: r.location ?? r.地点 ?? '',
-    note: r.note ?? r.备注 ?? '',
-    createdAt: r.createdAt || Date.now(),
-    updatedAt: r.updatedAt || r.createdAt || Date.now()
+    note: r.note ?? r.备注 ?? ''
   };
 }
-function importJSONFile(file){
+async function importJSONFile(file){
   const reader = new FileReader();
-  reader.onload = e => {
+  reader.onload = async e => {
     try{
       const parsed = JSON.parse(e.target.result);
       const arr = Array.isArray(parsed) ? parsed : (parsed && Array.isArray(parsed.records) ? parsed.records : null);
       if (!arr) throw new Error('文件格式不正确');
       const list = arr.map(normalizeRecord).filter(Boolean);
       if (!list.length) throw new Error('没有可导入的记录');
-      const overwrite = confirm(`解析到 ${list.length} 条记录。\n\n点「确定」= 覆盖现有数据\n点「取消」= 追加到现有数据`);
-      db.records = overwrite ? list : db.records.concat(list);
-      saveLocal();
-      Sync.schedulePush();
-      render();
+      if (!confirm(`解析到 ${list.length} 条记录，确定导入到当前账号？`)) return;
+      const { error } = await supabase.from('records').insert(list);
+      if (error) throw error;
+      await loadRecordsFromSupabase();
       toast(`已导入 ${list.length} 条`);
-    }catch(err){ toast('导入失败：' + err.message); }
+    }catch(err){ toast('导入失败：'+err.message); }
   };
   reader.onerror = () => toast('文件读取失败');
-  reader.readAsText(file, 'utf-8');
+  reader.readAsText(file,'utf-8');
 }
-
-/* ============================================================
- *  示例数据
- * ============================================================ */
 const SAMPLE = [
   { name:'张伟', relation:'朋友', event:'婚礼', direction:'in', amount:800, date:'2023-05-12', method:'微信', location:'金满楼酒店', note:'大学室友结婚' },
   { name:'李娜', relation:'同事', event:'满月百日', direction:'out', amount:500, date:'2023-08-03', method:'支付宝', location:'公司', note:'同事家宝宝满月' },
   { name:'王强', relation:'亲戚', event:'乔迁新居', direction:'in', amount:1000, date:'2023-10-01', method:'现金', location:'新居', note:'表哥乔迁' },
   { name:'刘敏', relation:'同学', event:'婚礼', direction:'out', amount:600, date:'2024-01-18', method:'微信', location:'香格里拉', note:'高中同学' },
   { name:'张伟', relation:'朋友', event:'生日寿宴', direction:'out', amount:300, date:'2024-03-22', method:'微信', location:'海底捞', note:'回请生日' },
-  { name:'陈静', relation:'朋友', event:'升学升职', direction:'in', amount:500, date:'2024-06-15', method:'微信', location:'', note:'升职宴请' },
-  { name:'赵磊', relation:'同事', event:'婚礼', direction:'out', amount:800, date:'2024-09-09', method:'银行转账', location:'万豪酒店', note:'部门同事' },
-  { name:'孙丽', relation:'邻居', event:'丧事白事', direction:'out', amount:400, date:'2024-11-20', method:'现金', location:'', note:'邻居家白事' },
-  { name:'周涛', relation:'客户生意', event:'开业庆典', direction:'in', amount:2000, date:'2025-01-08', method:'银行转账', location:'公司', note:'合作方开业' },
-  { name:'吴芳', relation:'亲戚', event:'满月百日', direction:'out', amount:1000, date:'2025-03-16', method:'微信', location:'老家', note:'堂姐家二胎' },
-  { name:'李娜', relation:'同事', event:'生日寿宴', direction:'in', amount:200, date:'2025-05-05', method:'微信', location:'', note:'生日红包' },
-  { name:'郑凯', relation:'同学', event:'婚礼', direction:'out', amount:800, date:'2025-06-28', method:'微信', location:'凯宾斯基', note:'研究生同学' }
+  { name:'陈静', relation:'朋友', event:'升学升职', direction:'in', amount:500, date:'2024-06-15', method:'微信', location:'', note:'升职宴请' }
 ];
-function loadSample(){
-  const list = SAMPLE.map(s => Object.assign({ id: uid(), createdAt: Date.now(), updatedAt: Date.now() }, s));
-  db.records = db.records.concat(list);
-  saveLocal();
-  Sync.schedulePush();
-  render();
+async function loadSample(){
+  const list = SAMPLE.map(s=>Object.assign({},s));
+  const { error } = await supabase.from('records').insert(list);
+  if (error){ toast('载入失败：'+error.message); return; }
+  await loadRecordsFromSupabase();
   toast(`已载入 ${list.length} 条示例`);
 }
 
 /* ============================================================
- *  主题切换
+ *  9. 主题切换
  * ============================================================ */
 function setTheme(theme){
   document.documentElement.dataset.theme = theme;
   localStorage.setItem(THEME_KEY, theme);
-  // 更新两个按钮的图标
-  const icon = theme === 'dark' ? '☀️' : '🌙';
-  const label = theme === 'dark' ? '浅色模式' : '深色模式';
-  const tb = $('#themeToggle');       if (tb) tb.textContent = `${icon} ${label}`;
+  const icon = theme==='dark'?'☀️':'🌙'; const label = theme==='dark'?'浅色模式':'深色模式';
+  const tb = $('#themeToggle'); if (tb) tb.textContent = `${icon} ${label}`;
   const tm = $('#themeToggleMobile'); if (tm) tm.textContent = icon;
-  // 同步 theme-color
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', theme === 'dark' ? '#1e1b17' : '#f6f3ee');
-  // 重绘图表
-  if (currentView === 'stats') renderStats();
+  if (meta) meta.setAttribute('content', theme==='dark'?'#1e1b17':'#f6f3ee');
+  if (currentView==='stats') renderStats();
 }
-function toggleTheme(){
-  const cur = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  setTheme(cur);
-  toast(cur === 'dark' ? '已切换到深色模式' : '已切换到浅色模式');
-}
+function toggleTheme(){ const cur = document.documentElement.dataset.theme==='dark'?'light':'dark'; setTheme(cur); toast(cur==='dark'?'已切换到深色模式':'已切换到浅色模式'); }
 
 /* ============================================================
- *  云同步设置弹窗
- * ============================================================ */
-function openSyncModal(){
-  $('#s-binId').value = Sync.cfg.binId || '';
-  $('#s-key').value   = Sync.cfg.key || '';
-  $('#s-auto').value  = Sync.cfg.auto || 'off';
-  $('#syncState').innerHTML = Sync.enabled()
-    ? '当前状态：<b style="color:var(--green)">已配置</b>，可直接点下方按钮测试同步。'
-    : '填写完毕后点击「保存设置」即可。';
-  $('#syncOverlay').classList.add('show');
-}
-function closeSyncModal(){ $('#syncOverlay').classList.remove('show'); }
-
-/* ============================================================
- *  全局事件
+ *  10. 全局事件绑定
  * ============================================================ */
 function bindEvents(){
-  // 导航
-  $$('.nav-item, .mobile-nav-item').forEach(btn => {
-    btn.addEventListener('click', () => navigate(btn.dataset.view));
-  });
-
-  // 主题
+  $$('.nav-item, .mobile-nav-item').forEach(btn => btn.addEventListener('click', ()=>navigate(btn.dataset.view)));
   $('#themeToggle').addEventListener('click', toggleTheme);
   $('#themeToggleMobile').addEventListener('click', toggleTheme);
-
-  // 记录弹窗
   $('#modalClose').addEventListener('click', closeModal);
   $('#btnCancel').addEventListener('click', closeModal);
-  $('#overlay').addEventListener('click', e => { if (e.target === $('#overlay')) closeModal(); });
-  $$('#dirSeg .seg-btn').forEach(btn => btn.addEventListener('click', () => setDirection(btn.dataset.dir)));
+  $('#overlay').addEventListener('click', e=>{ if (e.target===$('#overlay')) closeModal(); });
+  $$('#dirSeg .seg-btn').forEach(btn=>btn.addEventListener('click', ()=>setDirection(btn.dataset.dir)));
   $('#recordForm').addEventListener('submit', saveRecord);
 
-  // 同步弹窗
-  $('#syncClose').addEventListener('click', closeSyncModal);
-  $('#syncOverlay').addEventListener('click', e => { if (e.target === $('#syncOverlay')) closeSyncModal(); });
-  $('#btnSyncSave').addEventListener('click', () => {
-    Sync.cfg.binId = $('#s-binId').value.trim();
-    Sync.cfg.key   = $('#s-key').value.trim();
-    Sync.cfg.auto  = $('#s-auto').value;
-    Sync.save();
-    if (Sync.enabled()){
-      toast('设置已保存，正在测试同步…');
-      closeSyncModal();
-      Sync.push(true).then(ok => { if (ok) toast('同步成功！'); });
-    } else {
-      toast('设置已保存（未填写完整）');
-    }
-  });
-  $('#btnSyncPull').addEventListener('click', () => {
-    Sync.cfg.binId = $('#s-binId').value.trim();
-    Sync.cfg.key   = $('#s-key').value.trim();
-    Sync.save();
-    Sync.pull(false);
-  });
-  $('#btnSyncPush').addEventListener('click', () => {
-    Sync.cfg.binId = $('#s-binId').value.trim();
-    Sync.cfg.key   = $('#s-key').value.trim();
-    Sync.save();
-    Sync.push(false);
-  });
-
-  // 全局点击委托
-  document.addEventListener('click', e => {
-    const el = e.target.closest('[data-act]');
-    if (!el) return;
+  document.addEventListener('click', e=>{
+    const el = e.target.closest('[data-act]'); if (!el) return;
     const act = el.dataset.act;
     switch (act){
       case 'add': openModal(null); break;
       case 'edit': openModal(el.dataset.id); break;
       case 'del': deleteRecord(el.dataset.id); break;
       case 'goto': navigate(el.dataset.view); break;
-      case 'togglePerson': {
-        const n = el.dataset.name;
-        if (expandedPeople.has(n)) expandedPeople.delete(n); else expandedPeople.add(n);
-        renderPeople();
-        break;
-      }
-      case 'quickAdd':
-        openModal(null, { name: el.dataset.name, relation: el.dataset.relation, direction: 'out' });
-        break;
-      case 'filterByPerson': {
-        navigate('records');
-        setTimeout(() => {
-          const input = $('#searchInput');
-          if (input){ input.value = el.dataset.name; updateRecordsTable(); }
-        }, 40);
-        break;
-      }
-      case 'clearFilter': {
-        ['searchInput','filterDir','filterEvent','filterYear'].forEach(id => {
-          const n = $('#'+id);
-          if (n) n.value = id === 'searchInput' ? '' : 'all';
-        });
-        updateRecordsTable();
-        break;
-      }
-      case 'chartMode': chartMode = el.dataset.mode; renderStats(); break;
+      case 'togglePerson': { const n=el.dataset.name; if (expandedPeople.has(n)) expandedPeople.delete(n); else expandedPeople.add(n); renderPeople(); break; }
+      case 'quickAdd': openModal(null, {name:el.dataset.name, relation:el.dataset.relation, direction:'out'}); break;
+      case 'filterByPerson': { navigate('records'); setTimeout(()=>{ const input=$('#searchInput'); if (input){ input.value=el.dataset.name; updateRecordsTable(); } },40); break; }
+      case 'clearFilter': { ['searchInput','filterDir','filterEvent','filterYear'].forEach(id=>{ const n=$('#'+id); if (n) n.value = id==='searchInput'?'':'all'; }); updateRecordsTable(); break; }
+      case 'chartMode': chartMode=el.dataset.mode; renderStats(); break;
       case 'exportJSON': exportJSON(); break;
       case 'exportCSV': exportCSV(); break;
       case 'importJSON': $('#importFile').click(); break;
-      case 'loadSample': if (confirm('载入 12 条示例数据？')) loadSample(); break;
-      case 'clearAll':
-        if (confirm('确定清空全部记录？不可撤销！') && confirm('再次确认：将永久删除所有数据。')){
-          db.records = []; saveLocal(); Sync.schedulePush();
-          expandedPeople.clear(); render(); toast('已清空');
-        }
-        break;
-      case 'openSync': openSyncModal(); break;
-      case 'syncNow': Sync.pull(false); break;
+      case 'loadSample': if (confirm('载入 6 条示例数据？')) loadSample(); break;
+      case 'clearAll': if (confirm('确定清空全部记录？不可撤销！') && confirm('再次确认：将永久删除所有数据。')){ supabase.from('records').delete().neq('id',0).then(()=>loadRecordsFromSupabase()); } break;
     }
   });
 
-  // 导入
-  $('#importFile').addEventListener('change', e => {
-    const f = e.target.files && e.target.files[0];
-    if (f) importJSONFile(f);
-    e.target.value = '';
-  });
-
-  // ESC 关闭弹窗
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape'){
-      if ($('#overlay').classList.contains('show')) closeModal();
-      if ($('#syncOverlay').classList.contains('show')) closeSyncModal();
-    }
-    if (e.key.toLowerCase() === 'n' && !e.metaKey && !e.ctrlKey && !e.altKey){
-      const tag = (document.activeElement.tagName || '').toLowerCase();
-      if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+  $('#importFile').addEventListener('change', e=>{ const f=e.target.files&&e.target.files[0]; if (f) importJSONFile(f); e.target.value=''; });
+  document.addEventListener('keydown', e=>{
+    if (e.key==='Escape'){ if ($('#overlay').classList.contains('show')) closeModal(); }
+    if (e.key.toLowerCase()==='n' && !e.metaKey && !e.ctrlKey && !e.altKey){
+      const tag = (document.activeElement.tagName||'').toLowerCase();
+      if (tag==='input'||tag==='textarea'||tag==='select') return;
       if ($('#overlay').classList.contains('show')) return;
       openModal(null);
     }
   });
-
-  // 窗口尺寸变化重绘
   let rt;
-  window.addEventListener('resize', () => {
-    clearTimeout(rt);
-    rt = setTimeout(() => { if (currentView === 'stats') renderStats(); }, 200);
-  });
-
-  // 页面重新可见时拉取
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && Sync.enabled() && db.records.length === 0){
-      Sync.pull(true);
-    }
-  });
-
-  // 关闭页面时把待推送的内容推出去
-  window.addEventListener('beforeunload', () => {
-    if (Sync.enabled() && Sync.cfg.auto === 'on' && Sync.pushTimer){
-      // 同步发送（尽力而为）
-      try {
-        const data = JSON.stringify({ records: db.records, updatedAt: db.updatedAt || Date.now() });
-        navigator.sendBeacon?.(
-          `https://api.jsonbin.io/v3/b/${Sync.cfg.binId}`,
-          new Blob([data], { type: 'application/json' })
-        );
-      } catch(e){}
-    }
-  });
+  window.addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(()=>{ if (currentView==='stats') renderStats(); },200); });
 }
 
 /* ============================================================
- *  初始化
+ *  11. 初始化
  * ============================================================ */
-function init(){
-  // 主题
+async function init(){
   const saved = localStorage.getItem(THEME_KEY);
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   setTheme(saved || (prefersDark ? 'dark' : 'light'));
-
-  // 本地数据
-  loadLocal();
-
-  // 同步配置
-  Sync.load();
-
-  // 下拉框
   fillSelect($('#f-relation'), RELATIONS);
   fillSelect($('#f-event'), EVENT_TYPES);
   fillSelect($('#f-method'), METHODS);
   $('#f-date').value = today();
-
   bindEvents();
   navigate('dashboard');
-
-  // 启动时从云端拉取
-  if (Sync.enabled()){
-    Sync.pull(true);
-  }
+  await checkAuth();
 }
 document.addEventListener('DOMContentLoaded', init);
 </script>
