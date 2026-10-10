@@ -12,7 +12,7 @@
 html[data-theme="dark"]{--bg:#141210;--panel:#1e1b17;--panel-2:#252119;--text:#f2ece2;--text-2:#c3b8a9;--muted:#8d8377;--border:#332d25;--primary:#e2685a;--primary-2:#f0836f;--primary-soft:#3a221e;--gold:#e0b355;--gold-soft:#332a18;--green:#5cb98a;--green-soft:#1c2c23;--blue:#7aa6e0;--blue-soft:#1b2430;--shadow-sm:0 1px 2px rgba(0,0,0,.3);--shadow-md:0 6px 20px rgba(0,0,0,.35)}
 html,body{height:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background-color:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.5;transition:background-color .25s,color .25s}
-.app{display:flex;min-height:100vh}
+.app{display:flex;min-height:100vh;position:relative;z-index:2}
 .sidebar{width:230px;flex:0 0 230px;padding:22px 14px 18px;border-right:1px solid var(--border);background:var(--panel);position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
 .brand{display:flex;align-items:center;gap:11px;padding:4px 8px 22px}
 .brand-logo{width:40px;height:40px;border-radius:13px;flex:0 0 40px;background:linear-gradient(135deg,#c0392b,#d9a441);display:grid;place-items:center;color:#fff;font-weight:700;font-size:17px;letter-spacing:1px}
@@ -143,13 +143,13 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
 .dl{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--border);font-size:13.5px}
 .dl:last-child{border-bottom:none}.dl dt{color:var(--muted)}.dl dd{font-weight:600;font-variant-numeric:tabular-nums}
 .kv-big{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
-/* ===== 人情画像 ===== */
+/* 人情画像 */
 .persona-card{background:linear-gradient(135deg,#fff8f3,#fdf0ee);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow-sm);margin-bottom:16px;position:relative;overflow:hidden}
 html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,#2a1618)}
 .persona-card::after{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(192,57,43,.08),transparent 70%);pointer-events:none}
 .persona-main{display:flex;align-items:center;gap:14px;margin-bottom:14px;position:relative;z-index:1}
 .persona-icon{width:56px;height:56px;border-radius:16px;flex:0 0 56px;background:linear-gradient(135deg,#c0392b,#d9a441);display:grid;place-items:center;font-size:28px;box-shadow:0 6px 18px rgba(192,57,43,.24)}
-.persona-title{font-size:20px;font-weight:700;letter-spacing:-.3px}
+.persona-title{font-size:20px;font-weight:700;letter-spacing:-.3px;display:inline-block}
 .persona-desc{font-size:13px;color:var(--text-2);margin-top:3px}
 .persona-tags{display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:1}
 .persona-tag{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:600;background:var(--panel);border:1px solid var(--border);color:var(--text-2);transition:.15s}
@@ -158,6 +158,68 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
 .remind-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed var(--border)}
 .remind-item:last-child{border-bottom:none}
 .remind-badge{padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:600;background:var(--primary-soft);color:var(--primary)}
+.remind-bell{display:inline-block;transform-origin:50% 10%}
+/* ================ 特效样式 ================ */
+/* ① 数字滚动 - 只需 container，无特殊样式 */
+/* ② 卡片 stagger */
+html:not(.no-stagger) .stats .stat{opacity:0;transform:translateY(10px);animation:statIn .5s cubic-bezier(.2,.8,.3,1) forwards}
+html:not(.no-stagger) .stats .stat:nth-child(1){animation-delay:.05s}
+html:not(.no-stagger) .stats .stat:nth-child(2){animation-delay:.11s}
+html:not(.no-stagger) .stats .stat:nth-child(3){animation-delay:.17s}
+html:not(.no-stagger) .stats .stat:nth-child(4){animation-delay:.23s}
+@keyframes statIn{to{opacity:1;transform:none}}
+/* ③ 称号 shimmer */
+html:not(.no-shimmer) .persona-title{
+  background:linear-gradient(90deg,var(--text) 0%,var(--text) 40%,#d9a441 48%,#f5d98b 52%,#d9a441 56%,var(--text) 64%,var(--text) 100%);
+  background-size:250% 100%;background-position:100% 0;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shimmer 4.5s ease-in-out infinite;
+}
+@keyframes shimmer{0%,72%{background-position:100% 0}88%{background-position:-50% 0}100%{background-position:-50% 0}}
+/* ④ 金粉粒子 */
+.gold-particle{position:fixed;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#f5d98b,#d9a441);box-shadow:0 0 6px rgba(217,164,65,.6);pointer-events:none;z-index:999;animation:burst .9s cubic-bezier(.2,.8,.3,1) forwards}
+@keyframes burst{0%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.15);opacity:0}}
+/* ⑤ 新记录高亮 */
+html:not(.no-highlight) tr.is-new{animation:highlightNew 1.6s ease-out}
+@keyframes highlightNew{0%{background:rgba(47,143,91,.18)}100%{background:transparent}}
+html[data-theme="dark"]:not(.no-highlight) tr.is-new{animation:highlightNewDark 1.6s ease-out}
+@keyframes highlightNewDark{0%{background:rgba(92,185,138,.18)}100%{background:transparent}}
+/* ⑥ 铃铛摇摆 */
+html:not(.no-bell-swing) .remind-bell{animation:bellSwing 3s ease-in-out infinite}
+@keyframes bellSwing{0%,80%,100%{transform:rotate(0)}84%{transform:rotate(14deg)}88%{transform:rotate(-12deg)}92%{transform:rotate(8deg)}96%{transform:rotate(-4deg)}}
+/* ⑦ 深色微尘 */
+html[data-theme="dark"]:not(.no-dust) body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:1;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 30%,rgba(217,164,65,.28),transparent 50%),
+    radial-gradient(1.5px 1.5px at 70% 60%,rgba(226,104,90,.22),transparent 50%),
+    radial-gradient(1px 1px at 40% 80%,rgba(217,164,65,.22),transparent 50%),
+    radial-gradient(1px 1px at 85% 20%,rgba(226,104,90,.18),transparent 50%),
+    radial-gradient(1.5px 1.5px at 12% 65%,rgba(217,164,65,.2),transparent 50%),
+    radial-gradient(1px 1px at 55% 15%,rgba(226,104,90,.15),transparent 50%);
+  background-size:100% 200%;
+  animation:drift 60s linear infinite;
+}
+@keyframes drift{0%{background-position:0 0}100%{background-position:0 -200px}}
+/* ⑧ 金雨 canvas */
+#goldRainCanvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
+/* ⑨ 婚礼落樱 */
+.sakura-container{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.sakura{position:absolute;top:-20px;width:12px;height:12px;background:radial-gradient(circle at 30% 30%,#ffd9e1,#f4a3b5);border-radius:50% 0 50% 50%;box-shadow:0 0 6px rgba(244,163,181,.4);animation:fall linear infinite}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:0}10%{opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:.6}}
+/* 特效设置开关 UI */
+.fx-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px dashed var(--border)}
+.fx-row:last-child{border-bottom:none}
+.fx-row .fx-info{flex:1;min-width:0}
+.fx-row .fx-name{font-size:13.5px;font-weight:600}
+.fx-row .fx-desc{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.5}
+.fx-switch{position:relative;display:inline-block;width:44px;height:26px;flex:0 0 44px}
+.fx-switch input{opacity:0;width:0;height:0}
+.fx-slider{position:absolute;cursor:pointer;inset:0;background:var(--border);border-radius:26px;transition:.24s}
+.fx-slider::before{content:'';position:absolute;height:20px;width:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.24s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.fx-switch input:checked + .fx-slider{background:var(--primary)}
+.fx-switch input:checked + .fx-slider::before{transform:translateX(18px)}
 .mobile-nav,.mobile-topbar{display:none}
 @media(max-width:860px){
   .sidebar{display:none}.app{flex-direction:column}
@@ -231,7 +293,7 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
         <button class="btn btn-ghost btn-sm" id="quickExport" title="导出全部数据为 JSON 备份">⬇️ 导出</button>
         <button class="btn btn-ghost btn-sm" data-act="add" title="添加记录（快捷键 N）">＋ 添加</button>
       </div>
-      <div class="sync-label" id="syncLabel" role="button" tabindex="0" title="点击配置云同步"><span class="sync-dot idle"></span>未同步 · 点击配置</div>
+      <div class="sync-label" id="syncLabel" role="button" tabindex="0"><span class="sync-dot idle"></span>未同步 · 点击配置</div>
       <button class="btn btn-ghost btn-block btn-sm" id="themeToggle">🌙 深色模式</button>
     </div>
   </aside>
@@ -257,7 +319,7 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
   <button class="mobile-nav-item" data-view="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg><span>数据</span></button>
 </nav>
 
-<!-- 添加记录弹窗 -->
+<!-- 添加记录 -->
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal">
   <div class="modal-head"><h3 id="modalTitle">添加记录</h3><div class="spacer"></div><button class="icon-btn" id="modalClose" type="button" aria-label="关闭">&times;</button></div>
   <form id="recordForm">
@@ -278,9 +340,7 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
       </div>
     </div>
     <div class="modal-foot">
-      <label class="checkbox-row" title="保存后不关闭弹窗，自动聚焦到姓名输入框，适合礼金台连续录入">
-        <input type="checkbox" id="continuousMode"> 连续录入
-      </label>
+      <label class="checkbox-row" title="保存后不关闭弹窗，自动聚焦到姓名输入框"><input type="checkbox" id="continuousMode"> 连续录入</label>
       <div class="spacer"></div>
       <button type="button" class="btn" id="btnCancel">取消</button>
       <button type="submit" class="btn btn-primary">保存</button>
@@ -288,21 +348,16 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
   </form>
 </div></div>
 
-<!-- 云同步配置弹窗 -->
+<!-- 云同步 -->
 <div class="overlay" id="syncOverlay" role="dialog" aria-modal="true" aria-labelledby="syncTitle"><div class="modal">
   <div class="modal-head"><h3 id="syncTitle">☁️ 云同步设置（可选）</h3><div class="spacer"></div><button class="icon-btn" id="syncClose" type="button" aria-label="关闭">&times;</button></div>
   <div class="modal-body">
-    <p class="hint" style="line-height:1.8">
-      默认情况下，你的数据只保存在本地浏览器里，打开就能用。<br>
-      如果需要<b>手机和电脑同步</b>，请开启云同步：
-    </p>
-    <div class="steps">
-      <ol>
-        <li>到 <a href="https://jsonbin.io" target="_blank" rel="noopener" style="color:var(--primary)">jsonbin.io</a> 免费注册（可用 Google 一键注册）</li>
-        <li>创建一个 Bin，内容填 <code>{"records":[]}</code>，记下 <b>Bin ID</b></li>
-        <li>到 API Keys 页面复制 <b>Master Key</b>，填入下方</li>
-      </ol>
-    </div>
+    <p class="hint" style="line-height:1.8">默认情况下，你的数据只保存在本地浏览器里，打开就能用。<br>如果需要<b>手机和电脑同步</b>，请开启云同步：</p>
+    <div class="steps"><ol>
+      <li>到 <a href="https://jsonbin.io" target="_blank" rel="noopener" style="color:var(--primary)">jsonbin.io</a> 免费注册</li>
+      <li>创建一个 Bin，内容填 <code>{"records":[]}</code>，记下 <b>Bin ID</b></li>
+      <li>到 API Keys 页面复制 <b>Master Key</b>，填入下方</li>
+    </ol></div>
     <div class="field"><label for="s-binId">Bin ID</label><input id="s-binId" placeholder="65f8a1b2c3d4..."></div>
     <div class="field" style="margin-top:12px"><label for="s-key">Master Key</label><input id="s-key" placeholder="$2a$10$..." autocomplete="off"></div>
     <div class="field" style="margin-top:12px"><label for="s-auto">自动同步</label><select id="s-auto"><option value="on">开启（推荐）</option><option value="off">关闭（仅手动）</option></select></div>
@@ -310,7 +365,7 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
     <div class="hint" style="margin-top:10px;color:var(--primary)">⚠️ Master Key 拥有完全读写权限，请不要在公共设备上保存。</div>
   </div>
   <div class="modal-foot">
-    <button type="button" class="btn" id="btnSyncClear" title="清除本地保存的同步配置">清除配置</button>
+    <button type="button" class="btn" id="btnSyncClear">清除配置</button>
     <div class="spacer"></div>
     <button type="button" class="btn" id="btnSyncPull">⬇️ 拉取</button>
     <button type="button" class="btn" id="btnSyncPush">⬆️ 推送</button>
@@ -318,7 +373,7 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
   </div>
 </div></div>
 
-<!-- 关系管理弹窗 -->
+<!-- 关系管理 -->
 <div class="overlay" id="relationOverlay" role="dialog" aria-modal="true" aria-labelledby="relationTitle"><div class="modal" style="max-width:480px">
   <div class="modal-head"><h3 id="relationTitle">🏷️ 管理关系标签</h3><div class="spacer"></div><button class="icon-btn" id="relationClose" type="button" aria-label="关闭">&times;</button></div>
   <div class="modal-body">
@@ -332,15 +387,45 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
   <div class="modal-foot"><button class="btn" id="relationDone" type="button">完成</button></div>
 </div></div>
 
+<!-- 视觉特效设置 -->
+<div class="overlay" id="fxOverlay" role="dialog" aria-modal="true" aria-labelledby="fxTitle"><div class="modal" style="max-width:540px">
+  <div class="modal-head"><h3 id="fxTitle">✨ 视觉特效</h3><div class="spacer"></div><button class="icon-btn" id="fxClose" type="button" aria-label="关闭">&times;</button></div>
+  <div class="modal-body">
+    <p class="hint" style="margin-bottom:6px">按你的喜好自由开关，所有设置保存在本机。</p>
+    <div id="fxList"></div>
+  </div>
+  <div class="modal-foot">
+    <button class="btn" id="fxAllOn" type="button">全部开启</button>
+    <button class="btn" id="fxAllOff" type="button">全部关闭</button>
+    <button class="btn btn-primary" id="fxDone" type="button">完成</button>
+  </div>
+</div></div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
-const STORAGE_KEY='fenzi_db_v1',THEME_KEY='fenzi_theme',SYNC_KEY='fenzi_sync_cfg',REL_KEY='fenzi_relations_v1';
+const STORAGE_KEY='fenzi_db_v1',THEME_KEY='fenzi_theme',SYNC_KEY='fenzi_sync_cfg',REL_KEY='fenzi_relations_v1',FX_KEY='fenzi_fx_v1';
 const DEFAULT_EVENTS=['婚礼','订婚','满月百日','生日寿宴','乔迁新居','升学升职','开业庆典','丧事白事','探病慰问','节日问候','其他'];
 const DEFAULT_RELATIONS=['亲属','亲戚','朋友','同事','同学','邻居','客户生意','其他'];
 const METHODS=['现金','微信','支付宝','银行转账','实物礼品','其他'];
 const PALETTE=['#c0392b','#d97b2b','#c8a02e','#5b9e6b','#3b7fb6','#7a6bb5','#c2557f','#4fa3a3','#8d6e63','#9aa05b','#6c7a89'];
+const DEFAULT_FX={numberRoll:true,cardStagger:true,titleShimmer:true,goldBurst:true,newHighlight:true,bellSwing:true,darkDust:true,goldRain:true,weddingSakura:true};
+const FX_META=[
+  {key:'numberRoll',name:'🎬 数字滚动',desc:'进入概览时，统计数字从 0 滚到目标值'},
+  {key:'cardStagger',name:'🃏 卡片依次入场',desc:'统计卡从下往上逐张淡入'},
+  {key:'titleShimmer',name:'✨ 称号金光扫过',desc:'人情画像的称号每隔几秒有一道金光划过'},
+  {key:'goldBurst',name:'💫 保存金色粒子',desc:'保存记录后，按钮处飞出金粉粒子'},
+  {key:'newHighlight',name:'🟢 新记录高亮',desc:'刚添加的记录在列表里闪现淡绿背景'},
+  {key:'bellSwing',name:'🔔 回礼铃铛摇摆',desc:'回礼提醒卡片的铃铛每 3 秒轻摇一次'},
+  {key:'darkDust',name:'🌌 深色背景微尘',desc:'深色模式下背景有微弱的金色粒子飘动'},
+  {key:'goldRain',name:'🎊 里程碑金雨',desc:'第 10/50/100/500 条记录时洒落金粉'},
+  {key:'weddingSakura',name:'🌸 婚礼落樱',desc:'当"婚礼"类记录 ≥ 40% 时，概览页飘落樱花'}
+];
 let db={records:[],updatedAt:0},currentView='dashboard',editingId=null,formDirection='out',chartMode='year';
 let customRelations=[];
+let fxConfig=Object.assign({},DEFAULT_FX);
+let lastAddedId=null;
+let numberRollPlayedThisSession=false;
 const expandedPeople=new Set();
 const $=(s,p=document)=>p.querySelector(s),$$=(s,p=document)=>Array.from(p.querySelectorAll(s));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -357,7 +442,116 @@ function loadRelations(){try{const r=JSON.parse(localStorage.getItem(REL_KEY)||'
 function saveRelations(){localStorage.setItem(REL_KEY,JSON.stringify(customRelations))}
 function allRelations(){return Array.from(new Set([...DEFAULT_RELATIONS,...customRelations]))}
 
-/* ============ 云同步（可选） ============ */
+/* ========== 特效配置 ========== */
+function loadFx(){try{const r=JSON.parse(localStorage.getItem(FX_KEY)||'{}');fxConfig=Object.assign({},DEFAULT_FX,r)}catch(e){fxConfig=Object.assign({},DEFAULT_FX)}applyFx()}
+function saveFx(){localStorage.setItem(FX_KEY,JSON.stringify(fxConfig));applyFx()}
+function applyFx(){
+  const h=document.documentElement;
+  h.classList.toggle('no-stagger',!fxConfig.cardStagger);
+  h.classList.toggle('no-shimmer',!fxConfig.titleShimmer);
+  h.classList.toggle('no-bell-swing',!fxConfig.bellSwing);
+  h.classList.toggle('no-dust',!fxConfig.darkDust);
+  h.classList.toggle('no-highlight',!fxConfig.newHighlight);
+  if(!fxConfig.weddingSakura)removeSakura();
+  else if(currentView==='dashboard')updateSakura();
+}
+
+/* ========== ① 数字滚动 ========== */
+function animateNumberEl(el,duration=900){
+  const to=Number(el.dataset.animateValue)||0;
+  const type=el.dataset.animateType||'money';
+  const suffix=el.dataset.animateSuffix||'';
+  const prefix=el.dataset.animatePrefix||'';
+  const from=0,start=performance.now();
+  (function frame(now){
+    const t=Math.min(1,(now-start)/duration);
+    const eased=1-Math.pow(1-t,3);
+    const cur=from+(to-from)*eased;
+    if(type==='int')el.innerHTML=prefix+Math.round(cur)+suffix;
+    else el.textContent=prefix+money(cur)+suffix;
+    if(t<1)requestAnimationFrame(frame);
+  })(start);
+}
+function playNumberRoll(){
+  if(!fxConfig.numberRoll)return;
+  $$('[data-animate-value]').forEach(el=>animateNumberEl(el));
+}
+
+/* ========== ④ 金粉爆开 ========== */
+function goldBurst(x,y,count=16){
+  if(!fxConfig.goldBurst)return;
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div');
+    p.className='gold-particle';
+    const angle=(Math.PI*2*i)/count+Math.random()*0.4;
+    const dist=60+Math.random()*90;
+    p.style.left=x+'px';p.style.top=y+'px';
+    p.style.setProperty('--dx',Math.cos(angle)*dist+'px');
+    p.style.setProperty('--dy',Math.sin(angle)*dist+'px');
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1000);
+  }
+}
+
+/* ========== ⑧ 金雨 ========== */
+function goldRain(duration=2000){
+  if(!fxConfig.goldRain)return;
+  const cv=document.createElement('canvas');
+  cv.id='goldRainCanvas';
+  cv.width=innerWidth*devicePixelRatio;
+  cv.height=innerHeight*devicePixelRatio;
+  cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';
+  document.body.appendChild(cv);
+  const ctx=cv.getContext('2d');
+  ctx.scale(devicePixelRatio,devicePixelRatio);
+  const parts=Array.from({length:60},()=>({
+    x:Math.random()*innerWidth,y:-20-Math.random()*200,
+    vx:(Math.random()-.5)*.6,vy:1.5+Math.random()*2,
+    r:1.5+Math.random()*2.5,
+    hue:Math.random()>.5?40:10
+  }));
+  const end=performance.now()+duration;
+  (function frame(now){
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    parts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.y>innerHeight+20){p.y=-10;p.x=Math.random()*innerWidth}
+      ctx.fillStyle=`hsla(${p.hue},70%,60%,.85)`;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+    });
+    if(now<end)requestAnimationFrame(frame);
+    else cv.remove();
+  })(performance.now());
+}
+function checkMilestone(count){
+  const milestones=[10,50,100,500,1000];
+  if(milestones.includes(count)){
+    setTimeout(()=>goldRain(2500),400);
+    setTimeout(()=>toast(`🎉 恭喜！已记录 ${count} 条`),200);
+  }
+}
+
+/* ========== ⑨ 婚礼落樱 ========== */
+function weddingRatio(){if(!db.records.length)return 0;const w=db.records.filter(r=>r.event==='婚礼').length;return w/db.records.length}
+function updateSakura(){
+  if(!fxConfig.weddingSakura||currentView!=='dashboard'||db.records.length<5||weddingRatio()<0.4){removeSakura();return}
+  if($('.sakura-container'))return;
+  const wrap=document.createElement('div');
+  wrap.className='sakura-container';
+  for(let i=0;i<10;i++){
+    const s=document.createElement('div');
+    s.className='sakura';
+    s.style.left=(Math.random()*100)+'%';
+    s.style.animationDuration=(8+Math.random()*6)+'s';
+    s.style.animationDelay=(-Math.random()*10)+'s';
+    s.style.transform=`scale(${.6+Math.random()*.8})`;
+    wrap.appendChild(s);
+  }
+  document.body.appendChild(wrap);
+}
+function removeSakura(){const el=$('.sakura-container');if(el)el.remove()}
+
+/* ========== 云同步（可选） ========== */
 const Sync={
   cfg:{binId:'',key:'',auto:'off'},busy:false,pushTimer:null,
   load(){try{const c=JSON.parse(localStorage.getItem(SYNC_KEY)||'{}');this.cfg=Object.assign({binId:'',key:'',auto:'off'},c)}catch(e){this.cfg={binId:'',key:'',auto:'off'}}},
@@ -410,21 +604,13 @@ const sumBy=(rs,d)=>rs.filter(r=>r.direction===d).reduce((s,r)=>s+(Number(r.amou
 function personStats(){const m=new Map();db.records.forEach(r=>{const k=(r.name||'未知').trim();if(!m.has(k))m.set(k,{name:k,relation:r.relation||'其他',in:0,out:0,count:0,records:[],last:''});const p=m.get(k);p.records.push(r);p.count++;if(r.direction==='in')p.in+=Number(r.amount)||0;else p.out+=Number(r.amount)||0;if(r.relation)p.relation=r.relation;if(!p.last||(r.date||'')>p.last)p.last=r.date||''});return Array.from(m.values()).map(p=>Object.assign(p,{net:p.in-p.out})).sort((a,b)=>Math.abs(b.net)-Math.abs(a.net)||b.count-a.count)}
 const sortRecordsDesc=l=>l.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')||((b.createdAt||0)-(a.createdAt||0)));
 
-/* ===== 回礼提醒：找出我欠人情（对方送我的比我送对方多）的人，给参考金额 ===== */
 function getReminders(){
-  const people=personStats();
-  return people
-    .filter(p=>p.net>0.001)
-    .map(p=>{
-      // 参考金额 = 对方送我的总额 / 对方送我次数，向上取整到常见的整百
-      const avg=p.in/Math.max(1,p.records.filter(r=>r.direction==='in').length);
-      const rounded=Math.ceil(avg/100)*100;
-      return {name:p.name,relation:p.relation,net:p.net,suggest:rounded,last:p.last,count:p.count};
-    })
-    .sort((a,b)=>b.net-a.net);
+  return personStats().filter(p=>p.net>0.001).map(p=>{
+    const avg=p.in/Math.max(1,p.records.filter(r=>r.direction==='in').length);
+    const rounded=Math.ceil(avg/100)*100;
+    return {name:p.name,relation:p.relation,net:p.net,suggest:rounded,last:p.last};
+  }).sort((a,b)=>b.net-a.net);
 }
-
-/* ===== 人情画像 ===== */
 function getPersona(){
   const recs=db.records;if(!recs.length)return null;
   const totalIn=sumBy(recs,'in'),totalOut=sumBy(recs,'out');
@@ -475,8 +661,16 @@ function navigate(v){
   });
   $$('.view').forEach(el=>{el.hidden=(el.id!=='view-'+v)});
   render();window.scrollTo({top:0,behavior:'smooth'});
+  if(v==='dashboard')setTimeout(updateSakura,100);
+  else removeSakura();
 }
-function render(){if(currentView==='dashboard')renderDashboard();else if(currentView==='records')renderRecords();else if(currentView==='people')renderPeople();else if(currentView==='stats')renderStats();else if(currentView==='data')renderData()}
+function render(){
+  if(currentView==='dashboard')renderDashboard();
+  else if(currentView==='records')renderRecords();
+  else if(currentView==='people')renderPeople();
+  else if(currentView==='stats')renderStats();
+  else if(currentView==='data')renderData();
+}
 
 function renderDashboard(){
   const recs=db.records,totalIn=sumBy(recs,'in'),totalOut=sumBy(recs,'out'),net=totalIn-totalOut,people=personStats();
@@ -497,25 +691,21 @@ function renderDashboard(){
       ${persona.tags.length?`<div class="persona-tags">${persona.tags.map(t=>`<span class="persona-tag" title="${esc(t.desc)}">${t.icon} ${esc(t.text)}</span>`).join('')}</div>`:''}
     </div>`:'';
 
-  // 回礼提醒（最多显示 5 个）
-  const remindHTML = reminders.length ? reminders.slice(0,5).map(r=>`
+  const remindHTML=reminders.length?reminders.slice(0,5).map(r=>`
     <div class="remind-item">
       <div class="avatar" style="width:36px;height:36px;flex:0 0 36px;font-size:14px;border-radius:11px;background:${hashColor(r.name)}">${esc(r.name.slice(0,1))}</div>
-      <div style="flex:1;min-width:0">
-        <div style="font-weight:600;font-size:13.5px">${esc(r.name)}</div>
-        <div style="font-size:11.5px;color:var(--muted)">${esc(r.relation)} · 最近 ${esc(r.last||'—')}</div>
-      </div>
+      <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13.5px">${esc(r.name)}</div><div style="font-size:11.5px;color:var(--muted)">${esc(r.relation)} · 最近 ${esc(r.last||'—')}</div></div>
       <div class="remind-badge" title="根据历史往来金额推算的参考金额">建议回 ¥${r.suggest}</div>
       <button class="btn btn-sm" data-act="quickAdd" data-name="${esc(r.name)}" data-relation="${esc(r.relation)}" data-direction="out">还礼</button>
     </div>`).join('')
-    : `<div class="empty" style="padding:24px 10px"><div class="empty-icon" style="font-size:32px">✅</div><div class="empty-title">人情两清</div><div class="empty-sub">目前没有需要偿还的人情</div></div>`;
+    :`<div class="empty" style="padding:24px 10px"><div class="empty-icon" style="font-size:32px">✅</div><div class="empty-title">人情两清</div><div class="empty-sub">目前没有需要偿还的人情</div></div>`;
 
   const recentHTML=recent.length?`
     <div class="table-wrap"><table>
       <thead><tr><th>日期</th><th>姓名</th><th>事由</th><th style="text-align:right">金额</th></tr></thead>
-      <tbody>${recent.map(r=>`<tr data-act="edit" data-id="${r.id}" style="cursor:pointer"><td data-label="日期" style="color:var(--muted)">${esc((r.date||'').slice(5))}</td><td data-label="姓名" class="td-name">${esc(r.name)}</td><td data-label="事由"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收':'送'}</span> ${esc(r.event)}</td><td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td></tr>`).join('')}</tbody>
+      <tbody>${recent.map(r=>`<tr data-act="edit" data-id="${r.id}" class="${r.id===lastAddedId?'is-new':''}" style="cursor:pointer"><td data-label="日期" style="color:var(--muted)">${esc((r.date||'').slice(5))}</td><td data-label="姓名" class="td-name">${esc(r.name)}</td><td data-label="事由"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收':'送'}</span> ${esc(r.event)}</td><td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td></tr>`).join('')}</tbody>
     </table></div>`
-    : `<div class="empty" style="padding:30px 14px">
+    :`<div class="empty" style="padding:30px 14px">
         <div class="empty-icon">📖</div>
         <div class="empty-title">还没有记录</div>
         <div class="empty-sub" style="margin-bottom:14px">点击下方按钮，一键添加一条示例记录试试</div>
@@ -529,15 +719,19 @@ function renderDashboard(){
   </div>
   ${personaHTML}
   <div class="stats">
-    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--green)"></span>累计收礼</div><div class="stat-value" style="color:var(--green)">${money(totalIn)}</div><div class="stat-foot">共 ${inCount} 笔</div></div>
-    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--primary)"></span>累计送礼</div><div class="stat-value" style="color:var(--primary)">${money(totalOut)}</div><div class="stat-foot">共 ${outCount} 笔</div></div>
-    <div class="stat" title="净结余 = 累计收礼 − 累计送礼，反映当前人情收支的盈亏"><div class="stat-label"><span class="dot" style="background:var(--gold)"></span>净结余 ⓘ</div><div class="stat-value" style="color:${net>=0?'var(--green)':'var(--primary)'}">${net>=0?'+':''}${money(net)}</div><div class="stat-foot">${net>=0?'收大于送':'送大于收'}</div></div>
-    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--blue)"></span>往来人数</div><div class="stat-value" style="color:var(--blue)">${people.length}<span style="font-size:15px;font-weight:600;color:var(--muted)"> 人</span></div><div class="stat-foot">${reminders.length} 人待还</div></div>
+    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--green)"></span>累计收礼</div><div class="stat-value" style="color:var(--green)" data-animate-value="${totalIn}">${money(totalIn)}</div><div class="stat-foot">共 ${inCount} 笔</div></div>
+    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--primary)"></span>累计送礼</div><div class="stat-value" style="color:var(--primary)" data-animate-value="${totalOut}">${money(totalOut)}</div><div class="stat-foot">共 ${outCount} 笔</div></div>
+    <div class="stat" title="净结余 = 累计收礼 − 累计送礼，反映当前人情收支的盈亏"><div class="stat-label"><span class="dot" style="background:var(--gold)"></span>净结余 ⓘ</div><div class="stat-value" style="color:${net>=0?'var(--green)':'var(--primary)'}" data-animate-value="${net}" data-animate-prefix="${net>=0?'+':''}">${net>=0?'+':''}${money(net)}</div><div class="stat-foot">${net>=0?'收大于送':'送大于收'}</div></div>
+    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--blue)"></span>往来人数</div><div class="stat-value" style="color:var(--blue)" data-animate-value="${people.length}" data-animate-type="int" data-animate-suffix='<span style="font-size:15px;font-weight:600;color:var(--muted)"> 人</span>'>${people.length}<span style="font-size:15px;font-weight:600;color:var(--muted)"> 人</span></div><div class="stat-foot">${reminders.length} 人待还</div></div>
   </div>
   <div class="grid-2">
-    <div class="card"><div class="card-head"><div class="card-title">🔔 回礼提醒</div><div class="spacer"></div><span class="tag tag-out">${reminders.length} 人待还</span></div><div class="card-body" style="padding:6px 20px 12px">${remindHTML}</div></div>
+    <div class="card"><div class="card-head"><div class="card-title"><span class="remind-bell">🔔</span> 回礼提醒</div><div class="spacer"></div><span class="tag tag-out">${reminders.length} 人待还</span></div><div class="card-body" style="padding:6px 20px 12px">${remindHTML}</div></div>
     <div class="card"><div class="card-head"><div class="card-title">🕒 最近往来</div><div class="spacer"></div><button class="btn btn-sm btn-ghost" data-act="goto" data-view="records">全部 →</button></div><div class="card-body p0">${recentHTML}</div></div>
   </div>`;
+  // 播放数字滚动
+  requestAnimationFrame(playNumberRoll);
+  // 高亮刚添加的记录
+  if(lastAddedId){setTimeout(()=>{lastAddedId=null},2000)}
 }
 
 function renderRecords(){
@@ -573,7 +767,8 @@ function updateRecordsTable(){
   const list=filterRecords(),sIn=sumBy(list,'in'),sOut=sumBy(list,'out');
   const ce=$('#recCount');if(ce)ce.textContent=`筛选 ${list.length} 条 · 收 ${money(sIn)} · 送 ${money(sOut)}`;
   if(!list.length){wrap.innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">没有匹配的记录</div><div class="empty-sub">试试换个关键词或重置筛选</div></div></div>`;return}
-  wrap.innerHTML=`<div class="card"><div class="table-wrap"><table><thead><tr><th>日期</th><th>姓名</th><th>关系</th><th>事由</th><th>方向</th><th style="text-align:right">金额</th><th>方式</th><th>备注</th><th style="text-align:right">操作</th></tr></thead><tbody>${list.map(r=>`<tr><td data-label="日期" style="color:var(--muted)">${esc(r.date||'—')}</td><td data-label="姓名" class="td-name">${esc(r.name)}</td><td data-label="关系"><span class="tag tag-plain">${esc(r.relation||'其他')}</span></td><td data-label="事由">${esc(r.event||'—')}</td><td data-label="方向"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收礼':'送礼'}</span></td><td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td><td data-label="方式" style="color:var(--text-2);font-size:12.5px">${esc(r.method||'—')}</td><td data-label="备注" class="td-note">${esc(r.note||r.location||'')}</td><td class="td-actions"><button class="btn btn-sm btn-ghost" data-act="edit" data-id="${r.id}">编辑</button><button class="btn btn-sm btn-ghost btn-danger" data-act="del" data-id="${r.id}">删除</button></td></tr>`).join('')}</tbody></table></div></div>`;
+  wrap.innerHTML=`<div class="card"><div class="table-wrap"><table><thead><tr><th>日期</th><th>姓名</th><th>关系</th><th>事由</th><th>方向</th><th style="text-align:right">金额</th><th>方式</th><th>备注</th><th style="text-align:right">操作</th></tr></thead><tbody>${list.map(r=>`<tr class="${r.id===lastAddedId?'is-new':''}"><td data-label="日期" style="color:var(--muted)">${esc(r.date||'—')}</td><td data-label="姓名" class="td-name">${esc(r.name)}</td><td data-label="关系"><span class="tag tag-plain">${esc(r.relation||'其他')}</span></td><td data-label="事由">${esc(r.event||'—')}</td><td data-label="方向"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收礼':'送礼'}</span></td><td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td><td data-label="方式" style="color:var(--text-2);font-size:12.5px">${esc(r.method||'—')}</td><td data-label="备注" class="td-note">${esc(r.note||r.location||'')}</td><td class="td-actions"><button class="btn btn-sm btn-ghost" data-act="edit" data-id="${r.id}">编辑</button><button class="btn btn-sm btn-ghost btn-danger" data-act="del" data-id="${r.id}">删除</button></td></tr>`).join('')}</tbody></table></div></div>`;
+  if(lastAddedId){setTimeout(()=>{lastAddedId=null},2000)}
 }
 
 function renderPeople(){
@@ -647,7 +842,7 @@ function renderData(){
   const el=$('#view-data');if(!el)return;
   const dates=db.records.map(r=>r.date).filter(Boolean).sort();
   const syncReady=Sync.enabled();
-  el.innerHTML=`<div class="topbar"><div><div class="page-title">数据管理</div><div class="page-sub">备份与云同步（可选）</div></div></div>
+  el.innerHTML=`<div class="topbar"><div><div class="page-title">数据管理</div><div class="page-sub">备份、外观与云同步</div></div></div>
   <div class="card mb16" style="border-color:${syncReady?'var(--green)':'var(--border)'}">
     <div class="card-head"><div class="card-title">☁️ 云同步（可选）</div><div class="spacer"></div><span class="tag ${syncReady?'tag-in':'tag-plain'}">${syncReady?'已开启':'未开启'}</span></div>
     <div class="card-body">
@@ -656,6 +851,13 @@ function renderData(){
         <button class="btn btn-primary" data-act="openSync">${syncReady?'修改同步设置':'开启云同步'}</button>
         ${syncReady?'<button class="btn" data-act="syncNow">🔄 立即同步</button>':''}
       </div>
+    </div>
+  </div>
+  <div class="card mb16">
+    <div class="card-head"><div class="card-title">✨ 视觉特效</div><div class="spacer"></div><span class="tag tag-plain" id="fxCount">—</span></div>
+    <div class="card-body">
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px;line-height:1.8">数字滚动、卡片入场、称号金光、保存金粉、新记录高亮、铃铛摇摆、深色微尘、里程碑金雨、婚礼落樱 —— 按你的喜好自由开关。</p>
+      <button class="btn btn-primary" data-act="openFx">打开特效设置</button>
     </div>
   </div>
   <div class="data-grid">
@@ -691,6 +893,12 @@ function renderData(){
       </div>
     </div></div>
   </div>`;
+  updateFxCount();
+}
+function updateFxCount(){
+  const el=$('#fxCount');if(!el)return;
+  const on=Object.values(fxConfig).filter(Boolean).length;
+  el.textContent=`${on} / ${Object.keys(DEFAULT_FX).length} 已开启`;
 }
 
 function prep(cv){const dpr=window.devicePixelRatio||1,rect=cv.getBoundingClientRect(),w=Math.max(rect.width,100),h=Math.max(rect.height,80);cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);return{ctx,w,h}}
@@ -723,7 +931,6 @@ function openModal(id,preset){
   editingId=id||null;const rec=id?db.records.find(r=>r.id===id):null;
   const mt=$('#modalTitle');if(mt)mt.textContent=rec?'编辑记录':'添加记录';
   $('#f-name').value=rec?rec.name:(preset?.name||'');
-  // 关系下拉需要重建，以包含自定义标签
   fillSelect($('#f-relation'),allRelations());
   $('#f-relation').value=rec?(rec.relation||'朋友'):(preset?.relation||'朋友');
   fillSelect($('#f-event'),DEFAULT_EVENTS);
@@ -753,22 +960,28 @@ function saveRecord(e){
     method:$('#f-method').value||'',location:$('#f-location').value.trim(),
     note:$('#f-note').value.trim(),createdAt:Date.now()
   };
+  const wasEditing=!!editingId;
   if(editingId){const i=db.records.findIndex(r=>r.id===editingId);if(i>=0)db.records[i]=rec}
   else db.records.push(rec);
+  if(!wasEditing){
+    lastAddedId=rec.id;
+    // 里程碑金雨
+    checkMilestone(db.records.length);
+  }
   saveLocal();Sync.schedulePush();
-  const wasEditing=!!editingId;
-  // 批量连续录入模式：只清空姓名/金额/备注，保留日期/关系/事由/方式，方便连着录
+  // 金粉粒子
+  const btn=e.submitter||$('#recordForm button[type="submit"]');
+  if(btn){const rect=btn.getBoundingClientRect();goldBurst(rect.left+rect.width/2,rect.top+rect.height/2)}
+  // 连续录入模式
   if(!wasEditing && $('#continuousMode') && $('#continuousMode').checked){
     editingId=null;
     $('#f-name').value='';$('#f-amount').value='';$('#f-note').value='';$('#f-location').value='';
-    refreshNameList();
-    render();
+    refreshNameList();render();
     toast('已保存，继续录入下一位');
     setTimeout(()=>$('#f-name').focus(),50);
     return;
   }
-  closeModal();
-  render();
+  closeModal();render();
   toast(wasEditing?'已更新':'已添加');
 }
 function deleteRecord(id){const rec=db.records.find(r=>r.id===id);if(!rec)return;if(!confirm(`确定删除「${rec.name} · ${rec.event} · ${money(rec.amount)}」？`))return;db.records=db.records.filter(r=>r.id!==id);saveLocal();Sync.schedulePush();render();toast('已删除')}
@@ -807,19 +1020,40 @@ function openSyncModal(){
 }
 function closeSyncModal(){$('#syncOverlay').classList.remove('show')}
 
-function openRelationModal(){
-  renderRelationList();
-  $('#relationOverlay').classList.add('show');
-  setTimeout(()=>$('#newRelationInput').focus(),80);
-}
+function openRelationModal(){renderRelationList();$('#relationOverlay').classList.add('show');setTimeout(()=>$('#newRelationInput').focus(),80)}
 function closeRelationModal(){$('#relationOverlay').classList.remove('show')}
 function renderRelationList(){
   const el=$('#relationList');if(!el)return;
-  const all=allRelations();
-  el.innerHTML=all.map(r=>{
+  el.innerHTML=allRelations().map(r=>{
     const isDefault=DEFAULT_RELATIONS.includes(r);
     return `<span class="persona-tag" style="padding:6px 10px 6px 12px">${esc(r)}${isDefault?'':` <button data-act="delRelation" data-name="${esc(r)}" style="border:none;background:transparent;color:var(--primary);cursor:pointer;font-size:14px;line-height:1;padding:0 0 0 4px" title="删除">×</button>`}</span>`;
   }).join('');
+}
+
+function openFxModal(){renderFxList();$('#fxOverlay').classList.add('show')}
+function closeFxModal(){$('#fxOverlay').classList.remove('show')}
+function renderFxList(){
+  const el=$('#fxList');if(!el)return;
+  el.innerHTML=FX_META.map(m=>`
+    <div class="fx-row">
+      <div class="fx-info">
+        <div class="fx-name">${m.name}</div>
+        <div class="fx-desc">${m.desc}</div>
+      </div>
+      <label class="fx-switch" aria-label="${m.name}">
+        <input type="checkbox" data-fx="${m.key}" ${fxConfig[m.key]?'checked':''}>
+        <span class="fx-slider"></span>
+      </label>
+    </div>`).join('');
+  $$('#fxList input[data-fx]').forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      fxConfig[cb.dataset.fx]=cb.checked;
+      saveFx();
+      updateFxCount();
+      // 如果是 titleShimmer/bellSwing 这类，改动后需要重渲染
+      if(currentView==='dashboard')renderDashboard();
+    });
+  });
 }
 
 function bindEvents(){
@@ -847,10 +1081,14 @@ function bindEvents(){
     if(allRelations().includes(v)){toast('该标签已存在');return}
     customRelations.push(v);saveRelations();$('#newRelationInput').value='';
     renderRelationList();
-    // 同步更新添加记录里的关系下拉
     const cur=$('#f-relation').value;fillSelect($('#f-relation'),allRelations());$('#f-relation').value=cur||v;
     toast('已添加');
   });
+  on('#fxClose','click',closeFxModal);
+  on('#fxDone','click',closeFxModal);
+  on('#fxOverlay','click',e=>{if(e.target===$('#fxOverlay'))closeFxModal()});
+  on('#fxAllOn','click',()=>{Object.keys(DEFAULT_FX).forEach(k=>fxConfig[k]=true);saveFx();renderFxList();updateFxCount();if(currentView==='dashboard')renderDashboard();toast('已开启全部特效')});
+  on('#fxAllOff','click',()=>{Object.keys(DEFAULT_FX).forEach(k=>fxConfig[k]=false);saveFx();renderFxList();updateFxCount();removeSakura();if(currentView==='dashboard')renderDashboard();toast('已关闭全部特效')});
   on('#btnSyncSave','click',()=>{
     Sync.cfg.binId=$('#s-binId').value.trim();Sync.cfg.key=$('#s-key').value.trim();Sync.cfg.auto=$('#s-auto').value;Sync.save();
     if(Sync.enabled()){toast('设置已保存，正在测试同步…');closeSyncModal();Sync.push(true).then(()=>toast('同步成功！'))}
@@ -869,9 +1107,7 @@ function bindEvents(){
     else if(act==='del')deleteRecord(el.dataset.id);
     else if(act==='goto')navigate(el.dataset.view);
     else if(act==='togglePerson'){const n=el.dataset.name;if(expandedPeople.has(n))expandedPeople.delete(n);else expandedPeople.add(n);renderPeople()}
-    else if(act==='quickAdd'){
-      openModal(null,{name:el.dataset.name,relation:el.dataset.relation,direction:el.dataset.direction||'out'});
-    }
+    else if(act==='quickAdd'){openModal(null,{name:el.dataset.name,relation:el.dataset.relation,direction:el.dataset.direction||'out'})}
     else if(act==='filterByPerson'){navigate('records');setTimeout(()=>{const i=$('#searchInput');if(i){i.value=el.dataset.name;updateRecordsTable()}},40)}
     else if(act==='clearFilter'){['searchInput','filterDir','filterEvent','filterYear'].forEach(id=>{const n=$('#'+id);if(n)n.value=id==='searchInput'?'':'all'});updateRecordsTable()}
     else if(act==='chartMode'){chartMode=el.dataset.mode;renderStats()}
@@ -887,6 +1123,7 @@ function bindEvents(){
     else if(act==='openSync')openSyncModal();
     else if(act==='syncNow')Sync.pull(false);
     else if(act==='openRelations')openRelationModal();
+    else if(act==='openFx')openFxModal();
     else if(act==='delRelation'){
       const n=el.dataset.name;
       customRelations=customRelations.filter(r=>r!==n);saveRelations();
@@ -901,6 +1138,7 @@ function bindEvents(){
       const ov=$('#overlay');if(ov&&ov.classList.contains('show'))closeModal();
       const so=$('#syncOverlay');if(so&&so.classList.contains('show'))closeSyncModal();
       const ro=$('#relationOverlay');if(ro&&ro.classList.contains('show'))closeRelationModal();
+      const fo=$('#fxOverlay');if(fo&&fo.classList.contains('show'))closeFxModal();
     }
     if(e.key.toLowerCase()==='n'&&!e.metaKey&&!e.ctrlKey&&!e.altKey){
       const tag=(document.activeElement.tagName||'').toLowerCase();
@@ -917,9 +1155,7 @@ function init(){
   try{
     const s=localStorage.getItem(THEME_KEY),pd=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
     setTheme(s||(pd?'dark':'light'));
-    loadLocal();
-    loadRelations();
-    Sync.load();
+    loadLocal();loadRelations();loadFx();Sync.load();
     fillSelect($('#f-relation'),allRelations());
     fillSelect($('#f-event'),DEFAULT_EVENTS);
     fillSelect($('#f-method'),METHODS);
@@ -927,7 +1163,6 @@ function init(){
     bindEvents();
     Sync.updateUI();
     navigate('dashboard');
-    // 有云同步配置时，打开页面自动拉一次
     if(Sync.enabled())Sync.pull(true);
   }catch(e){console.error('init 失败',e)}
 }
