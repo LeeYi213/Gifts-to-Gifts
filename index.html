@@ -24,8 +24,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .nav-item.active{background:var(--primary-soft);color:var(--primary);font-weight:650}
 .nav-item svg{width:18px;height:18px;flex:0 0 18px}
 .sidebar-foot{padding-top:12px;border-top:1px solid var(--border);margin-top:8px;display:flex;flex-direction:column;gap:8px}
-.sync-label{font-size:11.5px;color:var(--muted);padding:0 8px 4px;display:flex;align-items:center}
-.sync-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+.sync-label{font-size:11.5px;color:var(--muted);padding:0 8px 4px;display:flex;align-items:center;cursor:pointer;border-radius:6px}
+.sync-label:hover{background:var(--panel-2)}
+.sync-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;flex:0 0 8px}
 .sync-dot.ok{background:var(--green)}.sync-dot.busy{background:var(--gold);animation:pulse 1s infinite}.sync-dot.idle{background:var(--muted)}.sync-dot.err{background:var(--primary)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 main{flex:1;min-width:0;padding:26px 30px 70px}
@@ -35,7 +36,7 @@ main{flex:1;min-width:0;padding:26px 30px 70px}
 .page-title{font-size:22px;font-weight:750;letter-spacing:-.4px}
 .page-sub{font-size:13px;color:var(--muted);margin-top:2px}
 .spacer{flex:1}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;border-radius:11px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:13.5px;font-weight:550;cursor:pointer;transition:.18s;font-family:inherit;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;border-radius:11px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:13.5px;font-weight:550;cursor:pointer;transition:.18s;font-family:inherit;white-space:nowrap;text-decoration:none}
 .btn:hover{border-color:#d8cec1;transform:translateY(-1px);box-shadow:var(--shadow-sm)}
 .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(192,57,43,.26)}
 .btn-ghost{background:transparent;border-color:transparent;color:var(--text-2)}.btn-ghost:hover{background:var(--panel-2);box-shadow:none;border-color:transparent}
@@ -123,12 +124,19 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
 .icon-btn{width:34px;height:34px;border-radius:10px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center;font-size:21px;line-height:1;transition:.16s;font-family:inherit}
 .icon-btn:hover{background:var(--panel-2);color:var(--text)}
 .modal-body{padding:20px 22px}
-.modal-foot{padding:16px 22px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border)}
+.modal-foot{padding:16px 22px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border);flex-wrap:wrap}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
 .field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
 .field label{font-size:12.5px;font-weight:600;color:var(--text-2)}
 .req{color:var(--primary)}
 .hint{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.6}
+.steps{background:var(--panel-2);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:13px;line-height:1.9}
+.steps ol{margin-left:18px}
+.steps code{background:var(--primary-soft);color:var(--primary);padding:1px 6px;border-radius:5px;font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.welcome-hero{text-align:center;padding:6px 0 14px}
+.welcome-hero .icon{font-size:44px;margin-bottom:10px}
+.welcome-hero h2{font-size:20px;font-weight:750;margin-bottom:6px}
+.welcome-hero p{font-size:13px;color:var(--muted)}
 .toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);background:var(--text);color:var(--bg);padding:11px 22px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:.26s;z-index:200;box-shadow:0 10px 28px rgba(0,0,0,.22);max-width:80vw;text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .data-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
@@ -200,7 +208,7 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
       <button class="nav-item" data-view="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg><span>数据</span></button>
     </nav>
     <div class="sidebar-foot">
-      <div class="sync-label" id="syncLabel"><span class="sync-dot idle"></span>未同步</div>
+      <div class="sync-label" id="syncLabel"><span class="sync-dot idle"></span>未同步 · 点击配置</div>
       <button class="btn btn-ghost btn-block btn-sm" id="themeToggle">🌙 深色模式</button>
     </div>
   </aside>
@@ -239,23 +247,50 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
     <div class="modal-foot"><button type="button" class="btn" id="btnCancel">取消</button><button type="submit" class="btn btn-primary">保存</button></div>
   </form>
 </div></div>
+
+<!-- 首次访问欢迎引导 -->
+<div class="overlay" id="welcomeOverlay"><div class="modal" style="max-width:520px">
+  <div class="modal-head"><h3>👋 欢迎使用人情簿</h3><div class="spacer"></div></div>
+  <div class="modal-body">
+    <div class="welcome-hero">
+      <div class="icon">📖</div>
+      <h2>记录份子钱，手机电脑自动同步</h2>
+      <p>只需配置一次，之后换设备填同样信息即可</p>
+    </div>
+    <div class="steps">
+      <b>三步开启云同步：</b>
+      <ol>
+        <li>点下方按钮，去 <b>jsonbin.io</b> 用 Google 或邮箱免费注册</li>
+        <li>创建一个 Bin，内容填 <code>{"records":[]}</code>，记下 <b>Bin ID</b></li>
+        <li>到 API Keys 页面复制 <b>Master Key</b>，回来填入</li>
+      </ol>
+    </div>
+    <p class="hint" style="text-align:center;margin-top:10px">已注册过？直接点「我已获取，去填写」</p>
+  </div>
+  <div class="modal-foot" style="flex-direction:column;gap:8px;align-items:stretch">
+    <a href="https://jsonbin.io" target="_blank" rel="noopener" class="btn btn-primary" id="welcomeGoRegister" style="text-align:center;justify-content:center">① 去 jsonbin.io 注册 →</a>
+    <button type="button" class="btn" id="welcomeGoConfig">② 我已获取，去填写</button>
+    <button type="button" class="btn btn-ghost" id="welcomeSkip">先体验，稍后再配置</button>
+  </div>
+</div></div>
+
+<!-- 云同步配置 -->
 <div class="overlay" id="syncOverlay"><div class="modal">
   <div class="modal-head"><h3>☁️ 云同步设置</h3><div class="spacer"></div><button class="icon-btn" id="syncClose" type="button">&times;</button></div>
   <div class="modal-body">
-    <p class="hint" style="margin-bottom:14px">到 <a href="https://jsonbin.io" target="_blank" style="color:var(--primary)">jsonbin.io</a> 免费注册，创建一个内容为 <code>{"records":[]}</code> 的 Bin，然后填入以下两项。</p>
+    <p class="hint" style="margin-bottom:14px;line-height:1.8">
+      到 <a href="https://jsonbin.io" target="_blank" rel="noopener" style="color:var(--primary)">jsonbin.io</a> 免费注册，创建一个内容为 <code>{"records":[]}</code> 的 Bin，把 Bin ID 和 Master Key 填入下面。手机和电脑填<b>同一个</b> Bin 即可同步。
+    </p>
     <div class="field"><label>Bin ID</label><input id="s-binId" placeholder="65f8a1b2c3d4..."></div>
     <div class="field" style="margin-top:12px"><label>Master Key</label><input id="s-key" placeholder="$2a$10$..." autocomplete="off"></div>
-    <div class="field" style="margin-top:12px"><label>自动同步</label><select id="s-auto"><option value="off">关闭（仅手动）</option><option value="on">开启（推荐）</option></select></div>
+    <div class="field" style="margin-top:12px"><label>自动同步</label><select id="s-auto"><option value="on">开启（推荐）</option><option value="off">关闭（仅手动）</option></select></div>
     <div id="syncState" class="hint" style="margin-top:14px"></div>
   </div>
-  <div class="modal-foot"><button type="button" class="btn" id="btnSyncPull">⬇️ 拉取</button><button type="button" class="btn" id="btnSyncPush">⬆️ 推送</button><button type="button" class="btn btn-primary" id="btnSyncSave">保存</button></div>
+  <div class="modal-foot"><button type="button" class="btn" id="btnSyncPull">⬇️ 拉取</button><button type="button" class="btn" id="btnSyncPush">⬆️ 推送</button><button type="button" class="btn btn-primary" id="btnSyncSave">保存设置</button></div>
 </div></div>
 <div class="toast" id="toast"></div>
 <script>
-const STORAGE_KEY='fenzi_db_v1',THEME_KEY='fenzi_theme',SYNC_KEY='fenzi_sync_cfg';
-const BIN_ID='6abc71f7ac6210605a03e7c0';   // ← 替换成你的 Bin ID
-const BIN_KEY='$2a$10$U7qrXQphnBtj53CCbffRf.qYrlYGTRzpo1qyuhNS/39h9zSXqbm6m';  // ← 替换成你的 Master Key
-
+const STORAGE_KEY='fenzi_db_v1',THEME_KEY='fenzi_theme',SYNC_KEY='fenzi_sync_cfg',WELCOME_KEY='fenzi_welcomed';
 const EVENT_TYPES=['婚礼','订婚','满月百日','生日寿宴','乔迁新居','升学升职','开业庆典','丧事白事','探病慰问','节日问候','其他'];
 const RELATIONS=['亲属','亲戚','朋友','同事','同学','邻居','客户生意','其他'];
 const METHODS=['现金','微信','支付宝','银行转账','实物礼品','其他'];
@@ -274,23 +309,57 @@ let toastTimer;function toast(m){const t=$('#toast');if(!t)return;t.textContent=
 function loadLocal(){try{const r=localStorage.getItem(STORAGE_KEY);if(r){const p=JSON.parse(r);if(p&&Array.isArray(p.records))db=p}}catch(e){}if(!Array.isArray(db.records))db.records=[]}
 function saveLocal(){db.updatedAt=Date.now();try{localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}catch(e){toast('存储空间不足')}}
 
-const Sync={busy:false,pushTimer:null,
-  enabled(){return!!(BIN_ID&&BIN_KEY)},
-  updateUI(){const el=$('#syncLabel');if(!el)return;if(!this.enabled()){el.innerHTML='<span class="sync-dot idle"></span>未开启云同步';return}
+const Sync={
+  cfg:{binId:'',key:'',auto:'off'},
+  busy:false,pushTimer:null,
+  load(){try{const c=JSON.parse(localStorage.getItem(SYNC_KEY)||'{}');this.cfg=Object.assign({binId:'',key:'',auto:'off'},c)}catch(e){this.cfg={binId:'',key:'',auto:'off'}}},
+  save(){localStorage.setItem(SYNC_KEY,JSON.stringify(this.cfg));this.updateUI()},
+  enabled(){return!!(this.cfg.binId&&this.cfg.key)},
+  updateUI(){
+    const el=$('#syncLabel');if(!el)return;
+    if(!this.enabled()){el.innerHTML='<span class="sync-dot idle"></span>未同步 · 点击配置';return}
     if(this.busy){el.innerHTML='<span class="sync-dot busy"></span>同步中…';return}
-    el.innerHTML='<span class="sync-dot ok"></span>已同步 · '+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})},
-  async _fetch(path,opts={}){const url=`https://api.jsonbin.io/v3/b/${BIN_ID}${path}`;const h=Object.assign({'X-Master-Key':BIN_KEY,'Content-Type':'application/json'},opts.headers||{});const r=await fetch(url,Object.assign({},opts,{headers:h}));if(!r.ok)throw new Error('HTTP '+r.status);return r.json()},
-  async pull(silent){if(!this.enabled()){if(!silent)toast('请先配置 Bin ID 和 Key');return}if(this.busy)return;this.busy=true;this.updateUI();
-    try{const d=await this._fetch('/latest',{headers:{'X-Bin-Meta':'false'}});const rec=d.record||d;const rrs=Array.isArray(rec.records)?rec.records:[];const rat=rec.updatedAt||0;
-      if(!db.records.length||rat>db.updatedAt){db.records=rrs;db.updatedAt=rat||Date.now();localStorage.setItem(STORAGE_KEY,JSON.stringify(db));render();if(!silent)toast(`已拉取 ${rrs.length} 条`)}
-      else if(db.updatedAt>rat){this.busy=false;await this.push(true);return}
-      else if(!silent)toast('云端已是最新')}catch(e){if(!silent)toast('拉取失败：'+e.message)}
-    finally{this.busy=false;this.updateUI()}},
-  async push(silent){if(!this.enabled()){if(!silent)toast('请先配置');return}if(this.busy)return;this.busy=true;this.updateUI();
-    try{await this._fetch('',{method:'PUT',body:JSON.stringify({records:db.records,updatedAt:db.updatedAt||Date.now()})});if(!silent)toast('已推送到云端')}
-    catch(e){if(!silent)toast('推送失败：'+e.message)}
-    finally{this.busy=false;this.updateUI()}},
-  schedulePush(){if(!this.enabled())return;clearTimeout(this.pushTimer);this.pushTimer=setTimeout(()=>this.push(true),1500)}
+    el.innerHTML='<span class="sync-dot ok"></span>已同步 · '+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+  },
+  async _fetch(path,opts={}){
+    const url=`https://api.jsonbin.io/v3/b/${this.cfg.binId}${path}`;
+    const h=Object.assign({'X-Master-Key':this.cfg.key,'Content-Type':'application/json'},opts.headers||{});
+    const r=await fetch(url,Object.assign({},opts,{headers:h}));
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return r.json();
+  },
+  async pull(silent){
+    if(!this.enabled()){if(!silent)toast('请先配置 Bin ID 和 Key');return}
+    if(this.busy)return;this.busy=true;this.updateUI();
+    try{
+      const d=await this._fetch('/latest',{headers:{'X-Bin-Meta':'false'}});
+      const rec=d.record||d;
+      const rrs=Array.isArray(rec.records)?rec.records:[];
+      const rat=rec.updatedAt||0;
+      if(!db.records.length||rat>db.updatedAt){
+        db.records=rrs;db.updatedAt=rat||Date.now();
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(db));
+        render();if(!silent)toast(`已拉取 ${rrs.length} 条`);
+      }else if(db.updatedAt>rat){
+        this.busy=false;await this.push(true);return;
+      }else if(!silent)toast('云端已是最新');
+    }catch(e){if(!silent)toast('拉取失败：'+e.message)}
+    finally{this.busy=false;this.updateUI()}
+  },
+  async push(silent){
+    if(!this.enabled()){if(!silent)toast('请先配置');return}
+    if(this.busy)return;this.busy=true;this.updateUI();
+    try{
+      await this._fetch('',{method:'PUT',body:JSON.stringify({records:db.records,updatedAt:db.updatedAt||Date.now()})});
+      if(!silent)toast('已推送到云端');
+    }catch(e){if(!silent)toast('推送失败：'+e.message)}
+    finally{this.busy=false;this.updateUI()}
+  },
+  schedulePush(){
+    if(!this.enabled()||this.cfg.auto!=='on')return;
+    clearTimeout(this.pushTimer);
+    this.pushTimer=setTimeout(()=>this.push(true),1500);
+  }
 };
 
 const sumBy=(rs,d)=>rs.filter(r=>r.direction===d).reduce((s,r)=>s+(Number(r.amount)||0),0);
@@ -398,8 +467,18 @@ function getBarData(mode){
 function renderData(){
   const el=$('#view-data');if(!el)return;
   const dates=db.records.map(r=>r.date).filter(Boolean).sort();
+  const syncReady=Sync.enabled();
   el.innerHTML=`<div class="topbar"><div><div class="page-title">数据管理</div></div></div>
-  <div class="card mb16"><div class="card-head"><div class="card-title">☁️ 云同步</div><div class="spacer"></div><span class="tag ${Sync.enabled()?'tag-in':'tag-plain'}">${Sync.enabled()?'已开启':'未开启'}</span></div><div class="card-body"><p style="font-size:13px;color:var(--text-2);margin-bottom:14px">开启后手机与电脑共用一份数据。</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" data-act="openSync">${Sync.enabled()?'修改设置':'立即开启'}</button>${Sync.enabled()?'<button class="btn" data-act="syncNow">🔄 立即同步</button>':''}</div></div></div>
+  <div class="card mb16" style="border-color:${syncReady?'var(--green)':'var(--border)'}">
+    <div class="card-head"><div class="card-title">☁️ 云同步</div><div class="spacer"></div><span class="tag ${syncReady?'tag-in':'tag-plain'}">${syncReady?'已开启':'未开启'}</span></div>
+    <div class="card-body">
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px;line-height:1.8">开启后，你在手机和电脑上填写<b>同一个</b> Bin ID 和 Key，就能看到同一份数据。<br>其他人注册自己的 jsonbin 账号，填自己的 Bin，数据完全隔离。</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" data-act="openSync">${syncReady?'修改同步设置':'立即开启'}</button>
+        ${syncReady?'<button class="btn" data-act="syncNow">🔄 立即同步</button>':''}
+      </div>
+    </div>
+  </div>
   <div class="data-grid">
     <div class="card"><div class="card-head"><div class="card-title">📦 数据概览</div></div><div class="card-body"><div class="kv-big">${db.records.length} <span style="font-size:14px;font-weight:600;color:var(--muted)">条记录</span></div><div style="margin-top:14px"><dl class="dl"><dt>往来人数</dt><dd>${personStats().length} 人</dd></dl><dl class="dl"><dt>收礼总额</dt><dd style="color:var(--green)">${money(sumBy(db.records,'in'))}</dd></dl><dl class="dl"><dt>送礼总额</dt><dd style="color:var(--primary)">${money(sumBy(db.records,'out'))}</dd></dl><dl class="dl"><dt>时间跨度</dt><dd>${dates.length?esc(dates[0])+' ~ '+esc(dates[dates.length-1]):'—'}</dd></dl></div></div></div>
     <div class="card"><div class="card-head"><div class="card-title">💾 导出备份</div></div><div class="card-body"><div style="display:flex;flex-direction:column;gap:10px"><button class="btn" data-act="exportJSON">⬇️ 导出 JSON</button><button class="btn" data-act="exportCSV">📊 导出 CSV</button></div></div></div>
@@ -476,8 +555,29 @@ function loadSample(){const list=SAMPLE.map(s=>Object.assign({id:Date.now().toSt
 function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem(THEME_KEY,t);const icon=t==='dark'?'☀️':'🌙',label=t==='dark'?'浅色模式':'深色模式';const tb=$('#themeToggle');if(tb)tb.textContent=`${icon} ${label}`;const tm=$('#themeToggleMobile');if(tm)tm.textContent=icon;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',t==='dark'?'#1e1b17':'#f6f3ee');if(currentView==='stats')renderStats()}
 function toggleTheme(){const cur=document.documentElement.dataset.theme==='dark'?'light':'dark';setTheme(cur);toast(cur==='dark'?'已切换到深色模式':'已切换到浅色模式')}
 
-function openSyncModal(){$('#s-binId').value=BIN_ID||'';$('#s-key').value=BIN_KEY||'';$('#s-auto').value='on';$('#syncState').innerHTML=Sync.enabled()?'当前状态：<b style="color:var(--green)">已配置</b>，可直接测试。':'填写后点击「保存」';$('#syncOverlay').classList.add('show')}
+function openSyncModal(){
+  $('#s-binId').value=Sync.cfg.binId||'';
+  $('#s-key').value=Sync.cfg.key||'';
+  $('#s-auto').value=Sync.cfg.auto||'on';
+  $('#syncState').innerHTML=Sync.enabled()?'当前状态：<b style="color:var(--green)">已配置</b>，可直接测试同步。':'填写后点「保存设置」';
+  $('#syncOverlay').classList.add('show');
+}
 function closeSyncModal(){$('#syncOverlay').classList.remove('show')}
+
+/* ========= 首次访问引导 ========= */
+function checkFirstVisit(){
+  const welcomed=localStorage.getItem(WELCOME_KEY);
+  if(welcomed==='1')return;
+  if(Sync.enabled())return;
+  // 首次访问 + 还没配置同步 → 显示欢迎引导
+  const ov=$('#welcomeOverlay');
+  if(ov)ov.classList.add('show');
+}
+function markWelcomed(){
+  localStorage.setItem(WELCOME_KEY,'1');
+  const ov=$('#welcomeOverlay');
+  if(ov)ov.classList.remove('show');
+}
 
 function bindEvents(){
   const on=(s,e,f)=>{const el=$(s);if(el)el.addEventListener(e,f)};
@@ -492,12 +592,48 @@ function bindEvents(){
   on('#recordForm','submit',saveRecord);
   on('#syncClose','click',closeSyncModal);
   on('#syncOverlay','click',e=>{if(e.target===$('#syncOverlay'))closeSyncModal()});
-  on('#btnSyncSave','click',()=>{
-    toast('请到 GitHub 编辑 index.html 顶部修改 BIN_ID 和 BIN_KEY');
-    closeSyncModal();
+  on('#syncLabel','click',openSyncModal);
+
+  // 欢迎引导按钮
+  on('#welcomeGoRegister','click',()=>{
+    // 打开 jsonbin.io 新标签页，用户操作完回来点"我已获取"
+    toast('请在新标签页完成注册并创建 Bin，然后回来点"我已获取"');
   });
-  on('#btnSyncPull','click',()=>Sync.pull(false));
-  on('#btnSyncPush','click',()=>Sync.push(false));
+  on('#welcomeGoConfig','click',()=>{
+    markWelcomed();
+    openSyncModal();
+  });
+  on('#welcomeSkip','click',()=>{
+    markWelcomed();
+    toast('已跳过，可随时点侧边栏底部"未同步"配置');
+  });
+
+  on('#btnSyncSave','click',()=>{
+    Sync.cfg.binId=$('#s-binId').value.trim();
+    Sync.cfg.key=$('#s-key').value.trim();
+    Sync.cfg.auto=$('#s-auto').value;
+    Sync.save();
+    if(Sync.enabled()){
+      localStorage.setItem(WELCOME_KEY,'1');
+      toast('设置已保存，正在测试同步…');
+      closeSyncModal();
+      Sync.push(true).then(()=>toast('同步成功！'));
+    }else{
+      toast('设置已保存（未填写完整）');
+    }
+  });
+  on('#btnSyncPull','click',()=>{
+    Sync.cfg.binId=$('#s-binId').value.trim();
+    Sync.cfg.key=$('#s-key').value.trim();
+    Sync.save();
+    Sync.pull(false);
+  });
+  on('#btnSyncPush','click',()=>{
+    Sync.cfg.binId=$('#s-binId').value.trim();
+    Sync.cfg.key=$('#s-key').value.trim();
+    Sync.save();
+    Sync.push(false);
+  });
   on('#importFile','change',e=>{const f=e.target.files&&e.target.files[0];if(f)importJSONFile(f);e.target.value=''});
   document.addEventListener('click',e=>{
     const el=e.target.closest('[data-act]');if(!el)return;
@@ -520,17 +656,18 @@ function bindEvents(){
     else if(act==='syncNow')Sync.pull(false);
   });
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){const ov=$('#overlay');if(ov&&ov.classList.contains('show'))closeModal();const so=$('#syncOverlay');if(so&&so.classList.contains('show'))closeSyncModal()}
+    if(e.key==='Escape'){const ov=$('#overlay');if(ov&&ov.classList.contains('show'))closeModal();const so=$('#syncOverlay');if(so&&so.classList.contains('show'))closeSyncModal();const wo=$('#welcomeOverlay');if(wo&&wo.classList.contains('show'))markWelcomed()}
     if(e.key.toLowerCase()==='n'&&!e.metaKey&&!e.ctrlKey&&!e.altKey){const tag=(document.activeElement.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea'||tag==='select')return;const ov=$('#overlay');if(ov&&ov.classList.contains('show'))return;openModal(null)}
   });
   let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(currentView==='stats')renderStats()},200)});
 }
 
-async function init(){
+function init(){
   try{
     const s=localStorage.getItem(THEME_KEY),pd=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
     setTheme(s||(pd?'dark':'light'));
     loadLocal();
+    Sync.load();
     fillSelect($('#f-relation'),RELATIONS);
     fillSelect($('#f-event'),EVENT_TYPES);
     fillSelect($('#f-method'),METHODS);
@@ -539,6 +676,8 @@ async function init(){
     Sync.updateUI();
     navigate('dashboard');
     if(Sync.enabled())Sync.pull(true);
+    // 首次访问引导（延迟一点点，等页面渲染好）
+    setTimeout(checkFirstVisit,300);
   }catch(e){console.error('init 失败',e)}
 }
 document.addEventListener('DOMContentLoaded',init);
