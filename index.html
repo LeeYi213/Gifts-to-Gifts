@@ -180,23 +180,18 @@ html[data-season="winter"] .seasonal-container::before{background:radial-gradien
 /* ===== 春 · 桃花瓣 ===== */
 .seasonal-spring{
   position:absolute;top:-40px;
-  background:radial-gradient(ellipse at 32% 28%,#ffe8ee 0%,#ffb8ca 45%,#f08aa6 100%);
-  border-radius:50% 8% 50% 50%;
-  box-shadow:0 0 8px rgba(240,138,166,.45),inset -2px -2px 3px rgba(200,80,120,.15);
   animation:petalFall linear infinite;
   will-change:transform;
-}
-.seasonal-spring::after{
-  content:'';position:absolute;inset:35% 42%;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,.9),transparent 70%);
+  filter:drop-shadow(0 0 4px rgba(240,138,166,.45));
+  pointer-events:none;
 }
 @keyframes petalFall{
   0%{transform:translate(0,-40px) rotate(0deg);opacity:0}
-  8%{opacity:.9}
-  25%{transform:translate(38px,25vh) rotate(180deg)}
-  50%{transform:translate(-25px,50vh) rotate(360deg)}
-  75%{transform:translate(30px,75vh) rotate(540deg)}
-  100%{transform:translate(-15px,110vh) rotate(720deg);opacity:.3}
+  8%{opacity:.95}
+  25%{transform:translate(45px,25vh) rotate(200deg)}
+  50%{transform:translate(-35px,50vh) rotate(400deg)}
+  75%{transform:translate(40px,78vh) rotate(600deg)}
+  100%{transform:translate(-20px,112vh) rotate(800deg);opacity:.35}
 }
 
 /* ===== 夏 · 萤火虫 ===== */
@@ -217,65 +212,42 @@ html[data-season="winter"] .seasonal-container::before{background:radial-gradien
   100%{transform:translate(-15px,-15px);opacity:.7}
 }
 
-/* ===== 秋 · 枫叶 ===== */
+/* ===== 秋 · 枫叶（SVG 版） ===== */
 .seasonal-autumn{
   position:absolute;top:-40px;
-  background:linear-gradient(135deg,#e85d2a 0%,#d97b2b 45%,#c8952f 100%);
-  border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
-  box-shadow:0 0 8px rgba(217,123,43,.5),inset -2px -3px 5px rgba(139,69,19,.25);
   animation:mapleFall linear infinite;
   will-change:transform;
-}
-.seasonal-autumn::after{
-  content:'';position:absolute;bottom:-5px;left:50%;
-  width:1.5px;height:7px;
-  background:linear-gradient(to bottom,#8b4513,rgba(139,69,19,0));
-  transform:translateX(-50%);
-  border-radius:1px;
-}
-.seasonal-autumn::before{
-  content:'';position:absolute;top:20%;left:20%;right:20%;bottom:20%;
-  background:radial-gradient(ellipse at 50% 40%,rgba(255,220,150,.35),transparent 70%);
-  border-radius:50%;
+  filter:drop-shadow(0 2px 3px rgba(139,69,19,.35));
+  pointer-events:none;
+  display:block;
 }
 @keyframes mapleFall{
-  0%{transform:translate(0,-40px) rotate(0deg) rotateY(0deg) scaleX(1);opacity:0}
+  0%{transform:translate(0,-40px) rotate(0deg) rotateY(0deg);opacity:0}
   8%{opacity:1}
-  20%{transform:translate(-30px,20vh) rotate(70deg) rotateY(120deg) scaleX(.6)}
-  40%{transform:translate(40px,42vh) rotate(180deg) rotateY(280deg) scaleX(1)}
-  60%{transform:translate(-25px,64vh) rotate(280deg) rotateY(430deg) scaleX(.7)}
-  80%{transform:translate(35px,86vh) rotate(380deg) rotateY(580deg) scaleX(1)}
-  100%{transform:translate(-10px,110vh) rotate(480deg) rotateY(720deg) scaleX(.8);opacity:.4}
+  20%{transform:translate(-35px,20vh) rotate(80deg) rotateY(140deg) scaleX(.75)}
+  40%{transform:translate(45px,42vh) rotate(190deg) rotateY(300deg) scaleX(1)}
+  60%{transform:translate(-30px,64vh) rotate(300deg) rotateY(460deg) scaleX(.8)}
+  80%{transform:translate(40px,86vh) rotate(410deg) rotateY(620deg) scaleX(1)}
+  100%{transform:translate(-15px,112vh) rotate(520deg) rotateY(760deg) scaleX(.85);opacity:.45}
 }
 
-/* ===== 冬 · 雪花 ===== */
+/* ===== 冬 · 雪花（SVG 版） ===== */
 .seasonal-winter{
   position:absolute;top:-30px;
-  background:radial-gradient(circle,#ffffff 0%,#eaf2ff 75%);
-  border-radius:50%;
-  box-shadow:0 0 6px 1px rgba(255,255,255,.95),0 0 14px 4px rgba(190,215,255,.6),0 0 22px 8px rgba(190,215,255,.25);
   animation:snowFall linear infinite;
   will-change:transform;
-}
-.seasonal-winter::before{
-  content:'';position:absolute;inset:-2px;
-  background:
-    linear-gradient(0deg,transparent 46%,rgba(255,255,255,.75) 50%,transparent 54%),
-    linear-gradient(90deg,transparent 46%,rgba(255,255,255,.75) 50%,transparent 54%),
-    linear-gradient(45deg,transparent 47.5%,rgba(255,255,255,.5) 50%,transparent 52.5%),
-    linear-gradient(-45deg,transparent 47.5%,rgba(255,255,255,.5) 50%,transparent 52.5%);
-  border-radius:50%;
-  opacity:.85;
+  filter:drop-shadow(0 0 4px rgba(255,255,255,.95)) drop-shadow(0 0 8px rgba(190,215,255,.6));
+  pointer-events:none;
+  display:block;
 }
 @keyframes snowFall{
   0%{transform:translate(0,-30px) rotate(0deg);opacity:0}
   10%{opacity:1}
-  30%{transform:translate(25px,30vh) rotate(60deg)}
-  50%{transform:translate(-20px,52vh) rotate(150deg)}
-  70%{transform:translate(22px,76vh) rotate(230deg)}
-  100%{transform:translate(-12px,110vh) rotate(360deg);opacity:.5}
+  30%{transform:translate(28px,30vh) rotate(80deg)}
+  50%{transform:translate(-22px,52vh) rotate(180deg)}
+  70%{transform:translate(25px,76vh) rotate(270deg)}
+  100%{transform:translate(-15px,112vh) rotate(360deg);opacity:.5}
 }
-
 /* 按钮涟漪 */
 .btn-ripple{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.6),rgba(255,255,255,0) 70%);transform:scale(0);animation:rippleExpand .6s ease-out forwards;pointer-events:none}
 .btn-primary .btn-ripple,.nav-item.active .btn-ripple,.mobile-nav-item.active .btn-ripple{background:radial-gradient(circle,rgba(255,255,255,.75),rgba(255,255,255,0) 70%)}
@@ -607,6 +579,68 @@ function getSeason(){
   if(m>=9&&m<=11)return 'autumn';
   return 'winter';
 }
+/* SVG path 常量 */
+const SVG_MAPLE_PATH = 'M383.8 351.7c2.5-2.5 105.3-31 105.3-31l-100-57.7 66.5-52.7-74.7-16.5 24.5-87.7-114.8 34.4L241.5 1l-49.2 138.6-115.6-34.4 25.8 87.7-75.6 16.5 67.6 52.7-101.1 57.7s101.9 28.5 105.3 31c3.1 2.5 8.5 56.9 8.5 56.9l47.5-48.1c4.5-4.7 12.8-2.3 15.7 3.4l52.4 106.2 53.3-107.7c2.9-5.7 10.7-8.1 15.7-3.4l47.5 48.1c-.8.1 5.5-53.4 8.6-55.9z';
+const SVG_PETAL_PATH = 'M50 3 C 80 20, 94 50, 80 78 C 68 98, 32 98, 20 78 C 6 50, 20 20, 50 3 Z';
+const SVG_SNOW_PATH = 'M256 30 L256 482 M80 148 L432 368 M80 368 L432 148 M256 30 L206 100 M256 30 L306 100 M256 482 L206 412 M256 482 L306 412 M80 148 L128 226 M80 148 L166 126 M432 368 L384 290 M432 368 L346 390 M80 368 L166 390 M80 368 L128 290 M432 148 L346 126 M432 148 L384 226';
+
+const AUTUMN_COLORS = ['#d97b2b','#e85d2a','#c8952f','#b8451f','#e6a13c','#d4691f'];
+const NS = 'http://www.w3.org/2000/svg';
+
+function makePetal(){
+  const svg = document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox','0 0 100 100');
+  svg.setAttribute('class','seasonal-spring');
+  const defs = document.createElementNS(NS,'defs');
+  const grad = document.createElementNS(NS,'radialGradient');
+  const gid = 'petalGrad' + Math.random().toString(36).slice(2,7);
+  grad.setAttribute('id', gid);
+  grad.setAttribute('cx','32%'); grad.setAttribute('cy','28%');
+  const stop1 = document.createElementNS(NS,'stop');
+  stop1.setAttribute('offset','0%'); stop1.setAttribute('stop-color','#ffe8ee');
+  const stop2 = document.createElementNS(NS,'stop');
+  stop2.setAttribute('offset','55%'); stop2.setAttribute('stop-color','#ffb8ca');
+  const stop3 = document.createElementNS(NS,'stop');
+  stop3.setAttribute('offset','100%'); stop3.setAttribute('stop-color','#f08aa6');
+  grad.appendChild(stop1); grad.appendChild(stop2); grad.appendChild(stop3);
+  defs.appendChild(grad);
+  const path = document.createElementNS(NS,'path');
+  path.setAttribute('d', SVG_PETAL_PATH);
+  path.setAttribute('fill', 'url(#' + gid + ')');
+  path.setAttribute('stroke', 'rgba(240,138,166,.35)');
+  path.setAttribute('stroke-width', '1');
+  svg.appendChild(defs);
+  svg.appendChild(path);
+  return svg;
+}
+
+function makeMapleLeaf(color){
+  const svg = document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox','0 0 512 512');
+  svg.setAttribute('class','seasonal-autumn');
+  const path = document.createElementNS(NS,'path');
+  path.setAttribute('fill', color);
+  path.setAttribute('d', SVG_MAPLE_PATH);
+  svg.appendChild(path);
+  return svg;
+}
+
+function makeSnowflake(){
+  const svg = document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox','0 0 512 512');
+  svg.setAttribute('class','seasonal-winter');
+  const g = document.createElementNS(NS,'g');
+  g.setAttribute('stroke', '#ffffff');
+  g.setAttribute('stroke-width', '22');
+  g.setAttribute('stroke-linecap', 'round');
+  g.setAttribute('fill', 'none');
+  const path = document.createElementNS(NS,'path');
+  path.setAttribute('d', SVG_SNOW_PATH);
+  g.appendChild(path);
+  svg.appendChild(g);
+  return svg;
+}
+
 function renderSeasonal(){
   let wrap=document.getElementById('seasonalWrap');
   if(wrap)return;
@@ -617,7 +651,6 @@ function renderSeasonal(){
   document.documentElement.dataset.season=season;
 
   if(season==='summer'){
-    // 夏 · 萤火虫：稀疏点缀在屏幕内各处
     const count=12;
     for(let i=0;i<count;i++){
       const p=document.createElement('div');
@@ -630,20 +663,42 @@ function renderSeasonal(){
       p.style.width=p.style.height=sz+'px';
       wrap.appendChild(p);
     }
-  } else {
-    // 春/秋/冬：从顶部飘落
-    const count=season==='spring'?16:season==='autumn'?12:20;
+  } else if(season==='autumn'){
+    const count=16;
     for(let i=0;i<count;i++){
-      const p=document.createElement('div');
-      p.className='seasonal-'+season;
-      p.style.left=(Math.random()*100)+'%';
-      p.style.animationDuration=(7+Math.random()*9)+'s';
-      p.style.animationDelay=(-Math.random()*14)+'s';
-      const baseSize=season==='spring'?12:season==='autumn'?18:8;
-      const sz=baseSize*(0.7+Math.random()*0.7);
-      p.style.width=sz+'px';
-      p.style.height=(season==='spring'?sz*0.85:season==='autumn'?sz*1.15:sz)+'px';
-      wrap.appendChild(p);
+      const color = AUTUMN_COLORS[Math.floor(Math.random()*AUTUMN_COLORS.length)];
+      const leaf = makeMapleLeaf(color);
+      leaf.style.left = (Math.random()*100)+'%';
+      leaf.style.animationDuration = (7+Math.random()*9)+'s';
+      leaf.style.animationDelay = (-Math.random()*14)+'s';
+      const sz = 16 + Math.random()*14;
+      leaf.style.width = sz+'px';
+      leaf.style.height = sz+'px';
+      wrap.appendChild(leaf);
+    }
+  } else if(season==='spring'){
+    const count=16;
+    for(let i=0;i<count;i++){
+      const petal = makePetal();
+      petal.style.left = (Math.random()*100)+'%';
+      petal.style.animationDuration = (7+Math.random()*9)+'s';
+      petal.style.animationDelay = (-Math.random()*14)+'s';
+      const sz = 10 + Math.random()*8;
+      petal.style.width = sz+'px';
+      petal.style.height = sz+'px';
+      wrap.appendChild(petal);
+    }
+  } else {
+    const count=20;
+    for(let i=0;i<count;i++){
+      const flake = makeSnowflake();
+      flake.style.left = (Math.random()*100)+'%';
+      flake.style.animationDuration = (8+Math.random()*9)+'s';
+      flake.style.animationDelay = (-Math.random()*15)+'s';
+      const sz = 8 + Math.random()*8;
+      flake.style.width = sz+'px';
+      flake.style.height = sz+'px';
+      wrap.appendChild(flake);
     }
   }
   document.body.appendChild(wrap);
