@@ -19,7 +19,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .brand-name{font-size:15.5px;font-weight:700}
 .brand-sub{font-size:11.5px;color:var(--muted);margin-top:-1px}
 .nav{display:flex;flex-direction:column;gap:4px;flex:1}
-.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:12px;color:var(--text-2);cursor:pointer;font-size:14px;font-weight:500;transition:.18s;border:none;background:none;width:100%;text-align:left;font-family:inherit}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:12px;color:var(--text-2);cursor:pointer;font-size:14px;font-weight:500;transition:.18s;border:none;background:none;width:100%;text-align:left;font-family:inherit;position:relative;overflow:hidden}
 .nav-item:hover{background:var(--panel-2);color:var(--text)}
 .nav-item.active{background:var(--primary-soft);color:var(--primary);font-weight:600}
 .nav-item svg{width:18px;height:18px;flex:0 0 18px}
@@ -31,13 +31,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .sync-dot.ok{background:var(--green)}.sync-dot.busy{background:var(--gold);animation:pulse 1s infinite}.sync-dot.idle{background:var(--muted)}.sync-dot.err{background:var(--primary)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 main{flex:1;min-width:0;padding:26px 30px 70px}
-.view[hidden]{display:none}.view{animation:fadeUp .26s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.view[hidden]{display:none}
 .topbar{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
 .page-title{font-size:22px;font-weight:700;letter-spacing:-.4px}
 .page-sub{font-size:13px;color:var(--muted);margin-top:2px}
 .spacer{flex:1}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;border-radius:11px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:13.5px;font-weight:500;cursor:pointer;transition:.18s;font-family:inherit;white-space:nowrap;text-decoration:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;border-radius:11px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:13.5px;font-weight:500;cursor:pointer;transition:.18s;font-family:inherit;white-space:nowrap;text-decoration:none;position:relative;overflow:hidden}
 .btn:hover{border-color:#d8cec1;transform:translateY(-1px);box-shadow:var(--shadow-sm)}
 .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(192,57,43,.26)}
 .btn-ghost{background:transparent;border-color:transparent;color:var(--text-2)}.btn-ghost:hover{background:var(--panel-2);box-shadow:none;border-color:transparent}
@@ -66,7 +65,7 @@ tbody tr{transition:background .14s}tbody tr:hover{background:var(--panel-2)}tbo
 .td-name{font-weight:600}.td-note{color:var(--muted);font-size:12.5px;white-space:normal;max-width:200px}
 .amt{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:14px}
 .amt-in{color:var(--green)}.amt-out{color:var(--primary)}
-.tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap;line-height:1.6}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap;line-height:1.6;transition:box-shadow .3s}
 .tag-in{background:var(--green-soft);color:var(--green)}
 .tag-out{background:var(--primary-soft);color:var(--primary)}
 .tag-plain{background:var(--panel-2);color:var(--text-2);border:1px solid var(--border)}
@@ -109,11 +108,11 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
 .bar-fill{height:100%;border-radius:99px;transition:width .55s cubic-bezier(.2,.8,.3,1)}
 .bar-value{color:var(--text-2);font-variant-numeric:tabular-nums;font-weight:600;min-width:62px;text-align:right}
 .seg{display:flex;gap:6px;background:var(--panel-2);padding:4px;border-radius:12px;border:1px solid var(--border)}
-.seg-btn{flex:1;padding:9px;border-radius:9px;border:none;background:transparent;color:var(--text-2);font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:.16s}
+.seg-btn{flex:1;padding:9px;border-radius:9px;border:none;background:transparent;color:var(--text-2);font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:.16s;position:relative;overflow:hidden}
 .seg-btn.active{background:var(--panel);color:var(--text);box-shadow:var(--shadow-sm)}
 .seg-btn[data-dir="in"].active{color:var(--green)}.seg-btn[data-dir="out"].active{color:var(--primary)}
 .empty{text-align:center;padding:46px 20px;color:var(--muted)}
-.empty-icon{font-size:38px;margin-bottom:12px;opacity:.55}
+.empty-icon{font-size:38px;margin-bottom:12px;opacity:.55;display:inline-block}
 .empty-title{font-size:14.5px;font-weight:600;color:var(--text-2);margin-bottom:5px}
 .empty-sub{font-size:12.5px}
 .overlay{position:fixed;inset:0;background:rgba(40,30,20,.45);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}
@@ -123,7 +122,7 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
 @keyframes pop{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
 .modal-head{display:flex;align-items:center;padding:18px 22px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--panel);z-index:2;border-radius:20px 20px 0 0}
 .modal-head h3{font-size:16px;font-weight:700}
-.icon-btn{width:34px;height:34px;border-radius:10px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center;font-size:21px;line-height:1;transition:.16s;font-family:inherit}
+.icon-btn{width:34px;height:34px;border-radius:10px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center;font-size:21px;line-height:1;transition:.16s;font-family:inherit;position:relative;overflow:hidden}
 .icon-btn:hover{background:var(--panel-2);color:var(--text)}
 .modal-body{padding:20px 22px}
 .modal-foot{padding:16px 22px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border);flex-wrap:wrap;align-items:center}
@@ -143,7 +142,6 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
 .dl{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--border);font-size:13.5px}
 .dl:last-child{border-bottom:none}.dl dt{color:var(--muted)}.dl dd{font-weight:600;font-variant-numeric:tabular-nums}
 .kv-big{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
-/* 人情画像 */
 .persona-card{background:linear-gradient(135deg,#fff8f3,#fdf0ee);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow-sm);margin-bottom:16px;position:relative;overflow:hidden}
 html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,#2a1618)}
 .persona-card::after{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(192,57,43,.08),transparent 70%);pointer-events:none}
@@ -154,62 +152,79 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
 .persona-tags{display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:1}
 .persona-tag{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:600;background:var(--panel);border:1px solid var(--border);color:var(--text-2);transition:.15s}
 .persona-tag:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-1px)}
-/* 回礼提醒 */
 .remind-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed var(--border)}
 .remind-item:last-child{border-bottom:none}
 .remind-badge{padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:600;background:var(--primary-soft);color:var(--primary)}
 .remind-bell{display:inline-block;transform-origin:50% 10%}
-/* ================ 特效样式 ================ */
-/* ① 数字滚动 - 只需 container，无特殊样式 */
-/* ② 卡片 stagger */
-html:not(.no-stagger) .stats .stat{opacity:0;transform:translateY(10px);animation:statIn .5s cubic-bezier(.2,.8,.3,1) forwards}
-html:not(.no-stagger) .stats .stat:nth-child(1){animation-delay:.05s}
-html:not(.no-stagger) .stats .stat:nth-child(2){animation-delay:.11s}
-html:not(.no-stagger) .stats .stat:nth-child(3){animation-delay:.17s}
-html:not(.no-stagger) .stats .stat:nth-child(4){animation-delay:.23s}
-@keyframes statIn{to{opacity:1;transform:none}}
-/* ③ 称号 shimmer */
-html:not(.no-shimmer) .persona-title{
-  background:linear-gradient(90deg,var(--text) 0%,var(--text) 40%,#d9a441 48%,#f5d98b 52%,#d9a441 56%,var(--text) 64%,var(--text) 100%);
-  background-size:250% 100%;background-position:100% 0;
-  -webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:shimmer 4.5s ease-in-out infinite;
+/* ============ 装饰层 ============ */
+.dark-dust{position:fixed;inset:0;pointer-events:none;z-index:3;opacity:0;transition:opacity .6s;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 30%,rgba(217,164,65,.4),transparent 50%),
+    radial-gradient(1.5px 1.5px at 70% 60%,rgba(226,104,90,.3),transparent 50%),
+    radial-gradient(1px 1px at 40% 80%,rgba(217,164,65,.3),transparent 50%),
+    radial-gradient(1px 1px at 85% 20%,rgba(226,104,90,.28),transparent 50%),
+    radial-gradient(1.5px 1.5px at 12% 65%,rgba(217,164,65,.3),transparent 50%),
+    radial-gradient(1px 1px at 55% 15%,rgba(226,104,90,.22),transparent 50%),
+    radial-gradient(1px 1px at 33% 45%,rgba(217,164,65,.25),transparent 50%),
+    radial-gradient(1.5px 1.5px at 92% 88%,rgba(217,164,65,.2),transparent 50%);
+  background-size:100% 200%;
 }
+html[data-theme="dark"]:not(.no-dust) .dark-dust{opacity:1;animation:drift 60s linear infinite}
+@keyframes drift{0%{background-position:0 0}100%{background-position:0 -200px}}
+.top-shimmer{position:fixed;top:0;left:0;right:0;height:2px;z-index:5;pointer-events:none;opacity:0;transition:opacity .6s;background:linear-gradient(90deg,transparent,var(--primary),var(--gold),var(--primary),transparent);background-size:200% 100%}
+html:not(.no-top-shimmer) .top-shimmer{opacity:.55;animation:topShimmer 6s linear infinite}
+@keyframes topShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.cursor-glow{position:fixed;width:500px;height:500px;left:-500px;top:-500px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;z-index:1;opacity:0;transition:opacity .4s;background:radial-gradient(circle,rgba(217,164,65,.09),rgba(192,57,43,.05) 40%,transparent 70%)}
+html:not(.no-cursor-glow) .cursor-glow{opacity:1}
+@media (hover:none){.cursor-glow{display:none!important}}
+/* 四季氛围容器 */
+.seasonal-container{position:fixed;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+.seasonal-spring{position:absolute;top:-20px;width:6px;height:6px;background:rgba(255,255,255,.85);border-radius:50%;box-shadow:0 0 8px rgba(255,255,255,.6);animation:catkinFall linear infinite}
+@keyframes catkinFall{0%{transform:translate(0,-20px) rotate(0);opacity:0}10%{opacity:1}100%{transform:translate(60px,105vh) rotate(360deg);opacity:.35}}
+.seasonal-summer{position:absolute;width:220px;height:220px;background:radial-gradient(circle,rgba(255,220,150,.18),transparent 70%);border-radius:50%;animation:sunspotMove ease-in-out infinite alternate}
+@keyframes sunspotMove{0%{transform:translate(0,0)}100%{transform:translate(80px,60px)}}
+.seasonal-autumn{position:absolute;top:-20px;width:14px;height:14px;background:linear-gradient(135deg,#d97b2b,#c8952f);border-radius:50% 0 50% 50%;box-shadow:0 0 4px rgba(217,123,43,.4);animation:leafFall linear infinite}
+@keyframes leafFall{0%{transform:translate(0,-20px) rotate(0);opacity:0}10%{opacity:1}50%{transform:translate(-50px,50vh) rotate(180deg)}100%{transform:translate(50px,105vh) rotate(720deg);opacity:.35}}
+.seasonal-winter{position:absolute;top:-10px;width:5px;height:5px;background:#fff;border-radius:50%;opacity:.7;box-shadow:0 0 4px rgba(255,255,255,.8);animation:snowFall linear infinite}
+@keyframes snowFall{0%{transform:translate(0,-10px);opacity:0}10%{opacity:.9}100%{transform:translate(30px,105vh);opacity:.3}}
+/* 按钮涟漪 */
+.btn-ripple{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.6),rgba(255,255,255,0) 70%);transform:scale(0);animation:rippleExpand .6s ease-out forwards;pointer-events:none}
+.btn-primary .btn-ripple,.nav-item.active .btn-ripple{background:radial-gradient(circle,rgba(255,255,255,.75),rgba(255,255,255,0) 70%)}
+@keyframes rippleExpand{to{transform:scale(2.5);opacity:0}}
+/* 页面入场动画 */
+html.playing-entry .view{animation:viewEnter .45s cubic-bezier(.2,.8,.3,1)}
+@keyframes viewEnter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+html.playing-entry .stagger-item{opacity:0;transform:translateY(10px);animation:statIn .5s cubic-bezier(.2,.8,.3,1) forwards}
+@keyframes statIn{to{opacity:1;transform:none}}
+/* 数字滚动/称号 shimmer/金粉/新记录高亮/铃铛摇摆 */
+html:not(.no-shimmer) .persona-title{background:linear-gradient(90deg,var(--text) 0%,var(--text) 40%,#d9a441 48%,#f5d98b 52%,#d9a441 56%,var(--text) 64%,var(--text) 100%);background-size:250% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 4.5s ease-in-out infinite}
 @keyframes shimmer{0%,72%{background-position:100% 0}88%{background-position:-50% 0}100%{background-position:-50% 0}}
-/* ④ 金粉粒子 */
 .gold-particle{position:fixed;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#f5d98b,#d9a441);box-shadow:0 0 6px rgba(217,164,65,.6);pointer-events:none;z-index:999;animation:burst .9s cubic-bezier(.2,.8,.3,1) forwards}
 @keyframes burst{0%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.15);opacity:0}}
-/* ⑤ 新记录高亮 */
 html:not(.no-highlight) tr.is-new{animation:highlightNew 1.6s ease-out}
 @keyframes highlightNew{0%{background:rgba(47,143,91,.18)}100%{background:transparent}}
 html[data-theme="dark"]:not(.no-highlight) tr.is-new{animation:highlightNewDark 1.6s ease-out}
 @keyframes highlightNewDark{0%{background:rgba(92,185,138,.18)}100%{background:transparent}}
-/* ⑥ 铃铛摇摆 */
 html:not(.no-bell-swing) .remind-bell{animation:bellSwing 3s ease-in-out infinite}
 @keyframes bellSwing{0%,80%,100%{transform:rotate(0)}84%{transform:rotate(14deg)}88%{transform:rotate(-12deg)}92%{transform:rotate(8deg)}96%{transform:rotate(-4deg)}}
-/* ⑦ 深色微尘 */
-html[data-theme="dark"]:not(.no-dust) body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:1;
-  background-image:
-    radial-gradient(1.5px 1.5px at 20% 30%,rgba(217,164,65,.28),transparent 50%),
-    radial-gradient(1.5px 1.5px at 70% 60%,rgba(226,104,90,.22),transparent 50%),
-    radial-gradient(1px 1px at 40% 80%,rgba(217,164,65,.22),transparent 50%),
-    radial-gradient(1px 1px at 85% 20%,rgba(226,104,90,.18),transparent 50%),
-    radial-gradient(1.5px 1.5px at 12% 65%,rgba(217,164,65,.2),transparent 50%),
-    radial-gradient(1px 1px at 55% 15%,rgba(226,104,90,.15),transparent 50%);
-  background-size:100% 200%;
-  animation:drift 60s linear infinite;
-}
-@keyframes drift{0%{background-position:0 0}100%{background-position:0 -200px}}
-/* ⑧ 金雨 canvas */
+/* 标签呼吸 */
+html:not(.no-tag-breath) .tag-in{animation:tagPulseIn 3s ease-in-out infinite}
+html:not(.no-tag-breath) .tag-out{animation:tagPulseOut 3s ease-in-out infinite}
+@keyframes tagPulseIn{0%,100%{box-shadow:0 0 0 0 rgba(47,143,91,.2)}50%{box-shadow:0 0 0 4px rgba(47,143,91,0)}}
+@keyframes tagPulseOut{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,.2)}50%{box-shadow:0 0 0 4px rgba(192,57,43,0)}}
+/* 空状态图标浮动 */
+html:not(.no-empty-float) .empty-icon{animation:emptyFloat 3.2s ease-in-out infinite}
+@keyframes emptyFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+/* 金雨 */
 #goldRainCanvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
-/* ⑨ 婚礼落樱 */
-.sakura-container{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
-.sakura{position:absolute;top:-20px;width:12px;height:12px;background:radial-gradient(circle at 30% 30%,#ffd9e1,#f4a3b5);border-radius:50% 0 50% 50%;box-shadow:0 0 6px rgba(244,163,181,.4);animation:fall linear infinite}
-@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:0}10%{opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:.6}}
-/* 特效设置开关 UI */
-.fx-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px dashed var(--border)}
+/* 樱花 */
+.sakura-container{position:fixed;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+.sakura{position:absolute;top:-20px;width:12px;height:12px;background:radial-gradient(circle at 30% 30%,#ffd9e1,#f4a3b5);border-radius:50% 0 50% 50%;box-shadow:0 0 6px rgba(244,163,181,.4);animation:sakuraFall linear infinite}
+@keyframes sakuraFall{0%{transform:translateY(-20px) rotate(0deg);opacity:0}10%{opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:.6}}
+/* 特效设置 */
+.fx-group-title{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;padding:14px 0 6px;margin-top:6px}
+.fx-group-title:first-child{padding-top:0;margin-top:0}
+.fx-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed var(--border)}
 .fx-row:last-child{border-bottom:none}
 .fx-row .fx-info{flex:1;min-width:0}
 .fx-row .fx-name{font-size:13.5px;font-weight:600}
@@ -268,16 +283,22 @@ html[data-theme="dark"]:not(.no-dust) body::before{
   .persona-icon{width:46px;height:46px;flex:0 0 46px;font-size:22px;border-radius:13px}
   .persona-title{font-size:17px}.persona-desc{font-size:12px}
   .persona-tag{font-size:11.5px;padding:4px 9px}
+  .cursor-glow{display:none!important}
   .mobile-nav{display:flex;position:fixed;left:0;right:0;bottom:0;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:var(--panel);border-top:1px solid var(--border);z-index:50;box-shadow:0 -4px 20px rgba(70,50,30,.08)}
-  .mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;border-radius:12px;border:none;background:transparent;color:var(--text-2);font-size:10.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:.16s}
+  .mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;border-radius:12px;border:none;background:transparent;color:var(--text-2);font-size:10.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:.16s;position:relative;overflow:hidden}
   .mobile-nav-item svg{width:21px;height:21px}
   .mobile-nav-item.active{color:var(--primary);background:var(--primary-soft)}
 }
-.theme-fab{width:36px;height:36px;border-radius:12px;border:none;background:var(--panel-2);color:var(--text);cursor:pointer;display:grid;place-items:center;font-size:17px;transition:.18s;flex:0 0 36px}
+.theme-fab{width:36px;height:36px;border-radius:12px;border:none;background:var(--panel-2);color:var(--text);cursor:pointer;display:grid;place-items:center;font-size:17px;transition:.18s;flex:0 0 36px;position:relative;overflow:hidden}
 .theme-fab:hover{background:var(--primary-soft);color:var(--primary)}
 </style>
 </head>
 <body>
+<!-- 装饰层（固定在最上层，pointer-events:none 不挡点击） -->
+<div id="darkDust" class="dark-dust" aria-hidden="true"></div>
+<div class="top-shimmer" aria-hidden="true"></div>
+<div id="cursorGlow" class="cursor-glow" aria-hidden="true"></div>
+
 <div class="app">
   <aside class="sidebar">
     <div class="brand"><div class="brand-logo">簿</div><div><div class="brand-name">人情簿</div><div class="brand-sub">份子钱往来记录</div></div></div>
@@ -290,8 +311,8 @@ html[data-theme="dark"]:not(.no-dust) body::before{
     </nav>
     <div class="sidebar-foot">
       <div class="side-actions">
-        <button class="btn btn-ghost btn-sm" id="quickExport" title="导出全部数据为 JSON 备份">⬇️ 导出</button>
-        <button class="btn btn-ghost btn-sm" data-act="add" title="添加记录（快捷键 N）">＋ 添加</button>
+        <button class="btn btn-ghost btn-sm" id="quickExport">⬇️ 导出</button>
+        <button class="btn btn-ghost btn-sm" data-act="add">＋ 添加</button>
       </div>
       <div class="sync-label" id="syncLabel" role="button" tabindex="0"><span class="sync-dot idle"></span>未同步 · 点击配置</div>
       <button class="btn btn-ghost btn-block btn-sm" id="themeToggle">🌙 深色模式</button>
@@ -387,8 +408,8 @@ html[data-theme="dark"]:not(.no-dust) body::before{
   <div class="modal-foot"><button class="btn" id="relationDone" type="button">完成</button></div>
 </div></div>
 
-<!-- 视觉特效设置 -->
-<div class="overlay" id="fxOverlay" role="dialog" aria-modal="true" aria-labelledby="fxTitle"><div class="modal" style="max-width:540px">
+<!-- 视觉特效 -->
+<div class="overlay" id="fxOverlay" role="dialog" aria-modal="true" aria-labelledby="fxTitle"><div class="modal" style="max-width:560px">
   <div class="modal-head"><h3 id="fxTitle">✨ 视觉特效</h3><div class="spacer"></div><button class="icon-btn" id="fxClose" type="button" aria-label="关闭">&times;</button></div>
   <div class="modal-body">
     <p class="hint" style="margin-bottom:6px">按你的喜好自由开关，所有设置保存在本机。</p>
@@ -409,23 +430,44 @@ const DEFAULT_EVENTS=['婚礼','订婚','满月百日','生日寿宴','乔迁新
 const DEFAULT_RELATIONS=['亲属','亲戚','朋友','同事','同学','邻居','客户生意','其他'];
 const METHODS=['现金','微信','支付宝','银行转账','实物礼品','其他'];
 const PALETTE=['#c0392b','#d97b2b','#c8a02e','#5b9e6b','#3b7fb6','#7a6bb5','#c2557f','#4fa3a3','#8d6e63','#9aa05b','#6c7a89'];
-const DEFAULT_FX={numberRoll:true,cardStagger:true,titleShimmer:true,goldBurst:true,newHighlight:true,bellSwing:true,darkDust:true,goldRain:true,weddingSakura:true};
+const DEFAULT_FX={
+  numberRoll:true,cardStagger:true,pageTransition:true,
+  goldBurst:true,newHighlight:true,tagBreath:true,
+  titleShimmer:true,bellSwing:true,cursorGlow:true,topShimmer:true,buttonRipple:true,
+  darkDust:true,seasonalAmbience:true,goldRain:true,weddingSakura:true
+};
 const FX_META=[
-  {key:'numberRoll',name:'🎬 数字滚动',desc:'进入概览时，统计数字从 0 滚到目标值'},
-  {key:'cardStagger',name:'🃏 卡片依次入场',desc:'统计卡从下往上逐张淡入'},
-  {key:'titleShimmer',name:'✨ 称号金光扫过',desc:'人情画像的称号每隔几秒有一道金光划过'},
-  {key:'goldBurst',name:'💫 保存金色粒子',desc:'保存记录后，按钮处飞出金粉粒子'},
-  {key:'newHighlight',name:'🟢 新记录高亮',desc:'刚添加的记录在列表里闪现淡绿背景'},
-  {key:'bellSwing',name:'🔔 回礼铃铛摇摆',desc:'回礼提醒卡片的铃铛每 3 秒轻摇一次'},
-  {key:'darkDust',name:'🌌 深色背景微尘',desc:'深色模式下背景有微弱的金色粒子飘动'},
-  {key:'goldRain',name:'🎊 里程碑金雨',desc:'第 10/50/100/500 条记录时洒落金粉'},
-  {key:'weddingSakura',name:'🌸 婚礼落樱',desc:'当"婚礼"类记录 ≥ 40% 时，概览页飘落樱花'}
+  {group:'入场动画',list:[
+    {key:'numberRoll',name:'🎬 数字滚动',desc:'进入页面时，统计数字从 0 滚到目标值'},
+    {key:'cardStagger',name:'🃏 卡片依次入场',desc:'卡片从下往上依次淡入（所有页面）'},
+    {key:'pageTransition',name:'✨ 页面切换过渡',desc:'切换标签时，内容淡入 + 轻微上移'}
+  ]},
+  {group:'数据反馈',list:[
+    {key:'goldBurst',name:'💫 保存金色粒子',desc:'保存记录后，按钮处飞出金粉粒子'},
+    {key:'newHighlight',name:'🟢 新记录高亮',desc:'刚添加的记录在列表里闪现淡绿背景'},
+    {key:'tagBreath',name:'💗 收/送标签呼吸',desc:'收礼/送礼的标签有轻微的呼吸光晕'}
+  ]},
+  {group:'装饰点缀',list:[
+    {key:'titleShimmer',name:'✨ 称号金光扫过',desc:'人情画像的称号每隔几秒有一道金光划过'},
+    {key:'bellSwing',name:'🔔 回礼铃铛摇摆',desc:'回礼提醒卡片的铃铛每 3 秒轻摇一次'},
+    {key:'cursorGlow',name:'🔆 鼠标暖光晕',desc:'桌面端鼠标移动时，有一团柔和暖光跟随（移动端自动关闭）'},
+    {key:'topShimmer',name:'🌟 顶部流光',desc:'页面顶部有一条流动的彩色渐变线'},
+    {key:'buttonRipple',name:'💧 按钮涟漪',desc:'点击按钮时，从点击处扩散一圈涟漪'}
+  ]},
+  {group:'氛围背景',list:[
+    {key:'darkDust',name:'🌌 深色背景微尘',desc:'深色模式下背景飘浮着金色微尘'},
+    {key:'seasonalAmbience',name:'🍃 四季氛围',desc:'根据当前月份自动切换：春柳絮 / 夏光斑 / 秋落叶 / 冬雪花'},
+    {key:'goldRain',name:'🎊 里程碑金雨',desc:'第 10/50/100/500/1000 条记录时洒落金粉'},
+    {key:'weddingSakura',name:'🌸 婚礼落樱',desc:'当"婚礼"类记录 ≥ 40% 时，概览页飘落樱花'}
+  ]}
 ];
+const ALL_FX_KEYS=FX_META.reduce((a,g)=>a.concat(g.list.map(i=>i.key)),[]);
+
 let db={records:[],updatedAt:0},currentView='dashboard',editingId=null,formDirection='out',chartMode='year';
 let customRelations=[];
 let fxConfig=Object.assign({},DEFAULT_FX);
 let lastAddedId=null;
-let numberRollPlayedThisSession=false;
+let entryTimer=null;
 const expandedPeople=new Set();
 const $=(s,p=document)=>p.querySelector(s),$$=(s,p=document)=>Array.from(p.querySelectorAll(s));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -447,13 +489,87 @@ function loadFx(){try{const r=JSON.parse(localStorage.getItem(FX_KEY)||'{}');fxC
 function saveFx(){localStorage.setItem(FX_KEY,JSON.stringify(fxConfig));applyFx()}
 function applyFx(){
   const h=document.documentElement;
-  h.classList.toggle('no-stagger',!fxConfig.cardStagger);
+  // 视觉特效类
   h.classList.toggle('no-shimmer',!fxConfig.titleShimmer);
   h.classList.toggle('no-bell-swing',!fxConfig.bellSwing);
   h.classList.toggle('no-dust',!fxConfig.darkDust);
   h.classList.toggle('no-highlight',!fxConfig.newHighlight);
+  h.classList.toggle('no-tag-breath',!fxConfig.tagBreath);
+  h.classList.toggle('no-cursor-glow',!fxConfig.cursorGlow);
+  h.classList.toggle('no-top-shimmer',!fxConfig.topShimmer);
+  h.classList.toggle('no-empty-float',!(fxConfig.cardStagger||fxConfig.pageTransition));
+  // 四季氛围
+  if(!fxConfig.seasonalAmbience)removeSeasonal();else renderSeasonal();
+  // 樱花
   if(!fxConfig.weddingSakura)removeSakura();
   else if(currentView==='dashboard')updateSakura();
+}
+
+/* ========== 四季氛围 ========== */
+function getSeason(){
+  const m=new Date().getMonth()+1;
+  if(m>=3&&m<=5)return 'spring';
+  if(m>=6&&m<=8)return 'summer';
+  if(m>=9&&m<=11)return 'autumn';
+  return 'winter';
+}
+function renderSeasonal(){
+  let wrap=document.getElementById('seasonalWrap');
+  if(wrap)return; // 已存在
+  wrap=document.createElement('div');
+  wrap.id='seasonalWrap';
+  wrap.className='seasonal-container';
+  const season=getSeason();
+  const count=season==='summer'?4:14;
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div');
+    p.className='seasonal-'+season;
+    p.style.left=(Math.random()*100)+'%';
+    if(season==='summer'){
+      p.style.top=(Math.random()*80)+'%';
+      p.style.animationDelay=(-Math.random()*20)+'s';
+      p.style.animationDuration=(15+Math.random()*15)+'s';
+    }else{
+      p.style.animationDuration=(8+Math.random()*8)+'s';
+      p.style.animationDelay=(-Math.random()*12)+'s';
+      p.style.transform=`scale(${0.6+Math.random()*0.8})`;
+    }
+    wrap.appendChild(p);
+  }
+  document.body.appendChild(wrap);
+}
+function removeSeasonal(){const el=document.getElementById('seasonalWrap');if(el)el.remove()}
+
+/* ========== 鼠标暖光晕 ========== */
+function setupCursorGlow(){
+  let raf;
+  document.addEventListener('mousemove',e=>{
+    if(!fxConfig.cursorGlow)return;
+    if(window.matchMedia('(hover:none)').matches)return;
+    cancelAnimationFrame(raf);
+    raf=requestAnimationFrame(()=>{
+      const g=document.getElementById('cursorGlow');
+      if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px'}
+    });
+  });
+}
+
+/* ========== 按钮涟漪 ========== */
+function setupRipple(){
+  document.addEventListener('pointerdown',e=>{
+    if(!fxConfig.buttonRipple)return;
+    const btn=e.target.closest('.btn, .nav-item, .mobile-nav-item, .icon-btn, .seg-btn, .theme-fab');
+    if(!btn)return;
+    const rect=btn.getBoundingClientRect();
+    const size=Math.max(rect.width,rect.height);
+    const ripple=document.createElement('span');
+    ripple.className='btn-ripple';
+    ripple.style.left=(e.clientX-rect.left-size/2)+'px';
+    ripple.style.top=(e.clientY-rect.top-size/2)+'px';
+    ripple.style.width=ripple.style.height=size+'px';
+    btn.appendChild(ripple);
+    setTimeout(()=>ripple.remove(),650);
+  });
 }
 
 /* ========== ① 数字滚动 ========== */
@@ -468,7 +584,7 @@ function animateNumberEl(el,duration=900){
     const eased=1-Math.pow(1-t,3);
     const cur=from+(to-from)*eased;
     if(type==='int')el.innerHTML=prefix+Math.round(cur)+suffix;
-    else el.textContent=prefix+money(cur)+suffix;
+    else el.textContent=prefix+money(cur);
     if(t<1)requestAnimationFrame(frame);
   })(start);
 }
@@ -551,7 +667,7 @@ function updateSakura(){
 }
 function removeSakura(){const el=$('.sakura-container');if(el)el.remove()}
 
-/* ========== 云同步（可选） ========== */
+/* ========== 云同步 ========== */
 const Sync={
   cfg:{binId:'',key:'',auto:'off'},busy:false,pushTimer:null,
   load(){try{const c=JSON.parse(localStorage.getItem(SYNC_KEY)||'{}');this.cfg=Object.assign({binId:'',key:'',auto:'off'},c)}catch(e){this.cfg={binId:'',key:'',auto:'off'}}},
@@ -652,6 +768,18 @@ function getPersona(){
   return{main,tags};
 }
 
+/* ========== 卡片入场 ========== */
+function applyStagger(){
+  if(!fxConfig.cardStagger)return;
+  const view=document.getElementById('view-'+currentView);
+  if(!view)return;
+  view.querySelectorAll('.card, .person, .stat, .remind-item').forEach((el,i)=>{
+    el.classList.add('stagger-item');
+    el.style.animationDelay=Math.min(i*0.035,0.6)+'s';
+  });
+}
+
+/* ========== 导航 ========== */
 function navigate(v){
   currentView=v;
   $$('.nav-item, .mobile-nav-item').forEach(el=>{
@@ -660,8 +788,21 @@ function navigate(v){
     if(isActive)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');
   });
   $$('.view').forEach(el=>{el.hidden=(el.id!=='view-'+v)});
-  render();window.scrollTo({top:0,behavior:'smooth'});
-  if(v==='dashboard')setTimeout(updateSakura,100);
+  // 页面入场动画
+  if(fxConfig.pageTransition){
+    document.documentElement.classList.add('playing-entry');
+    clearTimeout(entryTimer);
+  }
+  render();
+  if(fxConfig.cardStagger)applyStagger();
+  if(fxConfig.pageTransition){
+    entryTimer=setTimeout(()=>{
+      document.documentElement.classList.remove('playing-entry');
+      $$('.stagger-item').forEach(el=>{el.classList.remove('stagger-item');el.style.animationDelay=''});
+    },1600);
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(v==='dashboard')setTimeout(updateSakura,120);
   else removeSakura();
 }
 function render(){
@@ -721,17 +862,15 @@ function renderDashboard(){
   <div class="stats">
     <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--green)"></span>累计收礼</div><div class="stat-value" style="color:var(--green)" data-animate-value="${totalIn}">${money(totalIn)}</div><div class="stat-foot">共 ${inCount} 笔</div></div>
     <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--primary)"></span>累计送礼</div><div class="stat-value" style="color:var(--primary)" data-animate-value="${totalOut}">${money(totalOut)}</div><div class="stat-foot">共 ${outCount} 笔</div></div>
-    <div class="stat" title="净结余 = 累计收礼 − 累计送礼，反映当前人情收支的盈亏"><div class="stat-label"><span class="dot" style="background:var(--gold)"></span>净结余 ⓘ</div><div class="stat-value" style="color:${net>=0?'var(--green)':'var(--primary)'}" data-animate-value="${net}" data-animate-prefix="${net>=0?'+':''}">${net>=0?'+':''}${money(net)}</div><div class="stat-foot">${net>=0?'收大于送':'送大于收'}</div></div>
+    <div class="stat" title="净结余 = 累计收礼 − 累计送礼"><div class="stat-label"><span class="dot" style="background:var(--gold)"></span>净结余 ⓘ</div><div class="stat-value" style="color:${net>=0?'var(--green)':'var(--primary)'}" data-animate-value="${net}" data-animate-prefix="${net>=0?'+':''}">${net>=0?'+':''}${money(net)}</div><div class="stat-foot">${net>=0?'收大于送':'送大于收'}</div></div>
     <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--blue)"></span>往来人数</div><div class="stat-value" style="color:var(--blue)" data-animate-value="${people.length}" data-animate-type="int" data-animate-suffix='<span style="font-size:15px;font-weight:600;color:var(--muted)"> 人</span>'>${people.length}<span style="font-size:15px;font-weight:600;color:var(--muted)"> 人</span></div><div class="stat-foot">${reminders.length} 人待还</div></div>
   </div>
   <div class="grid-2">
     <div class="card"><div class="card-head"><div class="card-title"><span class="remind-bell">🔔</span> 回礼提醒</div><div class="spacer"></div><span class="tag tag-out">${reminders.length} 人待还</span></div><div class="card-body" style="padding:6px 20px 12px">${remindHTML}</div></div>
     <div class="card"><div class="card-head"><div class="card-title">🕒 最近往来</div><div class="spacer"></div><button class="btn btn-sm btn-ghost" data-act="goto" data-view="records">全部 →</button></div><div class="card-body p0">${recentHTML}</div></div>
   </div>`;
-  // 播放数字滚动
   requestAnimationFrame(playNumberRoll);
-  // 高亮刚添加的记录
-  if(lastAddedId){setTimeout(()=>{lastAddedId=null},2000)}
+  if(lastAddedId)setTimeout(()=>{lastAddedId=null},2000);
 }
 
 function renderRecords(){
@@ -768,7 +907,7 @@ function updateRecordsTable(){
   const ce=$('#recCount');if(ce)ce.textContent=`筛选 ${list.length} 条 · 收 ${money(sIn)} · 送 ${money(sOut)}`;
   if(!list.length){wrap.innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">没有匹配的记录</div><div class="empty-sub">试试换个关键词或重置筛选</div></div></div>`;return}
   wrap.innerHTML=`<div class="card"><div class="table-wrap"><table><thead><tr><th>日期</th><th>姓名</th><th>关系</th><th>事由</th><th>方向</th><th style="text-align:right">金额</th><th>方式</th><th>备注</th><th style="text-align:right">操作</th></tr></thead><tbody>${list.map(r=>`<tr class="${r.id===lastAddedId?'is-new':''}"><td data-label="日期" style="color:var(--muted)">${esc(r.date||'—')}</td><td data-label="姓名" class="td-name">${esc(r.name)}</td><td data-label="关系"><span class="tag tag-plain">${esc(r.relation||'其他')}</span></td><td data-label="事由">${esc(r.event||'—')}</td><td data-label="方向"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收礼':'送礼'}</span></td><td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td><td data-label="方式" style="color:var(--text-2);font-size:12.5px">${esc(r.method||'—')}</td><td data-label="备注" class="td-note">${esc(r.note||r.location||'')}</td><td class="td-actions"><button class="btn btn-sm btn-ghost" data-act="edit" data-id="${r.id}">编辑</button><button class="btn btn-sm btn-ghost btn-danger" data-act="del" data-id="${r.id}">删除</button></td></tr>`).join('')}</tbody></table></div></div>`;
-  if(lastAddedId){setTimeout(()=>{lastAddedId=null},2000)}
+  if(lastAddedId)setTimeout(()=>{lastAddedId=null},2000);
 }
 
 function renderPeople(){
@@ -856,7 +995,7 @@ function renderData(){
   <div class="card mb16">
     <div class="card-head"><div class="card-title">✨ 视觉特效</div><div class="spacer"></div><span class="tag tag-plain" id="fxCount">—</span></div>
     <div class="card-body">
-      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px;line-height:1.8">数字滚动、卡片入场、称号金光、保存金粉、新记录高亮、铃铛摇摆、深色微尘、里程碑金雨、婚礼落樱 —— 按你的喜好自由开关。</p>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px;line-height:1.8">共 15 种特效：数字滚动、卡片入场、页面过渡、保存金粉、新记录高亮、标签呼吸、称号金光、铃铛摇摆、鼠标暖光晕、顶部流光、按钮涟漪、深色微尘、四季氛围、里程碑金雨、婚礼落樱 —— 按你的喜好自由开关。</p>
       <button class="btn btn-primary" data-act="openFx">打开特效设置</button>
     </div>
   </div>
@@ -897,8 +1036,8 @@ function renderData(){
 }
 function updateFxCount(){
   const el=$('#fxCount');if(!el)return;
-  const on=Object.values(fxConfig).filter(Boolean).length;
-  el.textContent=`${on} / ${Object.keys(DEFAULT_FX).length} 已开启`;
+  const on=ALL_FX_KEYS.filter(k=>fxConfig[k]).length;
+  el.textContent=`${on} / ${ALL_FX_KEYS.length} 已开启`;
 }
 
 function prep(cv){const dpr=window.devicePixelRatio||1,rect=cv.getBoundingClientRect(),w=Math.max(rect.width,100),h=Math.max(rect.height,80);cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);return{ctx,w,h}}
@@ -965,14 +1104,11 @@ function saveRecord(e){
   else db.records.push(rec);
   if(!wasEditing){
     lastAddedId=rec.id;
-    // 里程碑金雨
     checkMilestone(db.records.length);
   }
   saveLocal();Sync.schedulePush();
-  // 金粉粒子
   const btn=e.submitter||$('#recordForm button[type="submit"]');
   if(btn){const rect=btn.getBoundingClientRect();goldBurst(rect.left+rect.width/2,rect.top+rect.height/2)}
-  // 连续录入模式
   if(!wasEditing && $('#continuousMode') && $('#continuousMode').checked){
     editingId=null;
     $('#f-name').value='';$('#f-amount').value='';$('#f-note').value='';$('#f-location').value='';
@@ -1034,23 +1170,25 @@ function openFxModal(){renderFxList();$('#fxOverlay').classList.add('show')}
 function closeFxModal(){$('#fxOverlay').classList.remove('show')}
 function renderFxList(){
   const el=$('#fxList');if(!el)return;
-  el.innerHTML=FX_META.map(m=>`
-    <div class="fx-row">
-      <div class="fx-info">
-        <div class="fx-name">${m.name}</div>
-        <div class="fx-desc">${m.desc}</div>
-      </div>
-      <label class="fx-switch" aria-label="${m.name}">
-        <input type="checkbox" data-fx="${m.key}" ${fxConfig[m.key]?'checked':''}>
-        <span class="fx-slider"></span>
-      </label>
-    </div>`).join('');
+  el.innerHTML=FX_META.map(g=>`
+    <div class="fx-group-title">${g.group}</div>
+    ${g.list.map(m=>`
+      <div class="fx-row">
+        <div class="fx-info">
+          <div class="fx-name">${m.name}</div>
+          <div class="fx-desc">${m.desc}</div>
+        </div>
+        <label class="fx-switch" aria-label="${m.name}">
+          <input type="checkbox" data-fx="${m.key}" ${fxConfig[m.key]?'checked':''}>
+          <span class="fx-slider"></span>
+        </label>
+      </div>`).join('')}
+  `).join('');
   $$('#fxList input[data-fx]').forEach(cb=>{
     cb.addEventListener('change',()=>{
       fxConfig[cb.dataset.fx]=cb.checked;
       saveFx();
       updateFxCount();
-      // 如果是 titleShimmer/bellSwing 这类，改动后需要重渲染
       if(currentView==='dashboard')renderDashboard();
     });
   });
@@ -1087,8 +1225,8 @@ function bindEvents(){
   on('#fxClose','click',closeFxModal);
   on('#fxDone','click',closeFxModal);
   on('#fxOverlay','click',e=>{if(e.target===$('#fxOverlay'))closeFxModal()});
-  on('#fxAllOn','click',()=>{Object.keys(DEFAULT_FX).forEach(k=>fxConfig[k]=true);saveFx();renderFxList();updateFxCount();if(currentView==='dashboard')renderDashboard();toast('已开启全部特效')});
-  on('#fxAllOff','click',()=>{Object.keys(DEFAULT_FX).forEach(k=>fxConfig[k]=false);saveFx();renderFxList();updateFxCount();removeSakura();if(currentView==='dashboard')renderDashboard();toast('已关闭全部特效')});
+  on('#fxAllOn','click',()=>{ALL_FX_KEYS.forEach(k=>fxConfig[k]=true);saveFx();renderFxList();updateFxCount();if(currentView==='dashboard')renderDashboard();toast('已开启全部特效')});
+  on('#fxAllOff','click',()=>{ALL_FX_KEYS.forEach(k=>fxConfig[k]=false);saveFx();renderFxList();updateFxCount();removeSakura();removeSeasonal();if(currentView==='dashboard')renderDashboard();toast('已关闭全部特效')});
   on('#btnSyncSave','click',()=>{
     Sync.cfg.binId=$('#s-binId').value.trim();Sync.cfg.key=$('#s-key').value.trim();Sync.cfg.auto=$('#s-auto').value;Sync.save();
     if(Sync.enabled()){toast('设置已保存，正在测试同步…');closeSyncModal();Sync.push(true).then(()=>toast('同步成功！'))}
@@ -1155,13 +1293,17 @@ function init(){
   try{
     const s=localStorage.getItem(THEME_KEY),pd=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
     setTheme(s||(pd?'dark':'light'));
-    loadLocal();loadRelations();loadFx();Sync.load();
+    loadLocal();loadRelations();
+    Sync.load();
     fillSelect($('#f-relation'),allRelations());
     fillSelect($('#f-event'),DEFAULT_EVENTS);
     fillSelect($('#f-method'),METHODS);
     const fd=$('#f-date');if(fd)fd.value=today();
     bindEvents();
+    setupCursorGlow();
+    setupRipple();
     Sync.updateUI();
+    loadFx(); // 加载特效（会自动 applyFx 并渲染四季氛围）
     navigate('dashboard');
     if(Sync.enabled())Sync.pull(true);
   }catch(e){console.error('init 失败',e)}
