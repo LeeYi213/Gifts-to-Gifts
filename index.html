@@ -157,76 +157,153 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
 .remind-badge{padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:600;background:var(--primary-soft);color:var(--primary)}
 .remind-bell{display:inline-block;transform-origin:50% 10%}
 /* ================= 装饰层 ================= */
-/* 深色微尘：DOM 粒子方案 */
 .dark-dust{position:fixed;inset:0;pointer-events:none;z-index:3;opacity:0;transition:opacity .8s;overflow:hidden}
 html[data-theme="dark"]:not(.no-dust) .dark-dust{opacity:1}
-.dust-particle{
-  position:absolute;
-  width:3px;height:3px;border-radius:50%;
-  background:radial-gradient(circle at 30% 30%, #f5d98b, #d9a441);
-  box-shadow:0 0 6px rgba(217,164,65,.9), 0 0 14px rgba(217,164,65,.4);
-  animation:dustFloat ease-in-out infinite alternate;
-}
-@keyframes dustFloat{
-  0%{transform:translate(0,0) scale(1);opacity:.5}
-  100%{transform:translate(var(--dx),var(--dy)) scale(1.15);opacity:1}
-}
-/* 顶部流光 */
+.dust-particle{position:absolute;border-radius:50%;background:radial-gradient(circle at 30% 30%,#f5d98b,#d9a441);box-shadow:0 0 6px rgba(217,164,65,.9),0 0 14px rgba(217,164,65,.4);animation:dustFloat ease-in-out infinite alternate}
+@keyframes dustFloat{0%{transform:translate(0,0) scale(1);opacity:.5}100%{transform:translate(var(--dx),var(--dy)) scale(1.15);opacity:1}}
 .top-shimmer{position:fixed;top:0;left:0;right:0;height:3px;z-index:5;pointer-events:none;opacity:0;transition:opacity .6s;background:linear-gradient(90deg,transparent 0%,var(--primary) 20%,var(--gold) 50%,var(--primary) 80%,transparent 100%);background-size:200% 100%}
 html:not(.no-top-shimmer) .top-shimmer{opacity:.75;animation:topShimmer 5s linear infinite}
 @keyframes topShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-/* 鼠标暖光晕 */
 .cursor-glow{position:fixed;width:520px;height:520px;left:-520px;top:-520px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;z-index:1;opacity:0;transition:opacity .4s;background:radial-gradient(circle,rgba(217,164,65,.12),rgba(192,57,43,.06) 40%,transparent 70%)}
 html:not(.no-cursor-glow) .cursor-glow{opacity:1}
 @media (hover:none){.cursor-glow{display:none!important}}
-/* 四季氛围 */
+
+/* ================= 四季氛围 ================= */
 .seasonal-container{position:fixed;inset:0;pointer-events:none;z-index:3;overflow:hidden}
-.seasonal-spring{position:absolute;top:-20px;width:8px;height:8px;background:rgba(255,255,255,.9);border-radius:50%;box-shadow:0 0 10px rgba(255,255,255,.7);animation:catkinFall linear infinite}
-@keyframes catkinFall{0%{transform:translate(0,-20px) rotate(0);opacity:0}10%{opacity:1}100%{transform:translate(80px,105vh) rotate(360deg);opacity:.4}}
-.seasonal-summer{position:absolute;width:260px;height:260px;background:radial-gradient(circle,rgba(255,220,150,.22),transparent 70%);border-radius:50%;animation:sunspotMove ease-in-out infinite alternate}
-@keyframes sunspotMove{0%{transform:translate(0,0)}100%{transform:translate(100px,70px)}}
-.seasonal-autumn{position:absolute;top:-20px;width:16px;height:16px;background:linear-gradient(135deg,#d97b2b,#c8952f);border-radius:50% 0 50% 50%;box-shadow:0 0 6px rgba(217,123,43,.5);animation:leafFall linear infinite}
-@keyframes leafFall{0%{transform:translate(0,-20px) rotate(0);opacity:0}10%{opacity:1}50%{transform:translate(-60px,50vh) rotate(180deg)}100%{transform:translate(60px,105vh) rotate(720deg);opacity:.4}}
-.seasonal-winter{position:absolute;top:-10px;width:7px;height:7px;background:#fff;border-radius:50%;opacity:.85;box-shadow:0 0 6px rgba(255,255,255,.9);animation:snowFall linear infinite}
-@keyframes snowFall{0%{transform:translate(0,-10px);opacity:0}10%{opacity:1}100%{transform:translate(40px,105vh);opacity:.4}}
+/* 季节顶部光晕 */
+.seasonal-container::before{content:'';position:absolute;top:-100px;left:0;right:0;height:500px;pointer-events:none;transition:opacity .8s}
+html[data-season="spring"] .seasonal-container::before{background:radial-gradient(ellipse at 50% 0%,rgba(255,182,204,.09),transparent 60%)}
+html[data-season="summer"] .seasonal-container::before{background:radial-gradient(ellipse at 50% 0%,rgba(255,220,130,.10),transparent 60%)}
+html[data-season="autumn"] .seasonal-container::before{background:radial-gradient(ellipse at 50% 0%,rgba(217,123,43,.10),transparent 60%)}
+html[data-season="winter"] .seasonal-container::before{background:radial-gradient(ellipse at 50% 0%,rgba(160,200,255,.10),transparent 60%)}
+
+/* ===== 春 · 桃花瓣 ===== */
+.seasonal-spring{
+  position:absolute;top:-40px;
+  background:radial-gradient(ellipse at 32% 28%,#ffe8ee 0%,#ffb8ca 45%,#f08aa6 100%);
+  border-radius:50% 8% 50% 50%;
+  box-shadow:0 0 8px rgba(240,138,166,.45),inset -2px -2px 3px rgba(200,80,120,.15);
+  animation:petalFall linear infinite;
+  will-change:transform;
+}
+.seasonal-spring::after{
+  content:'';position:absolute;inset:35% 42%;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.9),transparent 70%);
+}
+@keyframes petalFall{
+  0%{transform:translate(0,-40px) rotate(0deg);opacity:0}
+  8%{opacity:.9}
+  25%{transform:translate(38px,25vh) rotate(180deg)}
+  50%{transform:translate(-25px,50vh) rotate(360deg)}
+  75%{transform:translate(30px,75vh) rotate(540deg)}
+  100%{transform:translate(-15px,110vh) rotate(720deg);opacity:.3}
+}
+
+/* ===== 夏 · 萤火虫 ===== */
+.seasonal-summer{
+  position:absolute;
+  background:radial-gradient(circle,#f8ffc0 0%,#c7ec87 45%,#7bbf4f 100%);
+  border-radius:50%;
+  box-shadow:0 0 8px 2px rgba(199,236,135,.9),0 0 18px 5px rgba(199,236,135,.45),0 0 30px 10px rgba(199,236,135,.15);
+  animation:fireflyFloat ease-in-out infinite alternate;
+  will-change:transform,opacity;
+}
+@keyframes fireflyFloat{
+  0%{transform:translate(0,0);opacity:.15}
+  15%{opacity:1}
+  35%{transform:translate(50px,-40px);opacity:.75}
+  55%{transform:translate(-30px,25px);opacity:1}
+  75%{transform:translate(40px,50px);opacity:.4}
+  100%{transform:translate(-15px,-15px);opacity:.7}
+}
+
+/* ===== 秋 · 枫叶 ===== */
+.seasonal-autumn{
+  position:absolute;top:-40px;
+  background:linear-gradient(135deg,#e85d2a 0%,#d97b2b 45%,#c8952f 100%);
+  border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+  box-shadow:0 0 8px rgba(217,123,43,.5),inset -2px -3px 5px rgba(139,69,19,.25);
+  animation:mapleFall linear infinite;
+  will-change:transform;
+}
+.seasonal-autumn::after{
+  content:'';position:absolute;bottom:-5px;left:50%;
+  width:1.5px;height:7px;
+  background:linear-gradient(to bottom,#8b4513,rgba(139,69,19,0));
+  transform:translateX(-50%);
+  border-radius:1px;
+}
+.seasonal-autumn::before{
+  content:'';position:absolute;top:20%;left:20%;right:20%;bottom:20%;
+  background:radial-gradient(ellipse at 50% 40%,rgba(255,220,150,.35),transparent 70%);
+  border-radius:50%;
+}
+@keyframes mapleFall{
+  0%{transform:translate(0,-40px) rotate(0deg) rotateY(0deg) scaleX(1);opacity:0}
+  8%{opacity:1}
+  20%{transform:translate(-30px,20vh) rotate(70deg) rotateY(120deg) scaleX(.6)}
+  40%{transform:translate(40px,42vh) rotate(180deg) rotateY(280deg) scaleX(1)}
+  60%{transform:translate(-25px,64vh) rotate(280deg) rotateY(430deg) scaleX(.7)}
+  80%{transform:translate(35px,86vh) rotate(380deg) rotateY(580deg) scaleX(1)}
+  100%{transform:translate(-10px,110vh) rotate(480deg) rotateY(720deg) scaleX(.8);opacity:.4}
+}
+
+/* ===== 冬 · 雪花 ===== */
+.seasonal-winter{
+  position:absolute;top:-30px;
+  background:radial-gradient(circle,#ffffff 0%,#eaf2ff 75%);
+  border-radius:50%;
+  box-shadow:0 0 6px 1px rgba(255,255,255,.95),0 0 14px 4px rgba(190,215,255,.6),0 0 22px 8px rgba(190,215,255,.25);
+  animation:snowFall linear infinite;
+  will-change:transform;
+}
+.seasonal-winter::before{
+  content:'';position:absolute;inset:-2px;
+  background:
+    linear-gradient(0deg,transparent 46%,rgba(255,255,255,.75) 50%,transparent 54%),
+    linear-gradient(90deg,transparent 46%,rgba(255,255,255,.75) 50%,transparent 54%),
+    linear-gradient(45deg,transparent 47.5%,rgba(255,255,255,.5) 50%,transparent 52.5%),
+    linear-gradient(-45deg,transparent 47.5%,rgba(255,255,255,.5) 50%,transparent 52.5%);
+  border-radius:50%;
+  opacity:.85;
+}
+@keyframes snowFall{
+  0%{transform:translate(0,-30px) rotate(0deg);opacity:0}
+  10%{opacity:1}
+  30%{transform:translate(25px,30vh) rotate(60deg)}
+  50%{transform:translate(-20px,52vh) rotate(150deg)}
+  70%{transform:translate(22px,76vh) rotate(230deg)}
+  100%{transform:translate(-12px,110vh) rotate(360deg);opacity:.5}
+}
+
 /* 按钮涟漪 */
 .btn-ripple{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.6),rgba(255,255,255,0) 70%);transform:scale(0);animation:rippleExpand .6s ease-out forwards;pointer-events:none}
 .btn-primary .btn-ripple,.nav-item.active .btn-ripple,.mobile-nav-item.active .btn-ripple{background:radial-gradient(circle,rgba(255,255,255,.75),rgba(255,255,255,0) 70%)}
 @keyframes rippleExpand{to{transform:scale(2.5);opacity:0}}
-/* 页面入场 */
 html.playing-entry .view{animation:viewEnter .45s cubic-bezier(.2,.8,.3,1)}
 @keyframes viewEnter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 html.playing-entry .stagger-item{opacity:0;transform:translateY(10px);animation:statIn .5s cubic-bezier(.2,.8,.3,1) forwards}
 @keyframes statIn{to{opacity:1;transform:none}}
-/* 称号 shimmer */
 html:not(.no-shimmer) .persona-title{background:linear-gradient(90deg,var(--text) 0%,var(--text) 40%,#d9a441 48%,#f5d98b 52%,#d9a441 56%,var(--text) 64%,var(--text) 100%);background-size:250% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 4.5s ease-in-out infinite}
 @keyframes shimmer{0%,72%{background-position:100% 0}88%{background-position:-50% 0}100%{background-position:-50% 0}}
-/* 金粉 */
 .gold-particle{position:fixed;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#f5d98b,#d9a441);box-shadow:0 0 6px rgba(217,164,65,.6);pointer-events:none;z-index:999;animation:burst .9s cubic-bezier(.2,.8,.3,1) forwards}
 @keyframes burst{0%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.15);opacity:0}}
-/* 新记录高亮 */
 html:not(.no-highlight) tr.is-new{animation:highlightNew 1.6s ease-out}
 @keyframes highlightNew{0%{background:rgba(47,143,91,.18)}100%{background:transparent}}
 html[data-theme="dark"]:not(.no-highlight) tr.is-new{animation:highlightNewDark 1.6s ease-out}
 @keyframes highlightNewDark{0%{background:rgba(92,185,138,.18)}100%{background:transparent}}
-/* 铃铛摇摆 */
 html:not(.no-bell-swing) .remind-bell{animation:bellSwing 3s ease-in-out infinite}
 @keyframes bellSwing{0%,80%,100%{transform:rotate(0)}84%{transform:rotate(14deg)}88%{transform:rotate(-12deg)}92%{transform:rotate(8deg)}96%{transform:rotate(-4deg)}}
-/* 标签呼吸 */
 html:not(.no-tag-breath) .tag-in{animation:tagPulseIn 3s ease-in-out infinite}
 html:not(.no-tag-breath) .tag-out{animation:tagPulseOut 3s ease-in-out infinite}
 @keyframes tagPulseIn{0%,100%{box-shadow:0 0 0 0 rgba(47,143,91,.2)}50%{box-shadow:0 0 0 4px rgba(47,143,91,0)}}
 @keyframes tagPulseOut{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,.2)}50%{box-shadow:0 0 0 4px rgba(192,57,43,0)}}
-/* 空状态浮动 */
 html:not(.no-empty-float) .empty-icon{animation:emptyFloat 3.2s ease-in-out infinite}
 @keyframes emptyFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-/* 金雨 */
 #goldRainCanvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
-/* 樱花 */
 .sakura-container{position:fixed;inset:0;pointer-events:none;z-index:3;overflow:hidden}
 .sakura{position:absolute;top:-20px;width:12px;height:12px;background:radial-gradient(circle at 30% 30%,#ffd9e1,#f4a3b5);border-radius:50% 0 50% 50%;box-shadow:0 0 6px rgba(244,163,181,.4);animation:sakuraFall linear infinite}
 @keyframes sakuraFall{0%{transform:translateY(-20px) rotate(0deg);opacity:0}10%{opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:.6}}
-/* 特效设置 */
 .fx-group-title{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;padding:14px 0 6px;margin-top:6px}
 .fx-group-title:first-child{padding-top:0;margin-top:0}
 .fx-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed var(--border)}
@@ -451,7 +528,7 @@ const FX_META=[
   ]},
   {group:'氛围背景',list:[
     {key:'darkDust',name:'🌌 深色背景微尘',desc:'深色模式下背景飘浮着金色微尘'},
-    {key:'seasonalAmbience',name:'🍃 四季氛围',desc:'根据当前月份自动切换：春柳絮 / 夏光斑 / 秋落叶 / 冬雪花'},
+    {key:'seasonalAmbience',name:'🍃 四季氛围',desc:'春·桃花瓣 / 夏·萤火虫 / 秋·枫叶 / 冬·雪花'},
     {key:'goldRain',name:'🎊 里程碑金雨',desc:'第 10/50/100/500/1000 条记录时洒落金粉'},
     {key:'weddingSakura',name:'🌸 婚礼落樱',desc:'当"婚礼"类记录 ≥ 40% 时，概览页飘落樱花'}
   ]}
@@ -497,7 +574,7 @@ function applyFx(){
   else if(currentView==='dashboard')updateSakura();
 }
 
-/* ============ 深色微尘（DOM 粒子） ============ */
+/* ============ 深色微尘 ============ */
 function buildDarkDust(){
   const c=document.getElementById('darkDust');
   if(!c)return;
@@ -512,11 +589,8 @@ function buildDarkDust(){
     p.style.width=p.style.height=size+'px';
     p.style.animationDuration=(8+Math.random()*14)+'s';
     p.style.animationDelay=(-Math.random()*15)+'s';
-    const dx=(Math.random()-0.5)*80;
-    const dy=-30-Math.random()*90;
-    p.style.setProperty('--dx',dx+'px');
-    p.style.setProperty('--dy',dy+'px');
-    // 20% 概率是砖红色
+    p.style.setProperty('--dx',((Math.random()-0.5)*80)+'px');
+    p.style.setProperty('--dy',(-30-Math.random()*90)+'px');
     if(Math.random()>0.8){
       p.style.background='radial-gradient(circle at 30% 30%, #f0836f, #e2685a)';
       p.style.boxShadow='0 0 6px rgba(226,104,90,.8), 0 0 14px rgba(226,104,90,.35)';
@@ -526,7 +600,13 @@ function buildDarkDust(){
 }
 
 /* ============ 四季氛围 ============ */
-function getSeason(){const m=new Date().getMonth()+1;if(m>=3&&m<=5)return 'spring';if(m>=6&&m<=8)return 'summer';if(m>=9&&m<=11)return 'autumn';return 'winter'}
+function getSeason(){
+  const m=new Date().getMonth()+1;
+  if(m>=3&&m<=5)return 'spring';
+  if(m>=6&&m<=8)return 'summer';
+  if(m>=9&&m<=11)return 'autumn';
+  return 'winter';
+}
 function renderSeasonal(){
   let wrap=document.getElementById('seasonalWrap');
   if(wrap)return;
@@ -534,27 +614,47 @@ function renderSeasonal(){
   wrap.id='seasonalWrap';
   wrap.className='seasonal-container';
   const season=getSeason();
-  const count=season==='summer'?4:16;
-  for(let i=0;i<count;i++){
-    const p=document.createElement('div');
-    p.className='seasonal-'+season;
-    p.style.left=(Math.random()*100)+'%';
-    if(season==='summer'){
-      p.style.top=(Math.random()*80)+'%';
-      p.style.animationDelay=(-Math.random()*20)+'s';
-      p.style.animationDuration=(15+Math.random()*15)+'s';
-    }else{
-      p.style.animationDuration=(8+Math.random()*8)+'s';
-      p.style.animationDelay=(-Math.random()*12)+'s';
-      p.style.transform=`scale(${0.6+Math.random()*0.8})`;
+  document.documentElement.dataset.season=season;
+
+  if(season==='summer'){
+    // 夏 · 萤火虫：稀疏点缀在屏幕内各处
+    const count=12;
+    for(let i=0;i<count;i++){
+      const p=document.createElement('div');
+      p.className='seasonal-summer';
+      p.style.left=(3+Math.random()*94)+'%';
+      p.style.top=(10+Math.random()*80)+'%';
+      p.style.animationDuration=(7+Math.random()*8)+'s';
+      p.style.animationDelay=(-Math.random()*10)+'s';
+      const sz=4+Math.random()*3;
+      p.style.width=p.style.height=sz+'px';
+      wrap.appendChild(p);
     }
-    wrap.appendChild(p);
+  } else {
+    // 春/秋/冬：从顶部飘落
+    const count=season==='spring'?16:season==='autumn'?12:20;
+    for(let i=0;i<count;i++){
+      const p=document.createElement('div');
+      p.className='seasonal-'+season;
+      p.style.left=(Math.random()*100)+'%';
+      p.style.animationDuration=(7+Math.random()*9)+'s';
+      p.style.animationDelay=(-Math.random()*14)+'s';
+      const baseSize=season==='spring'?12:season==='autumn'?18:8;
+      const sz=baseSize*(0.7+Math.random()*0.7);
+      p.style.width=sz+'px';
+      p.style.height=(season==='spring'?sz*0.85:season==='autumn'?sz*1.15:sz)+'px';
+      wrap.appendChild(p);
+    }
   }
   document.body.appendChild(wrap);
 }
-function removeSeasonal(){const el=document.getElementById('seasonalWrap');if(el)el.remove()}
+function removeSeasonal(){
+  const el=document.getElementById('seasonalWrap');
+  if(el)el.remove();
+  delete document.documentElement.dataset.season;
+}
 
-/* ============ 鼠标光晕 ============ */
+/* ============ 鼠标光晕 / 涟漪 ============ */
 function setupCursorGlow(){
   let raf;
   document.addEventListener('mousemove',e=>{
@@ -567,8 +667,6 @@ function setupCursorGlow(){
     });
   });
 }
-
-/* ============ 按钮涟漪 ============ */
 function setupRipple(){
   document.addEventListener('pointerdown',e=>{
     if(!fxConfig.buttonRipple)return;
@@ -586,7 +684,7 @@ function setupRipple(){
   });
 }
 
-/* ============ 数字滚动 ============ */
+/* ============ 数字滚动 / 金粉 / 金雨 / 樱花 ============ */
 function animateNumberEl(el,duration=900){
   const to=Number(el.dataset.animateValue)||0;
   const type=el.dataset.animateType||'money';
@@ -596,15 +694,13 @@ function animateNumberEl(el,duration=900){
   (function frame(now){
     const t=Math.min(1,(now-start)/duration);
     const eased=1-Math.pow(1-t,3);
-    const cur=(to)*eased;
+    const cur=to*eased;
     if(type==='int')el.innerHTML=prefix+Math.round(cur)+suffix;
     else el.textContent=prefix+money(cur);
     if(t<1)requestAnimationFrame(frame);
   })(start);
 }
 function playNumberRoll(){if(!fxConfig.numberRoll)return;$$('[data-animate-value]').forEach(el=>animateNumberEl(el))}
-
-/* ============ 金粉 / 金雨 ============ */
 function goldBurst(x,y,count=16){
   if(!fxConfig.goldBurst)return;
   for(let i=0;i<count;i++){
@@ -646,8 +742,6 @@ function checkMilestone(count){
   const milestones=[10,50,100,500,1000];
   if(milestones.includes(count)){setTimeout(()=>goldRain(2500),400);setTimeout(()=>toast(`🎉 恭喜！已记录 ${count} 条`),200)}
 }
-
-/* ============ 婚礼落樱 ============ */
 function weddingRatio(){if(!db.records.length)return 0;return db.records.filter(r=>r.event==='婚礼').length/db.records.length}
 function updateSakura(){
   if(!fxConfig.weddingSakura||currentView!=='dashboard'||db.records.length<5||weddingRatio()<0.4){removeSakura();return}
@@ -907,7 +1001,7 @@ function renderData(){
   const syncReady=Sync.enabled();
   el.innerHTML=`<div class="topbar"><div><div class="page-title">数据管理</div><div class="page-sub">备份、外观与云同步</div></div></div>
   <div class="card mb16" style="border-color:${syncReady?'var(--green)':'var(--border)'}"><div class="card-head"><div class="card-title">☁️ 云同步（可选）</div><div class="spacer"></div><span class="tag ${syncReady?'tag-in':'tag-plain'}">${syncReady?'已开启':'未开启'}</span></div><div class="card-body"><p style="font-size:13px;color:var(--text-2);margin-bottom:14px;line-height:1.8">本地数据已经可以正常使用，无需任何配置。<br>如果需要<b>手机和电脑数据同步</b>，才需要开启云同步。</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" data-act="openSync">${syncReady?'修改同步设置':'开启云同步'}</button>${syncReady?'<button class="btn" data-act="syncNow">🔄 立即同步</button>':''}</div></div></div>
-  <div class="card mb16"><div class="card-head"><div class="card-title">✨ 视觉特效</div><div class="spacer"></div><span class="tag tag-plain" id="fxCount">—</span></div><div class="card-body"><p style="font-size:13px;color:var(--text-2);margin-bottom:14px;line-height:1.8">共 15 种特效：数字滚动、卡片入场、页面过渡、保存金粉、新记录高亮、标签呼吸、称号金光、铃铛摇摆、鼠标暖光晕、顶部流光、按钮涟漪、深色微尘、四季氛围、里程碑金雨、婚礼落樱 —— 按你的喜好自由开关。</p><button class="btn btn-primary" data-act="openFx">打开特效设置</button></div></div>
+  <div class="card mb16"><div class="card-head"><div class="card-title">✨ 视觉特效</div><div class="spacer"></div><span class="tag tag-plain" id="fxCount">—</span></div><div class="card-body"><p style="font-size:13px;color:var(--text-2);margin-bottom:14px;line-height:1.8">共 15 种特效，含四季氛围：春·桃花瓣 / 夏·萤火虫 / 秋·枫叶 / 冬·雪花。按你的喜好自由开关。</p><button class="btn btn-primary" data-act="openFx">打开特效设置</button></div></div>
   <div class="data-grid">
     <div class="card"><div class="card-head"><div class="card-title">📦 数据概览</div></div><div class="card-body"><div class="kv-big">${db.records.length} <span style="font-size:14px;font-weight:600;color:var(--muted)">条记录</span></div><div style="margin-top:14px"><dl class="dl"><dt>往来人数</dt><dd>${personStats().length} 人</dd></dl><dl class="dl"><dt>收礼总额</dt><dd style="color:var(--green)">${money(sumBy(db.records,'in'))}</dd></dl><dl class="dl"><dt>送礼总额</dt><dd style="color:var(--primary)">${money(sumBy(db.records,'out'))}</dd></dl><dl class="dl"><dt>时间跨度</dt><dd>${dates.length?esc(dates[0])+' ~ '+esc(dates[dates.length-1]):'—'}</dd></dl></div></div></div>
     <div class="card"><div class="card-head"><div class="card-title">💾 导出备份</div></div><div class="card-body"><p style="font-size:13px;color:var(--text-2);margin-bottom:14px">建议定期导出备份，换设备可直接导入。</p><div style="display:flex;flex-direction:column;gap:10px"><button class="btn" data-act="exportJSON">⬇️ 导出 JSON（完整备份）</button><button class="btn" data-act="exportCSV">📊 导出 CSV（Excel 可开）</button></div></div></div>
@@ -1132,9 +1226,9 @@ function init(){
     bindEvents();
     setupCursorGlow();
     setupRipple();
-    buildDarkDust(); // 构建深色微尘粒子
+    buildDarkDust();
     Sync.updateUI();
-    loadFx(); // 加载特效配置 + applyFx（含四季氛围）
+    loadFx();
     navigate('dashboard');
     if(Sync.enabled())Sync.pull(true);
   }catch(e){console.error('init 失败',e)}
