@@ -21,11 +21,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .nav{display:flex;flex-direction:column;gap:4px;flex:1}
 .nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:12px;color:var(--text-2);cursor:pointer;font-size:14px;font-weight:500;transition:.18s;border:none;background:none;width:100%;text-align:left;font-family:inherit}
 .nav-item:hover{background:var(--panel-2);color:var(--text)}
-.nav-item.active{background:var(--primary-soft);color:var(--primary);font-weight:650}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);font-weight:600}
 .nav-item svg{width:18px;height:18px;flex:0 0 18px}
-.sidebar-foot{padding-top:12px;border-top:1px solid var(--border);margin-top:8px;display:flex;flex-direction:column;gap:8px}
-.sync-label{font-size:11.5px;color:var(--muted);padding:0 8px 4px;display:flex;align-items:center;cursor:pointer;border-radius:6px}
-.sync-label:hover{background:var(--panel-2)}
+.sidebar-foot{padding-top:12px;border-top:1px solid var(--border);margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.side-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sync-label{font-size:11.5px;color:var(--muted);padding:6px 8px;display:flex;align-items:center;cursor:pointer;border-radius:8px;transition:.15s}
+.sync-label:hover{background:var(--panel-2);color:var(--text)}
 .sync-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;flex:0 0 8px}
 .sync-dot.ok{background:var(--green)}.sync-dot.busy{background:var(--gold);animation:pulse 1s infinite}.sync-dot.idle{background:var(--muted)}.sync-dot.err{background:var(--primary)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
@@ -33,10 +34,10 @@ main{flex:1;min-width:0;padding:26px 30px 70px}
 .view[hidden]{display:none}.view{animation:fadeUp .26s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 .topbar{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
-.page-title{font-size:22px;font-weight:750;letter-spacing:-.4px}
+.page-title{font-size:22px;font-weight:700;letter-spacing:-.4px}
 .page-sub{font-size:13px;color:var(--muted);margin-top:2px}
 .spacer{flex:1}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;border-radius:11px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:13.5px;font-weight:550;cursor:pointer;transition:.18s;font-family:inherit;white-space:nowrap;text-decoration:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;border-radius:11px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:13.5px;font-weight:500;cursor:pointer;transition:.18s;font-family:inherit;white-space:nowrap;text-decoration:none}
 .btn:hover{border-color:#d8cec1;transform:translateY(-1px);box-shadow:var(--shadow-sm)}
 .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(192,57,43,.26)}
 .btn-ghost{background:transparent;border-color:transparent;color:var(--text-2)}.btn-ghost:hover{background:var(--panel-2);box-shadow:none;border-color:transparent}
@@ -46,13 +47,13 @@ main{flex:1;min-width:0;padding:26px 30px 70px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:16px;margin-bottom:18px}
 .stat{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow-sm);transition:.2s}
 .stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
-.stat-label{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:7px;margin-bottom:9px;font-weight:550}
-.stat-value{font-size:26px;font-weight:750;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+.stat-label{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:7px;margin-bottom:9px;font-weight:500}
+.stat-value{font-size:26px;font-weight:700;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
 .stat-foot{font-size:12px;color:var(--muted);margin-top:7px}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:0 0 8px}
 .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden}
 .card-head{padding:15px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.card-title{font-size:14.5px;font-weight:650}
+.card-title{font-size:14.5px;font-weight:600}
 .card-body{padding:16px 20px}.card-body.p0{padding:0}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
 .grid-2-3{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
@@ -62,13 +63,14 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}
 th{text-align:left;font-weight:600;color:var(--muted);font-size:11.5px;letter-spacing:.5px;padding:11px 14px;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--panel-2)}
 td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle;white-space:nowrap}
 tbody tr{transition:background .14s}tbody tr:hover{background:var(--panel-2)}tbody tr:last-child td{border-bottom:none}
-.td-name{font-weight:650}.td-note{color:var(--muted);font-size:12.5px;white-space:normal;max-width:200px}
+.td-name{font-weight:600}.td-note{color:var(--muted);font-size:12.5px;white-space:normal;max-width:200px}
 .amt{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:14px}
 .amt-in{color:var(--green)}.amt-out{color:var(--primary)}
 .tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap;line-height:1.6}
 .tag-in{background:var(--green-soft);color:var(--green)}
 .tag-out{background:var(--primary-soft);color:var(--primary)}
 .tag-plain{background:var(--panel-2);color:var(--text-2);border:1px solid var(--border)}
+.tag-blue{background:var(--blue-soft);color:var(--blue)}
 .toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .search{position:relative;flex:1;min-width:190px}
 .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted);pointer-events:none}
@@ -105,7 +107,7 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
 .bar-row:last-child{margin-bottom:0}
 .bar-track{height:9px;background:var(--panel-2);border-radius:99px;overflow:hidden}
 .bar-fill{height:100%;border-radius:99px;transition:width .55s cubic-bezier(.2,.8,.3,1)}
-.bar-value{color:var(--text-2);font-variant-numeric:tabular-nums;font-weight:650;min-width:62px;text-align:right}
+.bar-value{color:var(--text-2);font-variant-numeric:tabular-nums;font-weight:600;min-width:62px;text-align:right}
 .seg{display:flex;gap:6px;background:var(--panel-2);padding:4px;border-radius:12px;border:1px solid var(--border)}
 .seg-btn{flex:1;padding:9px;border-radius:9px;border:none;background:transparent;color:var(--text-2);font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:.16s}
 .seg-btn.active{background:var(--panel);color:var(--text);box-shadow:var(--shadow-sm)}
@@ -124,36 +126,38 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
 .icon-btn{width:34px;height:34px;border-radius:10px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center;font-size:21px;line-height:1;transition:.16s;font-family:inherit}
 .icon-btn:hover{background:var(--panel-2);color:var(--text)}
 .modal-body{padding:20px 22px}
-.modal-foot{padding:16px 22px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border);flex-wrap:wrap}
+.modal-foot{padding:16px 22px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border);flex-wrap:wrap;align-items:center}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
 .field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
 .field label{font-size:12.5px;font-weight:600;color:var(--text-2)}
 .req{color:var(--primary)}
 .hint{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.6}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);cursor:pointer;user-select:none}
+.checkbox-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--primary);cursor:pointer}
 .steps{background:var(--panel-2);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:13px;line-height:1.9}
 .steps ol{margin-left:18px}
 .steps code{background:var(--primary-soft);color:var(--primary);padding:1px 6px;border-radius:5px;font-family:ui-monospace,Menlo,monospace;font-size:12px}
-.welcome-hero{text-align:center;padding:6px 0 14px}
-.welcome-hero .icon{font-size:44px;margin-bottom:10px}
-.welcome-hero h2{font-size:20px;font-weight:750;margin-bottom:6px}
-.welcome-hero p{font-size:13px;color:var(--muted)}
 .toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);background:var(--text);color:var(--bg);padding:11px 22px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:.26s;z-index:200;box-shadow:0 10px 28px rgba(0,0,0,.22);max-width:80vw;text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .data-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
 .dl{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--border);font-size:13.5px}
-.dl:last-child{border-bottom:none}.dl dt{color:var(--muted)}.dl dd{font-weight:650;font-variant-numeric:tabular-nums}
-.kv-big{font-size:24px;font-weight:750;font-variant-numeric:tabular-nums}
+.dl:last-child{border-bottom:none}.dl dt{color:var(--muted)}.dl dd{font-weight:600;font-variant-numeric:tabular-nums}
+.kv-big{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
 /* ===== 人情画像 ===== */
 .persona-card{background:linear-gradient(135deg,#fff8f3,#fdf0ee);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow-sm);margin-bottom:16px;position:relative;overflow:hidden}
 html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,#2a1618)}
 .persona-card::after{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(192,57,43,.08),transparent 70%);pointer-events:none}
 .persona-main{display:flex;align-items:center;gap:14px;margin-bottom:14px;position:relative;z-index:1}
 .persona-icon{width:56px;height:56px;border-radius:16px;flex:0 0 56px;background:linear-gradient(135deg,#c0392b,#d9a441);display:grid;place-items:center;font-size:28px;box-shadow:0 6px 18px rgba(192,57,43,.24)}
-.persona-title{font-size:20px;font-weight:750;letter-spacing:-.3px}
+.persona-title{font-size:20px;font-weight:700;letter-spacing:-.3px}
 .persona-desc{font-size:13px;color:var(--text-2);margin-top:3px}
 .persona-tags{display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:1}
 .persona-tag{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:600;background:var(--panel);border:1px solid var(--border);color:var(--text-2);transition:.15s}
 .persona-tag:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-1px)}
+/* 回礼提醒 */
+.remind-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed var(--border)}
+.remind-item:last-child{border-bottom:none}
+.remind-badge{padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:600;background:var(--primary-soft);color:var(--primary)}
 .mobile-nav,.mobile-topbar{display:none}
 @media(max-width:860px){
   .sidebar{display:none}.app{flex-direction:column}
@@ -200,8 +204,7 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
   .data-grid{grid-template-columns:1fr;gap:12px}
   .persona-card{padding:16px 16px}
   .persona-icon{width:46px;height:46px;flex:0 0 46px;font-size:22px;border-radius:13px}
-  .persona-title{font-size:17px}
-  .persona-desc{font-size:12px}
+  .persona-title{font-size:17px}.persona-desc{font-size:12px}
   .persona-tag{font-size:11.5px;padding:4px 9px}
   .mobile-nav{display:flex;position:fixed;left:0;right:0;bottom:0;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:var(--panel);border-top:1px solid var(--border);z-index:50;box-shadow:0 -4px 20px rgba(70,50,30,.08)}
   .mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;border-radius:12px;border:none;background:transparent;color:var(--text-2);font-size:10.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:.16s}
@@ -216,20 +219,29 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
 <div class="app">
   <aside class="sidebar">
     <div class="brand"><div class="brand-logo">簿</div><div><div class="brand-name">人情簿</div><div class="brand-sub">份子钱往来记录</div></div></div>
-    <nav class="nav">
-      <button class="nav-item active" data-view="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>概览</span></button>
+    <nav class="nav" aria-label="主导航">
+      <button class="nav-item active" data-view="dashboard" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>概览</span></button>
       <button class="nav-item" data-view="records"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.6" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg><span>记录</span></button>
-      <button class="nav-item" data-view="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>账簿</span></button>
+      <button class="nav-item" data-view="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>联系人</span></button>
       <button class="nav-item" data-view="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg><span>统计</span></button>
       <button class="nav-item" data-view="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg><span>数据</span></button>
     </nav>
     <div class="sidebar-foot">
-      <div class="sync-label" id="syncLabel"><span class="sync-dot idle"></span>未同步 · 点击配置</div>
+      <div class="side-actions">
+        <button class="btn btn-ghost btn-sm" id="quickExport" title="导出全部数据为 JSON 备份">⬇️ 导出</button>
+        <button class="btn btn-ghost btn-sm" data-act="add" title="添加记录（快捷键 N）">＋ 添加</button>
+      </div>
+      <div class="sync-label" id="syncLabel" role="button" tabindex="0" title="点击配置云同步"><span class="sync-dot idle"></span>未同步 · 点击配置</div>
       <button class="btn btn-ghost btn-block btn-sm" id="themeToggle">🌙 深色模式</button>
     </div>
   </aside>
   <main>
-    <div class="mobile-topbar"><div class="brand-logo">簿</div><div class="brand-name">人情簿</div><div class="spacer"></div><button class="theme-fab" id="themeToggleMobile">🌙</button></div>
+    <div class="mobile-topbar">
+      <div class="brand-logo">簿</div>
+      <div class="brand-name">人情簿</div>
+      <div class="spacer"></div>
+      <button class="theme-fab" id="themeToggleMobile" aria-label="切换深色模式">🌙</button>
+    </div>
     <section class="view" id="view-dashboard"></section>
     <section class="view" id="view-records" hidden></section>
     <section class="view" id="view-people" hidden></section>
@@ -237,75 +249,98 @@ html[data-theme="dark"] .persona-card{background:linear-gradient(135deg,#2a1d16,
     <section class="view" id="view-data" hidden></section>
   </main>
 </div>
-<nav class="mobile-nav">
-  <button class="mobile-nav-item active" data-view="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>概览</span></button>
+<nav class="mobile-nav" aria-label="底部导航">
+  <button class="mobile-nav-item active" data-view="dashboard" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>概览</span></button>
   <button class="mobile-nav-item" data-view="records"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.6" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg><span>记录</span></button>
-  <button class="mobile-nav-item" data-view="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>账簿</span></button>
+  <button class="mobile-nav-item" data-view="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>联系人</span></button>
   <button class="mobile-nav-item" data-view="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg><span>统计</span></button>
   <button class="mobile-nav-item" data-view="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg><span>数据</span></button>
 </nav>
-<div class="overlay" id="overlay"><div class="modal">
-  <div class="modal-head"><h3 id="modalTitle">添加记录</h3><div class="spacer"></div><button class="icon-btn" id="modalClose" type="button">&times;</button></div>
+
+<!-- 添加记录弹窗 -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal">
+  <div class="modal-head"><h3 id="modalTitle">添加记录</h3><div class="spacer"></div><button class="icon-btn" id="modalClose" type="button" aria-label="关闭">&times;</button></div>
   <form id="recordForm">
     <div class="modal-body">
-      <div class="seg" id="dirSeg"><button type="button" class="seg-btn" data-dir="in">收礼 · 别人送我</button><button type="button" class="seg-btn active" data-dir="out">送礼 · 我送别人</button></div>
+      <div class="seg" id="dirSeg" role="tablist">
+        <button type="button" class="seg-btn" data-dir="in" role="tab">收礼 · 别人送我</button>
+        <button type="button" class="seg-btn active" data-dir="out" role="tab" aria-selected="true">送礼 · 我送别人</button>
+      </div>
       <div class="form-grid">
-        <div class="field"><label>姓名 <span class="req">*</span></label><input id="f-name" list="nameList" placeholder="如：张三" required><datalist id="nameList"></datalist></div>
-        <div class="field"><label>关系</label><select id="f-relation"></select></div>
-        <div class="field"><label>事由</label><select id="f-event"></select></div>
-        <div class="field"><label>金额（元）<span class="req">*</span></label><input id="f-amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required></div>
-        <div class="field"><label>日期 <span class="req">*</span></label><input id="f-date" type="date" required></div>
-        <div class="field"><label>方式</label><select id="f-method"></select></div>
-        <div class="field full"><label>地点</label><input id="f-location" placeholder="如：金满楼酒店"></div>
-        <div class="field full"><label>备注</label><textarea id="f-note"></textarea></div>
+        <div class="field"><label for="f-name">姓名 <span class="req">*</span></label><input id="f-name" list="nameList" placeholder="如：张三" required autocomplete="off"><datalist id="nameList"></datalist></div>
+        <div class="field"><label for="f-relation">关系</label><select id="f-relation"></select></div>
+        <div class="field"><label for="f-event">事由</label><select id="f-event"></select></div>
+        <div class="field"><label for="f-amount">金额（元）<span class="req">*</span></label><input id="f-amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required></div>
+        <div class="field"><label for="f-date">日期 <span class="req">*</span></label><input id="f-date" type="date" required></div>
+        <div class="field"><label for="f-method">方式</label><select id="f-method"></select></div>
+        <div class="field full"><label for="f-location">地点</label><input id="f-location" placeholder="如：金满楼酒店"></div>
+        <div class="field full"><label for="f-note">备注</label><textarea id="f-note" placeholder="选填，如：大学室友"></textarea></div>
       </div>
     </div>
-    <div class="modal-foot"><button type="button" class="btn" id="btnCancel">取消</button><button type="submit" class="btn btn-primary">保存</button></div>
+    <div class="modal-foot">
+      <label class="checkbox-row" title="保存后不关闭弹窗，自动聚焦到姓名输入框，适合礼金台连续录入">
+        <input type="checkbox" id="continuousMode"> 连续录入
+      </label>
+      <div class="spacer"></div>
+      <button type="button" class="btn" id="btnCancel">取消</button>
+      <button type="submit" class="btn btn-primary">保存</button>
+    </div>
   </form>
 </div></div>
-<div class="overlay" id="welcomeOverlay"><div class="modal" style="max-width:520px">
-  <div class="modal-head"><h3>👋 欢迎使用人情簿</h3><div class="spacer"></div></div>
+
+<!-- 云同步配置弹窗 -->
+<div class="overlay" id="syncOverlay" role="dialog" aria-modal="true" aria-labelledby="syncTitle"><div class="modal">
+  <div class="modal-head"><h3 id="syncTitle">☁️ 云同步设置（可选）</h3><div class="spacer"></div><button class="icon-btn" id="syncClose" type="button" aria-label="关闭">&times;</button></div>
   <div class="modal-body">
-    <div class="welcome-hero">
-      <div class="icon">📖</div>
-      <h2>记录份子钱，手机电脑自动同步</h2>
-      <p>只需配置一次，之后换设备填同样信息即可</p>
-    </div>
+    <p class="hint" style="line-height:1.8">
+      默认情况下，你的数据只保存在本地浏览器里，打开就能用。<br>
+      如果需要<b>手机和电脑同步</b>，请开启云同步：
+    </p>
     <div class="steps">
-      <b>三步开启云同步：</b>
       <ol>
-        <li>点下方按钮，去 <b>jsonbin.io</b> 用 Google 或邮箱免费注册</li>
+        <li>到 <a href="https://jsonbin.io" target="_blank" rel="noopener" style="color:var(--primary)">jsonbin.io</a> 免费注册（可用 Google 一键注册）</li>
         <li>创建一个 Bin，内容填 <code>{"records":[]}</code>，记下 <b>Bin ID</b></li>
-        <li>到 API Keys 页面复制 <b>Master Key</b>，回来填入</li>
+        <li>到 API Keys 页面复制 <b>Master Key</b>，填入下方</li>
       </ol>
     </div>
-    <p class="hint" style="text-align:center;margin-top:10px">已注册过？直接点「我已获取，去填写」</p>
-  </div>
-  <div class="modal-foot" style="flex-direction:column;gap:8px;align-items:stretch">
-    <a href="https://jsonbin.io" target="_blank" rel="noopener" class="btn btn-primary" id="welcomeGoRegister" style="text-align:center;justify-content:center">① 去 jsonbin.io 注册 →</a>
-    <button type="button" class="btn" id="welcomeGoConfig">② 我已获取，去填写</button>
-    <button type="button" class="btn btn-ghost" id="welcomeSkip">先体验，稍后再配置</button>
-  </div>
-</div></div>
-<div class="overlay" id="syncOverlay"><div class="modal">
-  <div class="modal-head"><h3>☁️ 云同步设置</h3><div class="spacer"></div><button class="icon-btn" id="syncClose" type="button">&times;</button></div>
-  <div class="modal-body">
-    <p class="hint" style="margin-bottom:14px;line-height:1.8">到 <a href="https://jsonbin.io" target="_blank" rel="noopener" style="color:var(--primary)">jsonbin.io</a> 免费注册，创建一个内容为 <code>{"records":[]}</code> 的 Bin，把 Bin ID 和 Master Key 填入下面。手机和电脑填<b>同一个</b> Bin 即可同步。</p>
-    <div class="field"><label>Bin ID</label><input id="s-binId" placeholder="65f8a1b2c3d4..."></div>
-    <div class="field" style="margin-top:12px"><label>Master Key</label><input id="s-key" placeholder="$2a$10$..." autocomplete="off"></div>
-    <div class="field" style="margin-top:12px"><label>自动同步</label><select id="s-auto"><option value="on">开启（推荐）</option><option value="off">关闭（仅手动）</option></select></div>
+    <div class="field"><label for="s-binId">Bin ID</label><input id="s-binId" placeholder="65f8a1b2c3d4..."></div>
+    <div class="field" style="margin-top:12px"><label for="s-key">Master Key</label><input id="s-key" placeholder="$2a$10$..." autocomplete="off"></div>
+    <div class="field" style="margin-top:12px"><label for="s-auto">自动同步</label><select id="s-auto"><option value="on">开启（推荐）</option><option value="off">关闭（仅手动）</option></select></div>
     <div id="syncState" class="hint" style="margin-top:14px"></div>
+    <div class="hint" style="margin-top:10px;color:var(--primary)">⚠️ Master Key 拥有完全读写权限，请不要在公共设备上保存。</div>
   </div>
-  <div class="modal-foot"><button type="button" class="btn" id="btnSyncPull">⬇️ 拉取</button><button type="button" class="btn" id="btnSyncPush">⬆️ 推送</button><button type="button" class="btn btn-primary" id="btnSyncSave">保存设置</button></div>
+  <div class="modal-foot">
+    <button type="button" class="btn" id="btnSyncClear" title="清除本地保存的同步配置">清除配置</button>
+    <div class="spacer"></div>
+    <button type="button" class="btn" id="btnSyncPull">⬇️ 拉取</button>
+    <button type="button" class="btn" id="btnSyncPush">⬆️ 推送</button>
+    <button type="button" class="btn btn-primary" id="btnSyncSave">保存设置</button>
+  </div>
 </div></div>
-<div class="toast" id="toast"></div>
+
+<!-- 关系管理弹窗 -->
+<div class="overlay" id="relationOverlay" role="dialog" aria-modal="true" aria-labelledby="relationTitle"><div class="modal" style="max-width:480px">
+  <div class="modal-head"><h3 id="relationTitle">🏷️ 管理关系标签</h3><div class="spacer"></div><button class="icon-btn" id="relationClose" type="button" aria-label="关闭">&times;</button></div>
+  <div class="modal-body">
+    <p class="hint" style="margin-bottom:12px">添加常用的关系标签，方便下次录入时快速选择。</p>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <input id="newRelationInput" placeholder="如：前同事、球友…" style="flex:1">
+      <button class="btn btn-primary" id="addRelationBtn" type="button">添加</button>
+    </div>
+    <div id="relationList" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+  </div>
+  <div class="modal-foot"><button class="btn" id="relationDone" type="button">完成</button></div>
+</div></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
-const STORAGE_KEY='fenzi_db_v1',THEME_KEY='fenzi_theme',SYNC_KEY='fenzi_sync_cfg',WELCOME_KEY='fenzi_welcomed';
-const EVENT_TYPES=['婚礼','订婚','满月百日','生日寿宴','乔迁新居','升学升职','开业庆典','丧事白事','探病慰问','节日问候','其他'];
-const RELATIONS=['亲属','亲戚','朋友','同事','同学','邻居','客户生意','其他'];
+const STORAGE_KEY='fenzi_db_v1',THEME_KEY='fenzi_theme',SYNC_KEY='fenzi_sync_cfg',REL_KEY='fenzi_relations_v1';
+const DEFAULT_EVENTS=['婚礼','订婚','满月百日','生日寿宴','乔迁新居','升学升职','开业庆典','丧事白事','探病慰问','节日问候','其他'];
+const DEFAULT_RELATIONS=['亲属','亲戚','朋友','同事','同学','邻居','客户生意','其他'];
 const METHODS=['现金','微信','支付宝','银行转账','实物礼品','其他'];
 const PALETTE=['#c0392b','#d97b2b','#c8a02e','#5b9e6b','#3b7fb6','#7a6bb5','#c2557f','#4fa3a3','#8d6e63','#9aa05b','#6c7a89'];
 let db={records:[],updatedAt:0},currentView='dashboard',editingId=null,formDirection='out',chartMode='year';
+let customRelations=[];
 const expandedPeople=new Set();
 const $=(s,p=document)=>p.querySelector(s),$$=(s,p=document)=>Array.from(p.querySelectorAll(s));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -318,12 +353,16 @@ let toastTimer;function toast(m){const t=$('#toast');if(!t)return;t.textContent=
 
 function loadLocal(){try{const r=localStorage.getItem(STORAGE_KEY);if(r){const p=JSON.parse(r);if(p&&Array.isArray(p.records))db=p}}catch(e){}if(!Array.isArray(db.records))db.records=[]}
 function saveLocal(){db.updatedAt=Date.now();try{localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}catch(e){toast('存储空间不足')}}
+function loadRelations(){try{const r=JSON.parse(localStorage.getItem(REL_KEY)||'[]');if(Array.isArray(r))customRelations=r}catch(e){customRelations=[]}}
+function saveRelations(){localStorage.setItem(REL_KEY,JSON.stringify(customRelations))}
+function allRelations(){return Array.from(new Set([...DEFAULT_RELATIONS,...customRelations]))}
 
+/* ============ 云同步（可选） ============ */
 const Sync={
-  cfg:{binId:'',key:'',auto:'off'},
-  busy:false,pushTimer:null,
+  cfg:{binId:'',key:'',auto:'off'},busy:false,pushTimer:null,
   load(){try{const c=JSON.parse(localStorage.getItem(SYNC_KEY)||'{}');this.cfg=Object.assign({binId:'',key:'',auto:'off'},c)}catch(e){this.cfg={binId:'',key:'',auto:'off'}}},
   save(){localStorage.setItem(SYNC_KEY,JSON.stringify(this.cfg));this.updateUI()},
+  clear(){localStorage.removeItem(SYNC_KEY);this.cfg={binId:'',key:'',auto:'off'};this.updateUI()},
   enabled(){return!!(this.cfg.binId&&this.cfg.key)},
   updateUI(){
     const el=$('#syncLabel');if(!el)return;
@@ -350,9 +389,8 @@ const Sync={
         db.records=rrs;db.updatedAt=rat||Date.now();
         localStorage.setItem(STORAGE_KEY,JSON.stringify(db));
         render();if(!silent)toast(`已拉取 ${rrs.length} 条`);
-      }else if(db.updatedAt>rat){
-        this.busy=false;await this.push(true);return;
-      }else if(!silent)toast('云端已是最新');
+      }else if(db.updatedAt>rat){this.busy=false;await this.push(true);return}
+      else if(!silent)toast('云端已是最新');
     }catch(e){if(!silent)toast('拉取失败：'+e.message)}
     finally{this.busy=false;this.updateUI()}
   },
@@ -365,95 +403,89 @@ const Sync={
     }catch(e){if(!silent)toast('推送失败：'+e.message)}
     finally{this.busy=false;this.updateUI()}
   },
-  schedulePush(){
-    if(!this.enabled()||this.cfg.auto!=='on')return;
-    clearTimeout(this.pushTimer);
-    this.pushTimer=setTimeout(()=>this.push(true),1500);
-  }
+  schedulePush(){if(!this.enabled()||this.cfg.auto!=='on')return;clearTimeout(this.pushTimer);this.pushTimer=setTimeout(()=>this.push(true),1500)}
 };
 
 const sumBy=(rs,d)=>rs.filter(r=>r.direction===d).reduce((s,r)=>s+(Number(r.amount)||0),0);
 function personStats(){const m=new Map();db.records.forEach(r=>{const k=(r.name||'未知').trim();if(!m.has(k))m.set(k,{name:k,relation:r.relation||'其他',in:0,out:0,count:0,records:[],last:''});const p=m.get(k);p.records.push(r);p.count++;if(r.direction==='in')p.in+=Number(r.amount)||0;else p.out+=Number(r.amount)||0;if(r.relation)p.relation=r.relation;if(!p.last||(r.date||'')>p.last)p.last=r.date||''});return Array.from(m.values()).map(p=>Object.assign(p,{net:p.in-p.out})).sort((a,b)=>Math.abs(b.net)-Math.abs(a.net)||b.count-a.count)}
 const sortRecordsDesc=l=>l.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')||((b.createdAt||0)-(a.createdAt||0)));
 
-function navigate(v){currentView=v;$$('.nav-item, .mobile-nav-item').forEach(el=>el.classList.toggle('active',el.dataset.view===v));$$('.view').forEach(el=>{el.hidden=(el.id!=='view-'+v)});render();window.scrollTo({top:0,behavior:'smooth'})}
-function render(){if(currentView==='dashboard')renderDashboard();else if(currentView==='records')renderRecords();else if(currentView==='people')renderPeople();else if(currentView==='stats')renderStats();else if(currentView==='data')renderData()}
-
-/* ===== 人情画像生成 ===== */
-function getPersona(){
-  const recs = db.records;
-  if (!recs.length) return null;
-
-  const totalIn = sumBy(recs, 'in');
-  const totalOut = sumBy(recs, 'out');
-  const people = personStats();
-  const peopleCount = people.length;
-  const totalCount = recs.length;
-  const outRatio = totalIn > 0 ? totalOut / totalIn : (totalOut > 0 ? 999 : 1);
-
-  let main;
-  if (totalCount < 3) {
-    main = { icon: '🌱', title: '人情新手', desc: '刚踏入江湖，慢慢记录' };
-  } else if (outRatio > 3) {
-    main = { icon: '💸', title: '散财童子', desc: '送出去的比收回来多得多，人缘一定很好' };
-  } else if (outRatio > 1.5) {
-    main = { icon: '🤝', title: '有来有往', desc: '礼尚往来略有支出，是讲究人' };
-  } else if (outRatio > 0.7) {
-    main = { icon: '⚖️', title: '人情平衡大师', desc: '收支均衡，堪称人情教科书' };
-  } else if (outRatio > 0.3) {
-    main = { icon: '🌟', title: '人缘收割机', desc: '收获满满，备受宠爱' };
-  } else {
-    main = { icon: '👑', title: '社交巨星', desc: '人气之王，走到哪都受欢迎' };
-  }
-
-  const tags = [];
-
-  if (peopleCount >= 20) tags.push({ icon: '🌐', text: '社交达人', desc: `往来 ${peopleCount} 人` });
-  else if (peopleCount >= 10) tags.push({ icon: '🤗', text: '人缘不错', desc: `往来 ${peopleCount} 人` });
-  else if (peopleCount >= 5) tags.push({ icon: '👥', text: '精挑细选', desc: `往来 ${peopleCount} 人` });
-  else if (peopleCount > 0) tags.push({ icon: '🎯', text: '圈子精炼', desc: `往来 ${peopleCount} 人` });
-
-  const maxAmount = Math.max(...recs.map(r => Number(r.amount) || 0));
-  if (maxAmount >= 3000) tags.push({ icon: '💎', text: '豪气干云', desc: `单笔最大 ${money(maxAmount)}` });
-  else if (maxAmount >= 1500) tags.push({ icon: '🎁', text: '出手大方', desc: `单笔最大 ${money(maxAmount)}` });
-  else if (maxAmount >= 800) tags.push({ icon: '💰', text: '诚意十足', desc: `单笔最大 ${money(maxAmount)}` });
-
-  const eventCount = {};
-  recs.forEach(r => { const e = r.event || '其他'; eventCount[e] = (eventCount[e] || 0) + 1; });
-  const topEvent = Object.entries(eventCount).sort((a, b) => b[1] - a[1])[0];
-  if (topEvent) {
-    const [name, cnt] = topEvent;
-    if (name === '婚礼' && cnt >= 3) tags.push({ icon: '💒', text: '婚礼专业户', desc: `${cnt} 场婚礼` });
-    else if (name === '满月百日' && cnt >= 2) tags.push({ icon: '👶', text: '宝宝守护者', desc: `${cnt} 次新生` });
-    else if (name === '乔迁新居' && cnt >= 2) tags.push({ icon: '🏠', text: '乔迁见证人', desc: `${cnt} 次乔迁` });
-    else if (name === '升学升职' && cnt >= 2) tags.push({ icon: '🎓', text: '高光见证者', desc: `${cnt} 次庆祝` });
-    else if (name === '生日寿宴' && cnt >= 3) tags.push({ icon: '🎂', text: '寿星好友', desc: `${cnt} 次生日` });
-  }
-
-  const dates = recs.map(r => r.date).filter(Boolean).sort();
-  if (dates.length >= 2) {
-    const start = new Date(dates[0]);
-    const end = new Date(dates[dates.length - 1]);
-    const days = Math.max(0, Math.floor((end - start) / 86400000));
-    if (days > 365 * 3) tags.push({ icon: '📚', text: '资深人情簿', desc: `${(days / 365).toFixed(1)} 年记录` });
-    else if (days > 365) tags.push({ icon: '📖', text: '人情长跑', desc: `跨越 ${Math.floor(days / 365)} 年` });
-  }
-
-  if (totalCount >= 50) tags.push({ icon: '📝', text: '笔耕不辍', desc: `${totalCount} 笔记录` });
-  else if (totalCount >= 20) tags.push({ icon: '✍️', text: '记录达人', desc: `${totalCount} 笔记录` });
-
-  return { main, tags, totalIn, totalOut, net: totalIn - totalOut, peopleCount, totalCount };
+/* ===== 回礼提醒：找出我欠人情（对方送我的比我送对方多）的人，给参考金额 ===== */
+function getReminders(){
+  const people=personStats();
+  return people
+    .filter(p=>p.net>0.001)
+    .map(p=>{
+      // 参考金额 = 对方送我的总额 / 对方送我次数，向上取整到常见的整百
+      const avg=p.in/Math.max(1,p.records.filter(r=>r.direction==='in').length);
+      const rounded=Math.ceil(avg/100)*100;
+      return {name:p.name,relation:p.relation,net:p.net,suggest:rounded,last:p.last,count:p.count};
+    })
+    .sort((a,b)=>b.net-a.net);
 }
+
+/* ===== 人情画像 ===== */
+function getPersona(){
+  const recs=db.records;if(!recs.length)return null;
+  const totalIn=sumBy(recs,'in'),totalOut=sumBy(recs,'out');
+  const people=personStats(),peopleCount=people.length,totalCount=recs.length;
+  const outRatio=totalIn>0?totalOut/totalIn:(totalOut>0?999:1);
+  let main;
+  if(totalCount<3)main={icon:'🌱',title:'人情新手',desc:'刚踏入江湖，慢慢记录'};
+  else if(outRatio>3)main={icon:'💸',title:'散财童子',desc:'送出去的比收回来多得多，人缘一定很好'};
+  else if(outRatio>1.5)main={icon:'🤝',title:'有来有往',desc:'礼尚往来略有支出，是讲究人'};
+  else if(outRatio>0.7)main={icon:'⚖️',title:'人情平衡大师',desc:'收支均衡，堪称人情教科书'};
+  else if(outRatio>0.3)main={icon:'🌟',title:'人缘收割机',desc:'收获满满，备受宠爱'};
+  else main={icon:'👑',title:'社交巨星',desc:'人气之王，走到哪都受欢迎'};
+  const tags=[];
+  if(peopleCount>=20)tags.push({icon:'🌐',text:'社交达人',desc:`往来 ${peopleCount} 人`});
+  else if(peopleCount>=10)tags.push({icon:'🤗',text:'人缘不错',desc:`往来 ${peopleCount} 人`});
+  else if(peopleCount>=5)tags.push({icon:'👥',text:'精挑细选',desc:`往来 ${peopleCount} 人`});
+  else if(peopleCount>0)tags.push({icon:'🎯',text:'圈子精炼',desc:`往来 ${peopleCount} 人`});
+  const maxAmount=Math.max(...recs.map(r=>Number(r.amount)||0));
+  if(maxAmount>=3000)tags.push({icon:'💎',text:'豪气干云',desc:`单笔最大 ${money(maxAmount)}`});
+  else if(maxAmount>=1500)tags.push({icon:'🎁',text:'出手大方',desc:`单笔最大 ${money(maxAmount)}`});
+  else if(maxAmount>=800)tags.push({icon:'💰',text:'诚意十足',desc:`单笔最大 ${money(maxAmount)}`});
+  const eventCount={};recs.forEach(r=>{const e=r.event||'其他';eventCount[e]=(eventCount[e]||0)+1});
+  const topEvent=Object.entries(eventCount).sort((a,b)=>b[1]-a[1])[0];
+  if(topEvent){const[name,cnt]=topEvent;
+    if(name==='婚礼'&&cnt>=3)tags.push({icon:'💒',text:'婚礼专业户',desc:`${cnt} 场婚礼`});
+    else if(name==='满月百日'&&cnt>=2)tags.push({icon:'👶',text:'宝宝守护者',desc:`${cnt} 次新生`});
+    else if(name==='乔迁新居'&&cnt>=2)tags.push({icon:'🏠',text:'乔迁见证人',desc:`${cnt} 次乔迁`});
+    else if(name==='升学升职'&&cnt>=2)tags.push({icon:'🎓',text:'高光见证者',desc:`${cnt} 次庆祝`});
+    else if(name==='生日寿宴'&&cnt>=3)tags.push({icon:'🎂',text:'寿星好友',desc:`${cnt} 次生日`});
+  }
+  const dates=recs.map(r=>r.date).filter(Boolean).sort();
+  if(dates.length>=2){
+    const days=Math.max(0,Math.floor((new Date(dates[dates.length-1])-new Date(dates[0]))/86400000));
+    if(days>365*3)tags.push({icon:'📚',text:'资深人情簿',desc:`${(days/365).toFixed(1)} 年记录`});
+    else if(days>365)tags.push({icon:'📖',text:'人情长跑',desc:`跨越 ${Math.floor(days/365)} 年`});
+  }
+  if(totalCount>=50)tags.push({icon:'📝',text:'笔耕不辍',desc:`${totalCount} 笔记录`});
+  else if(totalCount>=20)tags.push({icon:'✍️',text:'记录达人',desc:`${totalCount} 笔记录`});
+  return{main,tags};
+}
+
+function navigate(v){
+  currentView=v;
+  $$('.nav-item, .mobile-nav-item').forEach(el=>{
+    const isActive=el.dataset.view===v;
+    el.classList.toggle('active',isActive);
+    if(isActive)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');
+  });
+  $$('.view').forEach(el=>{el.hidden=(el.id!=='view-'+v)});
+  render();window.scrollTo({top:0,behavior:'smooth'});
+}
+function render(){if(currentView==='dashboard')renderDashboard();else if(currentView==='records')renderRecords();else if(currentView==='people')renderPeople();else if(currentView==='stats')renderStats();else if(currentView==='data')renderData()}
 
 function renderDashboard(){
   const recs=db.records,totalIn=sumBy(recs,'in'),totalOut=sumBy(recs,'out'),net=totalIn-totalOut,people=personStats();
   const inCount=recs.filter(r=>r.direction==='in').length,outCount=recs.length-inCount;
-  const oweList=people.filter(p=>p.net>0.001).sort((a,b)=>b.net-a.net).slice(0,5),recent=sortRecordsDesc(recs).slice(0,8);
-  const oweHTML=oweList.length?oweList.map(p=>`<div class="pd-row" style="padding:11px 0"><div class="avatar" style="width:34px;height:34px;flex:0 0 34px;font-size:13px;border-radius:11px;background:${hashColor(p.name)}">${esc(p.name.slice(0,1))}</div><div style="flex:1;min-width:0"><div style="font-weight:650;font-size:13.5px">${esc(p.name)}</div><div style="font-size:11.5px;color:var(--muted)">${esc(p.relation)} · ${p.count} 次</div></div><div style="text-align:right;margin-right:4px"><div class="amt amt-out" style="font-size:13.5px">${money(p.net)}</div></div><button class="btn btn-sm" data-act="quickAdd" data-name="${esc(p.name)}" data-relation="${esc(p.relation)}">记一笔</button></div>`).join(''):`<div class="empty" style="padding:28px 10px"><div class="empty-icon">⚖️</div><div class="empty-title">人情两清</div></div>`;
-  const recentHTML=recent.length?`<div class="table-wrap"><table><thead><tr><th>日期</th><th>姓名</th><th>事由</th><th style="text-align:right">金额</th></tr></thead><tbody>${recent.map(r=>`<tr data-act="edit" data-id="${r.id}" style="cursor:pointer"><td data-label="日期" style="color:var(--muted)">${esc((r.date||'').slice(5))}</td><td data-label="姓名" class="td-name">${esc(r.name)}</td><td data-label="事由"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收':'送'}</span> ${esc(r.event)}</td><td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td></tr>`).join('')}</tbody></table></div>`:`<div class="empty" style="padding:34px 10px"><div class="empty-icon">📖</div><div class="empty-title">还没有记录</div><div class="empty-sub">点击右上角「添加记录」开始</div></div>`;
+  const recent=sortRecordsDesc(recs).slice(0,8);
+  const reminders=getReminders();
   const el=$('#view-dashboard');if(!el)return;
-  const persona = getPersona();
-  const personaHTML = persona ? `
+  const persona=getPersona();
+  const personaHTML=persona?`
     <div class="persona-card">
       <div class="persona-main">
         <div class="persona-icon">${persona.main.icon}</div>
@@ -462,20 +494,48 @@ function renderDashboard(){
           <div class="persona-desc">${esc(persona.main.desc)}</div>
         </div>
       </div>
-      ${persona.tags.length ? `<div class="persona-tags">
-        ${persona.tags.map(t => `<span class="persona-tag" title="${esc(t.desc)}">${t.icon} ${esc(t.text)}</span>`).join('')}
-      </div>` : ''}
-    </div>` : '';
-  el.innerHTML=`<div class="topbar"><div><div class="page-title">概览</div><div class="page-sub">${recs.length?`已记录 ${recs.length} 笔 · ${people.length} 位亲友`:'记录每一份人情'}</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加记录</button></div>
+      ${persona.tags.length?`<div class="persona-tags">${persona.tags.map(t=>`<span class="persona-tag" title="${esc(t.desc)}">${t.icon} ${esc(t.text)}</span>`).join('')}</div>`:''}
+    </div>`:'';
+
+  // 回礼提醒（最多显示 5 个）
+  const remindHTML = reminders.length ? reminders.slice(0,5).map(r=>`
+    <div class="remind-item">
+      <div class="avatar" style="width:36px;height:36px;flex:0 0 36px;font-size:14px;border-radius:11px;background:${hashColor(r.name)}">${esc(r.name.slice(0,1))}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:13.5px">${esc(r.name)}</div>
+        <div style="font-size:11.5px;color:var(--muted)">${esc(r.relation)} · 最近 ${esc(r.last||'—')}</div>
+      </div>
+      <div class="remind-badge" title="根据历史往来金额推算的参考金额">建议回 ¥${r.suggest}</div>
+      <button class="btn btn-sm" data-act="quickAdd" data-name="${esc(r.name)}" data-relation="${esc(r.relation)}" data-direction="out">还礼</button>
+    </div>`).join('')
+    : `<div class="empty" style="padding:24px 10px"><div class="empty-icon" style="font-size:32px">✅</div><div class="empty-title">人情两清</div><div class="empty-sub">目前没有需要偿还的人情</div></div>`;
+
+  const recentHTML=recent.length?`
+    <div class="table-wrap"><table>
+      <thead><tr><th>日期</th><th>姓名</th><th>事由</th><th style="text-align:right">金额</th></tr></thead>
+      <tbody>${recent.map(r=>`<tr data-act="edit" data-id="${r.id}" style="cursor:pointer"><td data-label="日期" style="color:var(--muted)">${esc((r.date||'').slice(5))}</td><td data-label="姓名" class="td-name">${esc(r.name)}</td><td data-label="事由"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收':'送'}</span> ${esc(r.event)}</td><td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td></tr>`).join('')}</tbody>
+    </table></div>`
+    : `<div class="empty" style="padding:30px 14px">
+        <div class="empty-icon">📖</div>
+        <div class="empty-title">还没有记录</div>
+        <div class="empty-sub" style="margin-bottom:14px">点击下方按钮，一键添加一条示例记录试试</div>
+        <button class="btn btn-primary" data-act="loadSample">✨ 添加示例记录</button>
+      </div>`;
+
+  el.innerHTML=`<div class="topbar">
+    <div><div class="page-title">概览</div><div class="page-sub">${recs.length?`已记录 ${recs.length} 笔 · ${people.length} 位亲友`:'记录每一份人情'}</div></div>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" data-act="add">＋ 添加记录</button>
+  </div>
   ${personaHTML}
   <div class="stats">
     <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--green)"></span>累计收礼</div><div class="stat-value" style="color:var(--green)">${money(totalIn)}</div><div class="stat-foot">共 ${inCount} 笔</div></div>
     <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--primary)"></span>累计送礼</div><div class="stat-value" style="color:var(--primary)">${money(totalOut)}</div><div class="stat-foot">共 ${outCount} 笔</div></div>
-    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--gold)"></span>净结余</div><div class="stat-value" style="color:${net>=0?'var(--green)':'var(--primary)'}">${net>=0?'+':''}${money(net)}</div></div>
-    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--blue)"></span>往来人数</div><div class="stat-value" style="color:var(--blue)">${people.length}<span style="font-size:15px;font-weight:600;color:var(--muted)"> 人</span></div></div>
+    <div class="stat" title="净结余 = 累计收礼 − 累计送礼，反映当前人情收支的盈亏"><div class="stat-label"><span class="dot" style="background:var(--gold)"></span>净结余 ⓘ</div><div class="stat-value" style="color:${net>=0?'var(--green)':'var(--primary)'}">${net>=0?'+':''}${money(net)}</div><div class="stat-foot">${net>=0?'收大于送':'送大于收'}</div></div>
+    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--blue)"></span>往来人数</div><div class="stat-value" style="color:var(--blue)">${people.length}<span style="font-size:15px;font-weight:600;color:var(--muted)"> 人</span></div><div class="stat-foot">${reminders.length} 人待还</div></div>
   </div>
   <div class="grid-2">
-    <div class="card"><div class="card-head"><div class="card-title">💌 待还人情</div><div class="spacer"></div><span class="tag tag-out">${people.filter(p=>p.net>0.001).length} 人</span></div><div class="card-body" style="padding:6px 20px 12px">${oweHTML}</div></div>
+    <div class="card"><div class="card-head"><div class="card-title">🔔 回礼提醒</div><div class="spacer"></div><span class="tag tag-out">${reminders.length} 人待还</span></div><div class="card-body" style="padding:6px 20px 12px">${remindHTML}</div></div>
     <div class="card"><div class="card-head"><div class="card-title">🕒 最近往来</div><div class="spacer"></div><button class="btn btn-sm btn-ghost" data-act="goto" data-view="records">全部 →</button></div><div class="card-body p0">${recentHTML}</div></div>
   </div>`;
 }
@@ -487,12 +547,13 @@ function renderRecords(){
   const el=$('#view-records');if(!el)return;
   el.innerHTML=`<div class="topbar"><div><div class="page-title">往来记录</div><div class="page-sub" id="recCount">共 ${all.length} 条</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div>
   <div class="toolbar">
-    <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="searchInput" placeholder="搜索姓名 / 事由 / 备注…"></div>
-    <select id="filterDir"><option value="all">全部方向</option><option value="in">收礼</option><option value="out">送礼</option></select>
-    <select id="filterEvent"><option value="all">全部事由</option>${events.map(e=>`<option value="${esc(e)}">${esc(e)}</option>`).join('')}</select>
-    <select id="filterYear"><option value="all">全部年份</option>${years.map(y=>`<option value="${esc(y)}">${esc(y)} 年</option>`).join('')}</select>
+    <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="searchInput" placeholder="搜索姓名 / 关系 / 事由 / 备注 / 方式…" aria-label="搜索记录"></div>
+    <select id="filterDir" aria-label="按方向筛选"><option value="all">全部方向</option><option value="in">收礼</option><option value="out">送礼</option></select>
+    <select id="filterEvent" aria-label="按事由筛选"><option value="all">全部事由</option>${events.map(e=>`<option value="${esc(e)}">${esc(e)}</option>`).join('')}</select>
+    <select id="filterYear" aria-label="按年份筛选"><option value="all">全部年份</option>${years.map(y=>`<option value="${esc(y)}">${esc(y)} 年</option>`).join('')}</select>
     <button class="btn btn-sm" data-act="clearFilter">重置</button>
-  </div><div id="recTableWrap"></div>`;
+  </div>
+  <div id="recTableWrap"></div>`;
   let t;const si=$('#searchInput');if(si)si.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(updateRecordsTable,180)});
   ['filterDir','filterEvent','filterYear'].forEach(id=>{const n=$('#'+id);if(n)n.addEventListener('change',updateRecordsTable)});
   updateRecordsTable();
@@ -511,26 +572,45 @@ function updateRecordsTable(){
   const wrap=$('#recTableWrap');if(!wrap)return;
   const list=filterRecords(),sIn=sumBy(list,'in'),sOut=sumBy(list,'out');
   const ce=$('#recCount');if(ce)ce.textContent=`筛选 ${list.length} 条 · 收 ${money(sIn)} · 送 ${money(sOut)}`;
-  if(!list.length){wrap.innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">没有匹配的记录</div></div></div>`;return}
+  if(!list.length){wrap.innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">没有匹配的记录</div><div class="empty-sub">试试换个关键词或重置筛选</div></div></div>`;return}
   wrap.innerHTML=`<div class="card"><div class="table-wrap"><table><thead><tr><th>日期</th><th>姓名</th><th>关系</th><th>事由</th><th>方向</th><th style="text-align:right">金额</th><th>方式</th><th>备注</th><th style="text-align:right">操作</th></tr></thead><tbody>${list.map(r=>`<tr><td data-label="日期" style="color:var(--muted)">${esc(r.date||'—')}</td><td data-label="姓名" class="td-name">${esc(r.name)}</td><td data-label="关系"><span class="tag tag-plain">${esc(r.relation||'其他')}</span></td><td data-label="事由">${esc(r.event||'—')}</td><td data-label="方向"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收礼':'送礼'}</span></td><td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td><td data-label="方式" style="color:var(--text-2);font-size:12.5px">${esc(r.method||'—')}</td><td data-label="备注" class="td-note">${esc(r.note||r.location||'')}</td><td class="td-actions"><button class="btn btn-sm btn-ghost" data-act="edit" data-id="${r.id}">编辑</button><button class="btn btn-sm btn-ghost btn-danger" data-act="del" data-id="${r.id}">删除</button></td></tr>`).join('')}</tbody></table></div></div>`;
 }
 
 function renderPeople(){
   const people=personStats(),el=$('#view-people');if(!el)return;
-  if(!people.length){el.innerHTML=`<div class="topbar"><div><div class="page-title">人情账簿</div></div></div><div class="card"><div class="empty"><div class="empty-icon">👥</div><div class="empty-title">还没有往来对象</div></div></div>`;return}
+  if(!people.length){el.innerHTML=`<div class="topbar"><div><div class="page-title">联系人</div><div class="page-sub">按人查看往来明细</div></div></div><div class="card"><div class="empty"><div class="empty-icon">👥</div><div class="empty-title">还没有往来对象</div><div class="empty-sub">添加记录后，这里会自动按人汇总</div></div></div>`;return}
   const cards=people.map(p=>{
     const open=expandedPeople.has(p.name);
     const netCls=p.net>0.001?'amt-out':p.net<-0.001?'amt-in':'';
     const status=p.net>0.001?`<span class="tag tag-out">我欠人情</span>`:p.net<-0.001?`<span class="tag tag-in">对方欠我</span>`:`<span class="tag tag-plain">人情已平</span>`;
     const details=sortRecordsDesc(p.records).map(r=>`<div class="pd-row"><span class="pd-date">${esc(r.date||'—')}</span><span class="pd-event">${esc(r.event||'—')}${r.note?` · ${esc(r.note)}`:''}</span><span class="amt ${r.direction==='in'?'amt-in':'amt-out'}" style="font-size:12.5px">${r.direction==='in'?'+':'-'}${money(r.amount)}</span></div>`).join('');
-    return `<div class="person ${open?'open':''}"><div class="person-head" data-act="togglePerson" data-name="${esc(p.name)}"><div class="person-top"><div class="avatar" style="background:${hashColor(p.name)}">${esc(p.name.slice(0,1))}</div><div style="flex:1;min-width:0"><div class="person-name">${esc(p.name)}</div><div class="person-meta">${esc(p.relation)} · ${p.count} 次 · 最近 ${esc(p.last||'—')}</div></div>${status}</div><div class="person-nums"><div class="pnum"><div class="pnum-label">我收</div><div class="pnum-val amt-in">${money(p.in)}</div></div><div class="pnum"><div class="pnum-label">我送</div><div class="pnum-val amt-out">${money(p.out)}</div></div><div class="pnum"><div class="pnum-label">差额</div><div class="pnum-val ${netCls}">${p.net>0?'+':''}${money(p.net)}</div></div></div></div><div class="person-detail"><div class="person-detail-inner">${details}<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn btn-sm btn-primary" data-act="quickAdd" data-name="${esc(p.name)}" data-relation="${esc(p.relation)}">＋ 记一笔</button><button class="btn btn-sm" data-act="filterByPerson" data-name="${esc(p.name)}">筛选记录</button></div></div></div></div>`;
+    return `<div class="person ${open?'open':''}">
+      <div class="person-head" data-act="togglePerson" data-name="${esc(p.name)}" role="button" tabindex="0" aria-expanded="${open}">
+        <div class="person-top">
+          <div class="avatar" style="background:${hashColor(p.name)}">${esc(p.name.slice(0,1))}</div>
+          <div style="flex:1;min-width:0"><div class="person-name">${esc(p.name)}</div><div class="person-meta">${esc(p.relation)} · ${p.count} 次 · 最近 ${esc(p.last||'—')}</div></div>
+          ${status}
+        </div>
+        <div class="person-nums">
+          <div class="pnum"><div class="pnum-label">我收</div><div class="pnum-val amt-in">${money(p.in)}</div></div>
+          <div class="pnum"><div class="pnum-label">我送</div><div class="pnum-val amt-out">${money(p.out)}</div></div>
+          <div class="pnum"><div class="pnum-label">差额</div><div class="pnum-val ${netCls}">${p.net>0?'+':''}${money(p.net)}</div></div>
+        </div>
+      </div>
+      <div class="person-detail"><div class="person-detail-inner">${details}
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn btn-sm btn-primary" data-act="quickAdd" data-name="${esc(p.name)}" data-relation="${esc(p.relation)}">＋ 记一笔</button>
+          <button class="btn btn-sm" data-act="filterByPerson" data-name="${esc(p.name)}">在记录中查看</button>
+        </div>
+      </div></div>
+    </div>`;
   }).join('');
-  el.innerHTML=`<div class="topbar"><div><div class="page-title">人情账簿</div><div class="page-sub">${people.length} 位亲友 · 点击展开明细</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div><div class="people">${cards}</div>`;
+  el.innerHTML=`<div class="topbar"><div><div class="page-title">联系人</div><div class="page-sub">${people.length} 位亲友 · 点击卡片展开明细</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div><div class="people">${cards}</div>`;
 }
 
 function renderStats(){
   const el=$('#view-stats');if(!el)return;
-  if(!db.records.length){el.innerHTML=`<div class="topbar"><div><div class="page-title">统计分析</div></div></div><div class="card"><div class="empty"><div class="empty-icon">📊</div><div class="empty-title">暂无数据</div></div></div>`;return}
+  if(!db.records.length){el.innerHTML=`<div class="topbar"><div><div class="page-title">统计分析</div></div></div><div class="card"><div class="empty"><div class="empty-icon">📊</div><div class="empty-title">暂无数据</div><div class="empty-sub">先添加几条记录吧</div></div></div>`;return}
   const evMap=new Map();db.records.forEach(r=>evMap.set(r.event||'其他',(evMap.get(r.event||'其他')||0)+(Number(r.amount)||0)));
   const evArr=Array.from(evMap.entries()).map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);
   const evTotal=evArr.reduce((s,i)=>s+i.value,0);
@@ -542,10 +622,18 @@ function renderStats(){
   const totalIn=sumBy(db.records,'in'),totalOut=sumBy(db.records,'out');
   const avgIn=totalIn/Math.max(1,db.records.filter(r=>r.direction==='in').length),avgOut=totalOut/Math.max(1,db.records.filter(r=>r.direction==='out').length);
   const maxRec=sortRecordsDesc(db.records).slice().sort((a,b)=>(b.amount||0)-(a.amount||0))[0];
-  el.innerHTML=`<div class="topbar"><div><div class="page-title">统计分析</div></div><div class="spacer"></div><div class="seg" style="width:auto"><button class="seg-btn ${chartMode==='year'?'active':''}" data-act="chartMode" data-mode="year">按年</button><button class="seg-btn ${chartMode==='month'?'active':''}" data-act="chartMode" data-mode="month">近 12 月</button></div></div>
-  <div class="stats"><div class="stat"><div class="stat-label">收礼总额</div><div class="stat-value" style="color:var(--green);font-size:20px">${money(totalIn)}</div></div><div class="stat"><div class="stat-label">送礼总额</div><div class="stat-value" style="color:var(--primary);font-size:20px">${money(totalOut)}</div></div><div class="stat"><div class="stat-label">平均收 / 送</div><div class="stat-value" style="font-size:15px">${money(avgIn)} / ${money(avgOut)}</div></div><div class="stat"><div class="stat-label">单笔最大</div><div class="stat-value" style="font-size:15px">${money(maxRec?maxRec.amount:0)}</div><div class="stat-foot">${maxRec?esc(maxRec.name)+' · '+esc(maxRec.event):'—'}</div></div></div>
+  el.innerHTML=`<div class="topbar"><div><div class="page-title">统计分析</div><div class="page-sub">从数据看清人情往来</div></div><div class="spacer"></div><div class="seg" style="width:auto"><button class="seg-btn ${chartMode==='year'?'active':''}" data-act="chartMode" data-mode="year">按年</button><button class="seg-btn ${chartMode==='month'?'active':''}" data-act="chartMode" data-mode="month">近 12 月</button></div></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">收礼总额</div><div class="stat-value" style="color:var(--green);font-size:20px">${money(totalIn)}</div></div>
+    <div class="stat"><div class="stat-label">送礼总额</div><div class="stat-value" style="color:var(--primary);font-size:20px">${money(totalOut)}</div></div>
+    <div class="stat"><div class="stat-label">平均收 / 送</div><div class="stat-value" style="font-size:15px">${money(avgIn)} / ${money(avgOut)}</div></div>
+    <div class="stat"><div class="stat-label">单笔最大</div><div class="stat-value" style="font-size:15px">${money(maxRec?maxRec.amount:0)}</div><div class="stat-foot">${maxRec?esc(maxRec.name)+' · '+esc(maxRec.event):'—'}</div></div>
+  </div>
   <div class="card mb16"><div class="card-head"><div class="card-title">📈 收支趋势</div></div><div class="card-body"><canvas id="barChart"></canvas></div></div>
-  <div class="grid-2-3"><div class="card"><div class="card-head"><div class="card-title">🎯 事由分布</div></div><div class="card-body" style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center"><canvas id="donutChart" class="donut" style="width:150px"></canvas><div class="legend">${legend}</div></div></div><div class="card"><div class="card-head"><div class="card-title">🤝 关系分布</div></div><div class="card-body">${relBars}</div></div></div>`;
+  <div class="grid-2-3">
+    <div class="card"><div class="card-head"><div class="card-title">🎯 事由分布</div></div><div class="card-body" style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center"><canvas id="donutChart" class="donut" style="width:150px"></canvas><div class="legend">${legend}</div></div></div>
+    <div class="card"><div class="card-head"><div class="card-title">🤝 关系分布</div></div><div class="card-body">${relBars}</div></div>
+  </div>`;
   requestAnimationFrame(()=>{const bars=$('#barChart'),donut=$('#donutChart');if(bars)drawBars(bars,getBarData(chartMode));if(donut)drawDonut(donut,evArr.slice(0,8).map((it,i)=>({value:it.value,color:PALETTE[i%PALETTE.length]})))});
 }
 function getBarData(mode){
@@ -559,22 +647,49 @@ function renderData(){
   const el=$('#view-data');if(!el)return;
   const dates=db.records.map(r=>r.date).filter(Boolean).sort();
   const syncReady=Sync.enabled();
-  el.innerHTML=`<div class="topbar"><div><div class="page-title">数据管理</div></div></div>
+  el.innerHTML=`<div class="topbar"><div><div class="page-title">数据管理</div><div class="page-sub">备份与云同步（可选）</div></div></div>
   <div class="card mb16" style="border-color:${syncReady?'var(--green)':'var(--border)'}">
-    <div class="card-head"><div class="card-title">☁️ 云同步</div><div class="spacer"></div><span class="tag ${syncReady?'tag-in':'tag-plain'}">${syncReady?'已开启':'未开启'}</span></div>
+    <div class="card-head"><div class="card-title">☁️ 云同步（可选）</div><div class="spacer"></div><span class="tag ${syncReady?'tag-in':'tag-plain'}">${syncReady?'已开启':'未开启'}</span></div>
     <div class="card-body">
-      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px;line-height:1.8">开启后，你在手机和电脑上填写<b>同一个</b> Bin ID 和 Key，就能看到同一份数据。<br>其他人注册自己的 jsonbin 账号，填自己的 Bin，数据完全隔离。</p>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px;line-height:1.8">本地数据已经可以正常使用，无需任何配置。<br>如果需要<b>手机和电脑数据同步</b>，才需要开启云同步。</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-primary" data-act="openSync">${syncReady?'修改同步设置':'立即开启'}</button>
+        <button class="btn btn-primary" data-act="openSync">${syncReady?'修改同步设置':'开启云同步'}</button>
         ${syncReady?'<button class="btn" data-act="syncNow">🔄 立即同步</button>':''}
       </div>
     </div>
   </div>
   <div class="data-grid">
-    <div class="card"><div class="card-head"><div class="card-title">📦 数据概览</div></div><div class="card-body"><div class="kv-big">${db.records.length} <span style="font-size:14px;font-weight:600;color:var(--muted)">条记录</span></div><div style="margin-top:14px"><dl class="dl"><dt>往来人数</dt><dd>${personStats().length} 人</dd></dl><dl class="dl"><dt>收礼总额</dt><dd style="color:var(--green)">${money(sumBy(db.records,'in'))}</dd></dl><dl class="dl"><dt>送礼总额</dt><dd style="color:var(--primary)">${money(sumBy(db.records,'out'))}</dd></dl><dl class="dl"><dt>时间跨度</dt><dd>${dates.length?esc(dates[0])+' ~ '+esc(dates[dates.length-1]):'—'}</dd></dl></div></div></div>
-    <div class="card"><div class="card-head"><div class="card-title">💾 导出备份</div></div><div class="card-body"><div style="display:flex;flex-direction:column;gap:10px"><button class="btn" data-act="exportJSON">⬇️ 导出 JSON</button><button class="btn" data-act="exportCSV">📊 导出 CSV</button></div></div></div>
-    <div class="card"><div class="card-head"><div class="card-title">📥 导入数据</div></div><div class="card-body"><input type="file" id="importFile" accept=".json,application/json" style="display:none"><button class="btn btn-block" data-act="importJSON">选择文件导入</button></div></div>
-    <div class="card"><div class="card-head"><div class="card-title">🧪 示例与清理</div></div><div class="card-body"><div style="display:flex;flex-direction:column;gap:10px"><button class="btn" data-act="loadSample">✨ 载入示例数据</button><button class="btn btn-danger" data-act="clearAll">🗑 清空全部数据</button></div></div></div>
+    <div class="card"><div class="card-head"><div class="card-title">📦 数据概览</div></div><div class="card-body">
+      <div class="kv-big">${db.records.length} <span style="font-size:14px;font-weight:600;color:var(--muted)">条记录</span></div>
+      <div style="margin-top:14px">
+        <dl class="dl"><dt>往来人数</dt><dd>${personStats().length} 人</dd></dl>
+        <dl class="dl"><dt>收礼总额</dt><dd style="color:var(--green)">${money(sumBy(db.records,'in'))}</dd></dl>
+        <dl class="dl"><dt>送礼总额</dt><dd style="color:var(--primary)">${money(sumBy(db.records,'out'))}</dd></dl>
+        <dl class="dl"><dt>时间跨度</dt><dd>${dates.length?esc(dates[0])+' ~ '+esc(dates[dates.length-1]):'—'}</dd></dl>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><div class="card-title">💾 导出备份</div></div><div class="card-body">
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">建议定期导出备份，换设备可直接导入。</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button class="btn" data-act="exportJSON">⬇️ 导出 JSON（完整备份）</button>
+        <button class="btn" data-act="exportCSV">📊 导出 CSV（Excel 可开）</button>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><div class="card-title">📥 导入数据</div></div><div class="card-body">
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">选择之前导出的 JSON 文件，可选覆盖或追加。</p>
+      <input type="file" id="importFile" accept=".json,application/json" style="display:none">
+      <button class="btn btn-block" data-act="importJSON">选择文件导入</button>
+    </div></div>
+    <div class="card"><div class="card-head"><div class="card-title">🏷️ 关系标签</div></div><div class="card-body">
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">自定义"关系"下拉里的选项（当前共 ${allRelations().length} 个）。</p>
+      <button class="btn btn-block" data-act="openRelations">管理关系标签</button>
+    </div></div>
+    <div class="card"><div class="card-head"><div class="card-title">🧪 示例与清理</div></div><div class="card-body">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button class="btn" data-act="loadSample">✨ 载入示例数据</button>
+        <button class="btn btn-danger" data-act="clearAll">🗑 清空全部数据</button>
+      </div>
+    </div></div>
   </div>`;
 }
 
@@ -601,17 +716,21 @@ function drawDonut(cv,items){
   ctx.fillStyle=cssVar('--text');ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='700 17px sans-serif';ctx.fillText(shortNum(total),cx,cy-7);ctx.font='11px sans-serif';ctx.fillStyle=cssVar('--muted');ctx.fillText('往来总额',cx,cy+12);
 }
 
-function fillSelect(el,opt){if(!el)return;el.innerHTML=opt.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join('')}
+function fillSelect(el,opt,placeholder){if(!el)return;el.innerHTML=(placeholder?`<option value="">${placeholder}</option>`:'')+opt.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join('')}
 function refreshNameList(){const nl=$('#nameList');if(!nl)return;const names=Array.from(new Set(db.records.map(r=>r.name).filter(Boolean))).sort();nl.innerHTML=names.map(n=>`<option value="${esc(n)}">`).join('')}
-function setDirection(d){formDirection=d;$$('#dirSeg .seg-btn').forEach(b=>b.classList.toggle('active',b.dataset.dir===d))}
+function setDirection(d){formDirection=d;$$('#dirSeg .seg-btn').forEach(b=>{const on=b.dataset.dir===d;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')})}
 function openModal(id,preset){
   editingId=id||null;const rec=id?db.records.find(r=>r.id===id):null;
   const mt=$('#modalTitle');if(mt)mt.textContent=rec?'编辑记录':'添加记录';
   $('#f-name').value=rec?rec.name:(preset?.name||'');
+  // 关系下拉需要重建，以包含自定义标签
+  fillSelect($('#f-relation'),allRelations());
   $('#f-relation').value=rec?(rec.relation||'朋友'):(preset?.relation||'朋友');
+  fillSelect($('#f-event'),DEFAULT_EVENTS);
   $('#f-event').value=rec?(rec.event||'婚礼'):(preset?.event||'婚礼');
   $('#f-amount').value=rec?rec.amount:'';
   $('#f-date').value=rec?(rec.date||today()):today();
+  fillSelect($('#f-method'),METHODS);
   $('#f-method').value=rec?(rec.method||'微信'):'微信';
   $('#f-location').value=rec?(rec.location||''):'';
   $('#f-note').value=rec?(rec.note||''):'';
@@ -627,9 +746,30 @@ function saveRecord(e){
   const name=$('#f-name').value.trim(),amount=parseFloat($('#f-amount').value);
   if(!name){toast('请填写姓名');return}
   if(!(amount>=0)){toast('请填写正确金额');return}
-  const rec={id:editingId||Date.now().toString(36)+Math.random().toString(36).slice(2,7),name,relation:$('#f-relation').value||'其他',event:$('#f-event').value||'其他',direction:formDirection,amount,date:$('#f-date').value||today(),method:$('#f-method').value||'',location:$('#f-location').value.trim(),note:$('#f-note').value.trim(),createdAt:Date.now()};
-  if(editingId){const i=db.records.findIndex(r=>r.id===editingId);if(i>=0)db.records[i]=rec}else db.records.push(rec);
-  saveLocal();Sync.schedulePush();closeModal();render();toast(editingId?'已更新':'已添加');
+  const rec={
+    id:editingId||Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+    name,relation:$('#f-relation').value||'其他',event:$('#f-event').value||'其他',
+    direction:formDirection,amount,date:$('#f-date').value||today(),
+    method:$('#f-method').value||'',location:$('#f-location').value.trim(),
+    note:$('#f-note').value.trim(),createdAt:Date.now()
+  };
+  if(editingId){const i=db.records.findIndex(r=>r.id===editingId);if(i>=0)db.records[i]=rec}
+  else db.records.push(rec);
+  saveLocal();Sync.schedulePush();
+  const wasEditing=!!editingId;
+  // 批量连续录入模式：只清空姓名/金额/备注，保留日期/关系/事由/方式，方便连着录
+  if(!wasEditing && $('#continuousMode') && $('#continuousMode').checked){
+    editingId=null;
+    $('#f-name').value='';$('#f-amount').value='';$('#f-note').value='';$('#f-location').value='';
+    refreshNameList();
+    render();
+    toast('已保存，继续录入下一位');
+    setTimeout(()=>$('#f-name').focus(),50);
+    return;
+  }
+  closeModal();
+  render();
+  toast(wasEditing?'已更新':'已添加');
 }
 function deleteRecord(id){const rec=db.records.find(r=>r.id===id);if(!rec)return;if(!confirm(`确定删除「${rec.name} · ${rec.event} · ${money(rec.amount)}」？`))return;db.records=db.records.filter(r=>r.id!==id);saveLocal();Sync.schedulePush();render();toast('已删除')}
 
@@ -639,33 +779,47 @@ function exportJSON(){if(!db.records.length){toast('暂无数据');return}downlo
 function csvCell(v){v=(v==null)?'':String(v);return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
 function exportCSV(){if(!db.records.length){toast('暂无数据');return}const head=['日期','姓名','关系','事由','方向','金额','方式','地点','备注'];const rows=sortRecordsDesc(db.records).map(r=>[r.date,r.name,r.relation,r.event,r.direction==='in'?'收礼':'送礼',r.amount,r.method,r.location,r.note]);const csv=[head,...rows].map(row=>row.map(csvCell).join(',')).join('\r\n');download('\uFEFF'+csv,`人情簿_${stamp()}.csv`,'text/csv;charset=utf-8');toast('CSV 已导出')}
 function normalizeRecord(r){if(!r||typeof r!=='object')return null;const dR=r.direction??r.方向??'';return{name:String(r.name??r.姓名??'未知').trim()||'未知',relation:r.relation??r.关系??'其他',event:r.event??r.事由??r.事件??'其他',direction:(dR==='in'||dR==='收礼'||dR==='收')?'in':'out',amount:Number(r.amount??r.金额??0)||0,date:String(r.date??r.日期??today()).slice(0,10),method:r.method??r.方式??'',location:r.location??r.地点??'',note:r.note??r.备注??''}}
-function importJSONFile(file){const rd=new FileReader();rd.onload=e=>{try{const p=JSON.parse(e.target.result),arr=Array.isArray(p)?p:(p&&Array.isArray(p.records)?p.records:null);if(!arr)throw new Error('格式不正确');const list=arr.map(normalizeRecord).filter(Boolean);if(!list.length)throw new Error('无记录');const ow=confirm(`解析到 ${list.length} 条。\n确定=覆盖现有\n取消=追加`);db.records=ow?list:db.records.concat(list);saveLocal();Sync.schedulePush();render();toast(`已导入 ${list.length} 条`)}catch(err){toast('导入失败：'+err.message)}};rd.readAsText(file,'utf-8')}
-const SAMPLE=[{name:'张伟',relation:'朋友',event:'婚礼',direction:'in',amount:800,date:'2023-05-12',method:'微信',location:'金满楼',note:'大学室友'},{name:'李娜',relation:'同事',event:'满月百日',direction:'out',amount:500,date:'2023-08-03',method:'支付宝',location:'公司',note:'宝宝满月'},{name:'王强',relation:'亲戚',event:'乔迁新居',direction:'in',amount:1000,date:'2023-10-01',method:'现金',location:'新居',note:'表哥乔迁'},{name:'刘敏',relation:'同学',event:'婚礼',direction:'out',amount:600,date:'2024-01-18',method:'微信',location:'香格里拉',note:'高中同学'},{name:'陈静',relation:'朋友',event:'升学升职',direction:'in',amount:500,date:'2024-06-15',method:'微信',location:'',note:'升职宴请'}];
+function importJSONFile(file){const rd=new FileReader();rd.onload=e=>{try{const p=JSON.parse(e.target.result),arr=Array.isArray(p)?p:(p&&Array.isArray(p.records)?p.records:null);if(!arr)throw new Error('格式不正确');const list=arr.map(normalizeRecord).filter(Boolean);if(!list.length)throw new Error('无记录');const ow=confirm(`解析到 ${list.length} 条。\n确定 = 覆盖现有数据\n取消 = 追加到现有数据`);db.records=ow?list:db.records.concat(list);saveLocal();Sync.schedulePush();render();toast(`已导入 ${list.length} 条`)}catch(err){toast('导入失败：'+err.message)}};rd.readAsText(file,'utf-8')}
+
+const SAMPLE=[
+  {name:'张伟',relation:'朋友',event:'婚礼',direction:'in',amount:800,date:'2023-05-12',method:'微信',location:'金满楼',note:'大学室友结婚'},
+  {name:'李娜',relation:'同事',event:'满月百日',direction:'out',amount:500,date:'2023-08-03',method:'支付宝',location:'公司',note:'宝宝满月'},
+  {name:'王强',relation:'亲戚',event:'乔迁新居',direction:'in',amount:1000,date:'2023-10-01',method:'现金',location:'新居',note:'表哥乔迁'},
+  {name:'刘敏',relation:'同学',event:'婚礼',direction:'out',amount:600,date:'2024-01-18',method:'微信',location:'香格里拉',note:'高中同学结婚'},
+  {name:'陈静',relation:'朋友',event:'升学升职',direction:'in',amount:500,date:'2024-06-15',method:'微信',location:'',note:'升职宴请'}
+];
 function loadSample(){const list=SAMPLE.map(s=>Object.assign({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),createdAt:Date.now()},s));db.records=db.records.concat(list);saveLocal();Sync.schedulePush();render();toast(`已载入 ${list.length} 条示例`)}
 
-function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem(THEME_KEY,t);const icon=t==='dark'?'☀️':'🌙',label=t==='dark'?'浅色模式':'深色模式';const tb=$('#themeToggle');if(tb)tb.textContent=`${icon} ${label}`;const tm=$('#themeToggleMobile');if(tm)tm.textContent=icon;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',t==='dark'?'#1e1b17':'#f6f3ee');if(currentView==='stats')renderStats()}
+function setTheme(t){
+  document.documentElement.dataset.theme=t;localStorage.setItem(THEME_KEY,t);
+  const icon=t==='dark'?'☀️':'🌙',label=t==='dark'?'浅色模式':'深色模式';
+  const tb=$('#themeToggle');if(tb)tb.textContent=`${icon} ${label}`;
+  const tm=$('#themeToggleMobile');if(tm)tm.textContent=icon;
+  const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',t==='dark'?'#1e1b17':'#f6f3ee');
+  if(currentView==='stats')renderStats();
+}
 function toggleTheme(){const cur=document.documentElement.dataset.theme==='dark'?'light':'dark';setTheme(cur);toast(cur==='dark'?'已切换到深色模式':'已切换到浅色模式')}
 
 function openSyncModal(){
-  $('#s-binId').value=Sync.cfg.binId||'';
-  $('#s-key').value=Sync.cfg.key||'';
-  $('#s-auto').value=Sync.cfg.auto||'on';
+  $('#s-binId').value=Sync.cfg.binId||'';$('#s-key').value=Sync.cfg.key||'';$('#s-auto').value=Sync.cfg.auto||'on';
   $('#syncState').innerHTML=Sync.enabled()?'当前状态：<b style="color:var(--green)">已配置</b>，可直接测试同步。':'填写后点「保存设置」';
   $('#syncOverlay').classList.add('show');
 }
 function closeSyncModal(){$('#syncOverlay').classList.remove('show')}
 
-function checkFirstVisit(){
-  const welcomed=localStorage.getItem(WELCOME_KEY);
-  if(welcomed==='1')return;
-  if(Sync.enabled())return;
-  const ov=$('#welcomeOverlay');
-  if(ov)ov.classList.add('show');
+function openRelationModal(){
+  renderRelationList();
+  $('#relationOverlay').classList.add('show');
+  setTimeout(()=>$('#newRelationInput').focus(),80);
 }
-function markWelcomed(){
-  localStorage.setItem(WELCOME_KEY,'1');
-  const ov=$('#welcomeOverlay');
-  if(ov)ov.classList.remove('show');
+function closeRelationModal(){$('#relationOverlay').classList.remove('show')}
+function renderRelationList(){
+  const el=$('#relationList');if(!el)return;
+  const all=allRelations();
+  el.innerHTML=all.map(r=>{
+    const isDefault=DEFAULT_RELATIONS.includes(r);
+    return `<span class="persona-tag" style="padding:6px 10px 6px 12px">${esc(r)}${isDefault?'':` <button data-act="delRelation" data-name="${esc(r)}" style="border:none;background:transparent;color:var(--primary);cursor:pointer;font-size:14px;line-height:1;padding:0 0 0 4px" title="删除">×</button>`}</span>`;
+  }).join('');
 }
 
 function bindEvents(){
@@ -674,6 +828,7 @@ function bindEvents(){
   onAll('.nav-item, .mobile-nav-item','click',e=>navigate(e.currentTarget.dataset.view));
   on('#themeToggle','click',toggleTheme);
   on('#themeToggleMobile','click',toggleTheme);
+  on('#quickExport','click',exportJSON);
   on('#modalClose','click',closeModal);
   on('#btnCancel','click',closeModal);
   on('#overlay','click',e=>{if(e.target===$('#overlay'))closeModal()});
@@ -682,24 +837,30 @@ function bindEvents(){
   on('#syncClose','click',closeSyncModal);
   on('#syncOverlay','click',e=>{if(e.target===$('#syncOverlay'))closeSyncModal()});
   on('#syncLabel','click',openSyncModal);
-  on('#welcomeGoRegister','click',()=>{toast('请在新标签页完成注册并创建 Bin，然后回来点"我已获取"')});
-  on('#welcomeGoConfig','click',()=>{markWelcomed();openSyncModal()});
-  on('#welcomeSkip','click',()=>{markWelcomed();toast('已跳过，可随时点侧边栏底部"未同步"配置')});
-  on('#btnSyncSave','click',()=>{
-    Sync.cfg.binId=$('#s-binId').value.trim();
-    Sync.cfg.key=$('#s-key').value.trim();
-    Sync.cfg.auto=$('#s-auto').value;
-    Sync.save();
-    if(Sync.enabled()){
-      localStorage.setItem(WELCOME_KEY,'1');
-      toast('设置已保存，正在测试同步…');
-      closeSyncModal();
-      Sync.push(true).then(()=>toast('同步成功！'));
-    }else{toast('设置已保存（未填写完整）')}
+  on('#syncLabel','keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openSyncModal()}});
+  on('#relationClose','click',closeRelationModal);
+  on('#relationDone','click',closeRelationModal);
+  on('#relationOverlay','click',e=>{if(e.target===$('#relationOverlay'))closeRelationModal()});
+  on('#addRelationBtn','click',()=>{
+    const v=$('#newRelationInput').value.trim();
+    if(!v){toast('请输入标签名');return}
+    if(allRelations().includes(v)){toast('该标签已存在');return}
+    customRelations.push(v);saveRelations();$('#newRelationInput').value='';
+    renderRelationList();
+    // 同步更新添加记录里的关系下拉
+    const cur=$('#f-relation').value;fillSelect($('#f-relation'),allRelations());$('#f-relation').value=cur||v;
+    toast('已添加');
   });
+  on('#btnSyncSave','click',()=>{
+    Sync.cfg.binId=$('#s-binId').value.trim();Sync.cfg.key=$('#s-key').value.trim();Sync.cfg.auto=$('#s-auto').value;Sync.save();
+    if(Sync.enabled()){toast('设置已保存，正在测试同步…');closeSyncModal();Sync.push(true).then(()=>toast('同步成功！'))}
+    else toast('设置已保存（未填写完整）');
+  });
+  on('#btnSyncClear','click',()=>{if(confirm('清除本地保存的同步配置？（云端数据不会删除）')){Sync.clear();toast('已清除同步配置')}});
   on('#btnSyncPull','click',()=>{Sync.cfg.binId=$('#s-binId').value.trim();Sync.cfg.key=$('#s-key').value.trim();Sync.save();Sync.pull(false)});
   on('#btnSyncPush','click',()=>{Sync.cfg.binId=$('#s-binId').value.trim();Sync.cfg.key=$('#s-key').value.trim();Sync.save();Sync.push(false)});
   on('#importFile','change',e=>{const f=e.target.files&&e.target.files[0];if(f)importJSONFile(f);e.target.value=''});
+
   document.addEventListener('click',e=>{
     const el=e.target.closest('[data-act]');if(!el)return;
     const act=el.dataset.act;
@@ -708,22 +869,47 @@ function bindEvents(){
     else if(act==='del')deleteRecord(el.dataset.id);
     else if(act==='goto')navigate(el.dataset.view);
     else if(act==='togglePerson'){const n=el.dataset.name;if(expandedPeople.has(n))expandedPeople.delete(n);else expandedPeople.add(n);renderPeople()}
-    else if(act==='quickAdd')openModal(null,{name:el.dataset.name,relation:el.dataset.relation,direction:'out'});
+    else if(act==='quickAdd'){
+      openModal(null,{name:el.dataset.name,relation:el.dataset.relation,direction:el.dataset.direction||'out'});
+    }
     else if(act==='filterByPerson'){navigate('records');setTimeout(()=>{const i=$('#searchInput');if(i){i.value=el.dataset.name;updateRecordsTable()}},40)}
     else if(act==='clearFilter'){['searchInput','filterDir','filterEvent','filterYear'].forEach(id=>{const n=$('#'+id);if(n)n.value=id==='searchInput'?'':'all'});updateRecordsTable()}
     else if(act==='chartMode'){chartMode=el.dataset.mode;renderStats()}
     else if(act==='exportJSON')exportJSON();
     else if(act==='exportCSV')exportCSV();
     else if(act==='importJSON')$('#importFile').click();
-    else if(act==='loadSample'){if(confirm('载入示例数据？'))loadSample()}
-    else if(act==='clearAll'){if(confirm('确定清空全部记录？不可撤销！')&&confirm('再次确认？')){db.records=[];saveLocal();Sync.schedulePush();render();toast('已清空')}}
+    else if(act==='loadSample')loadSample();
+    else if(act==='clearAll'){
+      if(confirm('确定清空全部记录？不可撤销！')&&confirm('再次确认：将永久删除所有数据。')){
+        db.records=[];saveLocal();Sync.schedulePush();render();toast('已清空');
+      }
+    }
     else if(act==='openSync')openSyncModal();
     else if(act==='syncNow')Sync.pull(false);
+    else if(act==='openRelations')openRelationModal();
+    else if(act==='delRelation'){
+      const n=el.dataset.name;
+      customRelations=customRelations.filter(r=>r!==n);saveRelations();
+      renderRelationList();
+      const cur=$('#f-relation').value;fillSelect($('#f-relation'),allRelations());$('#f-relation').value=cur;
+      toast('已删除');
+    }
   });
+
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){const ov=$('#overlay');if(ov&&ov.classList.contains('show'))closeModal();const so=$('#syncOverlay');if(so&&so.classList.contains('show'))closeSyncModal();const wo=$('#welcomeOverlay');if(wo&&wo.classList.contains('show'))markWelcomed()}
-    if(e.key.toLowerCase()==='n'&&!e.metaKey&&!e.ctrlKey&&!e.altKey){const tag=(document.activeElement.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea'||tag==='select')return;const ov=$('#overlay');if(ov&&ov.classList.contains('show'))return;openModal(null)}
+    if(e.key==='Escape'){
+      const ov=$('#overlay');if(ov&&ov.classList.contains('show'))closeModal();
+      const so=$('#syncOverlay');if(so&&so.classList.contains('show'))closeSyncModal();
+      const ro=$('#relationOverlay');if(ro&&ro.classList.contains('show'))closeRelationModal();
+    }
+    if(e.key.toLowerCase()==='n'&&!e.metaKey&&!e.ctrlKey&&!e.altKey){
+      const tag=(document.activeElement.tagName||'').toLowerCase();
+      if(tag==='input'||tag==='textarea'||tag==='select')return;
+      const ov=$('#overlay');if(ov&&ov.classList.contains('show'))return;
+      openModal(null);
+    }
   });
+
   let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(currentView==='stats')renderStats()},200)});
 }
 
@@ -732,16 +918,17 @@ function init(){
     const s=localStorage.getItem(THEME_KEY),pd=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
     setTheme(s||(pd?'dark':'light'));
     loadLocal();
+    loadRelations();
     Sync.load();
-    fillSelect($('#f-relation'),RELATIONS);
-    fillSelect($('#f-event'),EVENT_TYPES);
+    fillSelect($('#f-relation'),allRelations());
+    fillSelect($('#f-event'),DEFAULT_EVENTS);
     fillSelect($('#f-method'),METHODS);
     const fd=$('#f-date');if(fd)fd.value=today();
     bindEvents();
     Sync.updateUI();
     navigate('dashboard');
+    // 有云同步配置时，打开页面自动拉一次
     if(Sync.enabled())Sync.pull(true);
-    setTimeout(checkFirstVisit,300);
   }catch(e){console.error('init 失败',e)}
 }
 document.addEventListener('DOMContentLoaded',init);
