@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#c0392b">
 <title>人情簿 · 份子钱与人情往来记录</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -306,7 +306,9 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
  * ============================================================ */
 const SUPABASE_URL = 'https://nddrfzaraxvquxcmgpwk.supabase.co/rest/v1/';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kZHJmemFyYXh2cXV4Y21ncHdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzA4MjksImV4cCI6MjEwNzEwNjgyOX0.RVtck8yUOLow4dlF1KrKBxZgNgOlW2-kVz_S2lnvwL8';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* 注意：变量名用 sb，避免与 CDN 注册的全局 supabase 冲突 */
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* ============================================================
  *  2. 常量与工具
@@ -337,7 +339,7 @@ function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('sh
  *  3. 认证相关
  * ============================================================ */
 async function checkAuth(){
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await sb.auth.getSession();
   if (session){
     currentUserEmail = session.user.email;
     $('#authScreen').style.display = 'none';
@@ -360,8 +362,8 @@ async function handleAuth(mode){
   if (mode === 'signup' && password.length < 6){ errEl.textContent = '密码至少 6 位'; return; }
   errEl.textContent = '处理中…';
   const { error } = mode === 'signup'
-    ? await supabase.auth.signUp({ email, password })
-    : await supabase.auth.signInWithPassword({ email, password });
+    ? await sb.auth.signUp({ email, password })
+    : await sb.auth.signInWithPassword({ email, password });
   if (error){ errEl.textContent = error.message; return; }
   errEl.textContent = '';
   await checkAuth();
@@ -370,11 +372,11 @@ async function handleAuth(mode){
 }
 
 async function signOut(){
-  await supabase.auth.signOut();
+  await sb.auth.signOut();
   location.reload();
 }
 
-supabase.auth.onAuthStateChange((event, session) => {
+sb.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_OUT'){
     $('#authScreen').style.display = 'flex';
     $('#appContainer').style.display = 'none';
@@ -386,7 +388,7 @@ supabase.auth.onAuthStateChange((event, session) => {
  *  4. Supabase 数据读写
  * ============================================================ */
 async function loadRecordsFromSupabase(){
-  const { data, error } = await supabase.from('records').select('*').order('date',{ascending:false});
+  const { data, error } = await sb.from('records').select('*').order('date',{ascending:false});
   if (error){ toast('加载失败：'+error.message); return; }
   db.records = (data||[]).map(r => ({
     id: r.id, name: r.name, relation: r.relation, event: r.event,
@@ -414,9 +416,9 @@ async function saveRecord(e){
   btn.disabled = true; btn.textContent = '保存中…';
   let error;
   if (editingId){
-    ({ error } = await supabase.from('records').update(payload).eq('id', editingId));
+    ({ error } = await sb.from('records').update(payload).eq('id', editingId));
   } else {
-    ({ error } = await supabase.from('records').insert(payload));
+    ({ error } = await sb.from('records').insert(payload));
   }
   btn.disabled = false; btn.textContent = '保存';
   if (error){ toast('保存失败：'+error.message); return; }
@@ -429,7 +431,7 @@ async function deleteRecord(id){
   const rec = db.records.find(r => r.id === id);
   if (!rec) return;
   if (!confirm(`确定删除「${rec.name} · ${rec.event} · ${money(rec.amount)}」？`)) return;
-  const { error } = await supabase.from('records').delete().eq('id', id);
+  const { error } = await sb.from('records').delete().eq('id', id);
   if (error){ toast('删除失败：'+error.message); return; }
   await loadRecordsFromSupabase();
   toast('已删除');
@@ -807,7 +809,7 @@ async function importJSONFile(file){
       const list = arr.map(normalizeRecord).filter(Boolean);
       if (!list.length) throw new Error('没有可导入的记录');
       if (!confirm(`解析到 ${list.length} 条记录，确定导入到当前账号？`)) return;
-      const { error } = await supabase.from('records').insert(list);
+      const { error } = await sb.from('records').insert(list);
       if (error) throw error;
       await loadRecordsFromSupabase();
       toast(`已导入 ${list.length} 条`);
@@ -826,7 +828,7 @@ const SAMPLE = [
 ];
 async function loadSample(){
   const list = SAMPLE.map(s=>Object.assign({},s));
-  const { error } = await supabase.from('records').insert(list);
+  const { error } = await sb.from('records').insert(list);
   if (error){ toast('载入失败：'+error.message); return; }
   await loadRecordsFromSupabase();
   toast(`已载入 ${list.length} 条示例`);
@@ -877,7 +879,7 @@ function bindEvents(){
       case 'exportCSV': exportCSV(); break;
       case 'importJSON': $('#importFile').click(); break;
       case 'loadSample': if (confirm('载入 6 条示例数据？')) loadSample(); break;
-      case 'clearAll': if (confirm('确定清空全部记录？不可撤销！') && confirm('再次确认：将永久删除所有数据。')){ supabase.from('records').delete().neq('id',0).then(()=>loadRecordsFromSupabase()); } break;
+      case 'clearAll': if (confirm('确定清空全部记录？不可撤销！') && confirm('再次确认：将永久删除所有数据。')){ sb.from('records').delete().neq('id',0).then(()=>loadRecordsFromSupabase()); } break;
     }
   });
 
