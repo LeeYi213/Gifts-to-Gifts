@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#c0392b">
+<link rel="icon" href="data:,">
 <title>人情簿 · 份子钱与人情往来记录</title>
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <style>
@@ -212,7 +213,6 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
 </head>
 <body>
 
-<!-- 登录/注册界面（默认显示） -->
 <div id="authScreen" class="auth-screen">
   <div class="card" style="width:100%;max-width:400px;padding:28px">
     <div style="text-align:center;margin-bottom:22px">
@@ -224,14 +224,13 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
     <div class="field" style="margin-top:12px"><label>密码</label><input id="authPassword" type="password" placeholder="至少 6 位密码" autocomplete="current-password"></div>
     <div id="authError" style="color:var(--primary);font-size:12.5px;margin-top:10px;min-height:18px"></div>
     <div style="display:flex;gap:10px;margin-top:18px">
-      <button class="btn btn-primary" style="flex:1" onclick="handleAuth('signin')">登录</button>
-      <button class="btn" style="flex:1" onclick="handleAuth('signup')">注册</button>
+      <button type="button" class="btn btn-primary" style="flex:1" id="btnSignin">登录</button>
+      <button type="button" class="btn" style="flex:1" id="btnSignup">注册</button>
     </div>
     <div class="hint" style="margin-top:16px;text-align:center">首次使用请先点「注册」创建账号</div>
   </div>
 </div>
 
-<!-- 主应用（登录后显示） -->
 <div class="app" id="appContainer" style="display:none">
   <aside class="sidebar">
     <div class="brand">
@@ -302,12 +301,11 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
 
 <script>
 /* ============================================================
- *  1. Supabase 配置（请修改下面两行！）
+ *  1. Supabase 配置
  * ============================================================ */
 const SUPABASE_URL = 'https://nddrfzaraxvquxcmgpwk.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kZHJmemFyYXh2cXV4Y21ncHdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzA4MjksImV4cCI6MjEwNzEwNjgyOX0.RVtck8yUOLow4dlF1KrKBxZgNgOlW2-kVz_S2lnvwL8';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kZHJmemFyYXh2cXV4Y21ncHdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzA4MjksImV4cCI6MjEwNzEwNjgyOX0.RVtck8yUOLow4dlF1KrKBxZgNgOlW2-kVz_S2lnvwL8';  // ← 替换成你自己的 anon key
 
-/* 注意：变量名用 sb，避免与 CDN 注册的全局 supabase 冲突 */
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* ============================================================
@@ -325,7 +323,6 @@ const expandedPeople = new Set();
 
 const $ = (s,p=document) => p.querySelector(s);
 const $$ = (s,p=document) => Array.from(p.querySelectorAll(s));
-const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money = n => { n = Number(n)||0; return (n<0?'-':'')+'¥'+Math.abs(n).toLocaleString('zh-CN',{maximumFractionDigits:2}); };
 const shortNum = n => { n=Number(n)||0; const a=Math.abs(n); if(a>=1e8) return (n/1e8).toFixed(2).replace(/\.?0+$/,'')+'亿'; if(a>=1e4) return (n/1e4).toFixed(1).replace(/\.0$/,'')+'万'; return n.toLocaleString('zh-CN',{maximumFractionDigits:0}); };
@@ -333,42 +330,54 @@ const today = () => { const d=new Date(),p=n=>String(n).padStart(2,'0'); return 
 const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const hashColor = s => { let h=0; for(let i=0;i<String(s).length;i++) h=(h*31+String(s).charCodeAt(i))>>>0; return PALETTE[h%PALETTE.length]; };
 let toastTimer;
-function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2400); }
+function toast(msg){ const t=$('#toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2400); }
 
 /* ============================================================
  *  3. 认证相关
  * ============================================================ */
 async function checkAuth(){
-  const { data: { session } } = await sb.auth.getSession();
-  if (session){
-    currentUserEmail = session.user.email;
-    $('#authScreen').style.display = 'none';
-    $('#appContainer').style.display = 'flex';
-    await loadRecordsFromSupabase();
-    return true;
-  } else {
-    $('#authScreen').style.display = 'flex';
-    $('#appContainer').style.display = 'none';
+  try{
+    const { data: { session } } = await sb.auth.getSession();
+    if (session){
+      currentUserEmail = session.user.email;
+      const a = document.getElementById('authScreen'); if (a) a.style.display = 'none';
+      const b = document.getElementById('appContainer'); if (b) b.style.display = 'flex';
+      await loadRecordsFromSupabase();
+      return true;
+    } else {
+      const a = document.getElementById('authScreen'); if (a) a.style.display = 'flex';
+      const b = document.getElementById('appContainer'); if (b) b.style.display = 'none';
+      return false;
+    }
+  }catch(e){
+    console.error('checkAuth 失败', e);
     return false;
   }
 }
 
 async function handleAuth(mode){
-  const email = $('#authEmail').value.trim();
-  const password = $('#authPassword').value;
-  const errEl = $('#authError');
+  const emailEl = document.getElementById('authEmail');
+  const pwEl = document.getElementById('authPassword');
+  const errEl = document.getElementById('authError');
+  if (!emailEl || !pwEl || !errEl) return;
+  const email = emailEl.value.trim();
+  const password = pwEl.value;
   errEl.textContent = '';
   if (!email || !password){ errEl.textContent = '请填写邮箱和密码'; return; }
   if (mode === 'signup' && password.length < 6){ errEl.textContent = '密码至少 6 位'; return; }
   errEl.textContent = '处理中…';
-  const { error } = mode === 'signup'
-    ? await sb.auth.signUp({ email, password })
-    : await sb.auth.signInWithPassword({ email, password });
-  if (error){ errEl.textContent = error.message; return; }
-  errEl.textContent = '';
-  await checkAuth();
-  if (mode === 'signup') toast('注册成功！如提示需要确认，请查收邮件');
-  else toast('登录成功');
+  try{
+    const { error } = mode === 'signup'
+      ? await sb.auth.signUp({ email, password })
+      : await sb.auth.signInWithPassword({ email, password });
+    if (error){ errEl.textContent = error.message; return; }
+    errEl.textContent = '';
+    await checkAuth();
+    if (mode === 'signup') toast('注册成功！如提示需要确认，请查收邮件');
+    else toast('登录成功');
+  }catch(e){
+    errEl.textContent = '网络错误：' + e.message;
+  }
 }
 
 async function signOut(){
@@ -378,8 +387,8 @@ async function signOut(){
 
 sb.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_OUT'){
-    $('#authScreen').style.display = 'flex';
-    $('#appContainer').style.display = 'none';
+    const a = document.getElementById('authScreen'); if (a) a.style.display = 'flex';
+    const b = document.getElementById('appContainer'); if (b) b.style.display = 'none';
     db = { records: [] };
   }
 });
@@ -388,39 +397,46 @@ sb.auth.onAuthStateChange((event, session) => {
  *  4. Supabase 数据读写
  * ============================================================ */
 async function loadRecordsFromSupabase(){
-  const { data, error } = await sb.from('records').select('*').order('date',{ascending:false});
-  if (error){ toast('加载失败：'+error.message); return; }
-  db.records = (data||[]).map(r => ({
-    id: r.id, name: r.name, relation: r.relation, event: r.event,
-    direction: r.direction, amount: Number(r.amount)||0, date: r.date,
-    method: r.method||'', location: r.location||'', note: r.note||'',
-    createdAt: new Date(r.created_at).getTime(), updatedAt: Date.now()
-  }));
-  render();
+  try{
+    const { data, error } = await sb.from('records').select('*').order('date',{ascending:false});
+    if (error){ toast('加载失败：'+error.message); return; }
+    db.records = (data||[]).map(r => ({
+      id: r.id, name: r.name, relation: r.relation, event: r.event,
+      direction: r.direction, amount: Number(r.amount)||0, date: r.date,
+      method: r.method||'', location: r.location||'', note: r.note||'',
+      createdAt: new Date(r.created_at).getTime(), updatedAt: Date.now()
+    }));
+    render();
+  }catch(e){
+    toast('加载失败：' + e.message);
+  }
 }
 
 async function saveRecord(e){
   e.preventDefault();
-  const name = $('#f-name').value.trim();
-  const amount = parseFloat($('#f-amount').value);
+  const nameEl = document.getElementById('f-name');
+  const amountEl = document.getElementById('f-amount');
+  if (!nameEl || !amountEl) return;
+  const name = nameEl.value.trim();
+  const amount = parseFloat(amountEl.value);
   if (!name){ toast('请填写姓名'); return; }
   if (!(amount >= 0)){ toast('请填写正确金额'); return; }
   const payload = {
-    name, relation: $('#f-relation').value||'其他',
-    event: $('#f-event').value||'其他', direction: formDirection,
-    amount, date: $('#f-date').value||today(),
-    method: $('#f-method').value||'', location: $('#f-location').value.trim(),
-    note: $('#f-note').value.trim()
+    name, relation: document.getElementById('f-relation').value||'其他',
+    event: document.getElementById('f-event').value||'其他', direction: formDirection,
+    amount, date: document.getElementById('f-date').value||today(),
+    method: document.getElementById('f-method').value||'', location: document.getElementById('f-location').value.trim(),
+    note: document.getElementById('f-note').value.trim()
   };
-  const btn = $('#recordForm button[type="submit"]');
-  btn.disabled = true; btn.textContent = '保存中…';
+  const btn = document.querySelector('#recordForm button[type="submit"]');
+  if (btn){ btn.disabled = true; btn.textContent = '保存中…'; }
   let error;
   if (editingId){
     ({ error } = await sb.from('records').update(payload).eq('id', editingId));
   } else {
     ({ error } = await sb.from('records').insert(payload));
   }
-  btn.disabled = false; btn.textContent = '保存';
+  if (btn){ btn.disabled = false; btn.textContent = '保存'; }
   if (error){ toast('保存失败：'+error.message); return; }
   closeModal();
   await loadRecordsFromSupabase();
@@ -462,8 +478,8 @@ const sortRecordsDesc = list => list.slice().sort((a,b)=>(b.date||'').localeComp
  * ============================================================ */
 function navigate(view){
   currentView = view;
-  $$('.nav-item, .mobile-nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === view));
-  $$('.view').forEach(el => { el.hidden = (el.id !== 'view-'+view); });
+  document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === view));
+  document.querySelectorAll('.view').forEach(el => { el.hidden = (el.id !== 'view-'+view); });
   render();
   window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -506,7 +522,9 @@ function renderDashboard(){
     </table></div>`
     : `<div class="empty" style="padding:34px 10px"><div class="empty-icon">📖</div><div class="empty-title">还没有记录</div><div class="empty-sub">点击右上角「添加记录」开始记账</div></div>`;
 
-  $('#view-dashboard').innerHTML = `
+  const el = document.getElementById('view-dashboard');
+  if (!el) return;
+  el.innerHTML = `
     <div class="topbar">
       <div><div class="page-title">概览</div><div class="page-sub">${recs.length?`已记录 ${recs.length} 笔 · ${people.length} 位亲友`:'记录每一份人情，往来有数'}</div></div>
       <div class="spacer"></div>
@@ -528,7 +546,9 @@ function renderRecords(){
   const all = db.records;
   const years = Array.from(new Set(all.map(r=>(r.date||'').slice(0,4)).filter(Boolean))).sort().reverse();
   const events = Array.from(new Set(all.map(r=>r.event).filter(Boolean)));
-  $('#view-records').innerHTML = `
+  const el = document.getElementById('view-records');
+  if (!el) return;
+  el.innerHTML = `
     <div class="topbar"><div><div class="page-title">往来记录</div><div class="page-sub" id="recCount">共 ${all.length} 条</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div>
     <div class="toolbar">
       <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="searchInput" placeholder="搜索姓名 / 事由 / 备注…" autocomplete="off"></div>
@@ -539,15 +559,23 @@ function renderRecords(){
     </div>
     <div id="recTableWrap"></div>`;
   let t;
-  $('#searchInput').addEventListener('input', () => { clearTimeout(t); t = setTimeout(updateRecordsTable, 180); });
-  ['filterDir','filterEvent','filterYear'].forEach(id => $('#'+id).addEventListener('change', updateRecordsTable));
+  const si = document.getElementById('searchInput');
+  if (si) si.addEventListener('input', () => { clearTimeout(t); t = setTimeout(updateRecordsTable, 180); });
+  ['filterDir','filterEvent','filterYear'].forEach(id => {
+    const n = document.getElementById(id);
+    if (n) n.addEventListener('change', updateRecordsTable);
+  });
   updateRecordsTable();
 }
 function filterRecords(){
-  const q = ($('#searchInput')?.value||'').trim().toLowerCase();
-  const dir = $('#filterDir')?.value||'all';
-  const ev = $('#filterEvent')?.value||'all';
-  const yr = $('#filterYear')?.value||'all';
+  const qEl = document.getElementById('searchInput');
+  const dEl = document.getElementById('filterDir');
+  const eEl = document.getElementById('filterEvent');
+  const yEl = document.getElementById('filterYear');
+  const q = (qEl?.value||'').trim().toLowerCase();
+  const dir = dEl?.value||'all';
+  const ev = eEl?.value||'all';
+  const yr = yEl?.value||'all';
   return sortRecordsDesc(db.records.filter(r => {
     if (dir!=='all' && r.direction!==dir) return false;
     if (ev!=='all' && r.event!==ev) return false;
@@ -557,10 +585,10 @@ function filterRecords(){
   }));
 }
 function updateRecordsTable(){
-  const wrap = $('#recTableWrap'); if (!wrap) return;
+  const wrap = document.getElementById('recTableWrap'); if (!wrap) return;
   const list = filterRecords();
   const sIn = sumBy(list,'in'), sOut = sumBy(list,'out');
-  const countEl = $('#recCount');
+  const countEl = document.getElementById('recCount');
   if (countEl) countEl.textContent = `筛选 ${list.length} 条 · 收 ${money(sIn)} · 送 ${money(sOut)}`;
   if (!list.length){ wrap.innerHTML = `<div class="card"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">没有找到匹配的记录</div><div class="empty-sub">试试调整筛选条件</div></div></div>`; return; }
   wrap.innerHTML = `
@@ -583,7 +611,9 @@ function updateRecordsTable(){
 
 function renderPeople(){
   const people = personStats();
-  if (!people.length){ $('#view-people').innerHTML = `<div class="topbar"><div><div class="page-title">人情账簿</div><div class="page-sub">按人查看往来明细</div></div></div><div class="card"><div class="empty"><div class="empty-icon">👥</div><div class="empty-title">还没有往来对象</div><div class="empty-sub">添加记录后自动按人汇总</div></div></div>`; return; }
+  const el = document.getElementById('view-people');
+  if (!el) return;
+  if (!people.length){ el.innerHTML = `<div class="topbar"><div><div class="page-title">人情账簿</div><div class="page-sub">按人查看往来明细</div></div></div><div class="card"><div class="empty"><div class="empty-icon">👥</div><div class="empty-title">还没有往来对象</div><div class="empty-sub">添加记录后自动按人汇总</div></div></div>`; return; }
   const cards = people.map(p => {
     const open = expandedPeople.has(p.name);
     const netCls = p.net>0.001?'amt-out':p.net<-0.001?'amt-in':'';
@@ -601,11 +631,13 @@ function renderPeople(){
       </div></div>
     </div>`;
   }).join('');
-  $('#view-people').innerHTML = `<div class="topbar"><div><div class="page-title">人情账簿</div><div class="page-sub">${people.length} 位亲友 · 点击展开明细</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div><div class="people">${cards}</div>`;
+  el.innerHTML = `<div class="topbar"><div><div class="page-title">人情账簿</div><div class="page-sub">${people.length} 位亲友 · 点击展开明细</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div><div class="people">${cards}</div>`;
 }
 
 function renderStats(){
-  if (!db.records.length){ $('#view-stats').innerHTML = `<div class="topbar"><div><div class="page-title">统计分析</div><div class="page-sub">数据可视化</div></div></div><div class="card"><div class="empty"><div class="empty-icon">📊</div><div class="empty-title">暂无数据</div><div class="empty-sub">先添加几条记录吧</div></div></div>`; return; }
+  const el = document.getElementById('view-stats');
+  if (!el) return;
+  if (!db.records.length){ el.innerHTML = `<div class="topbar"><div><div class="page-title">统计分析</div><div class="page-sub">数据可视化</div></div></div><div class="card"><div class="empty"><div class="empty-icon">📊</div><div class="empty-title">暂无数据</div><div class="empty-sub">先添加几条记录吧</div></div></div>`; return; }
   const evMap = new Map();
   db.records.forEach(r => evMap.set(r.event||'其他', (evMap.get(r.event||'其他')||0) + (Number(r.amount)||0)));
   const evArr = Array.from(evMap.entries()).map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);
@@ -620,7 +652,7 @@ function renderStats(){
   const avgIn = totalIn / Math.max(1, db.records.filter(r=>r.direction==='in').length);
   const avgOut = totalOut / Math.max(1, db.records.filter(r=>r.direction==='out').length);
   const maxRec = sortRecordsDesc(db.records).slice().sort((a,b)=>(b.amount||0)-(a.amount||0))[0];
-  $('#view-stats').innerHTML = `
+  el.innerHTML = `
     <div class="topbar"><div><div class="page-title">统计分析</div><div class="page-sub">从数据看清人情往来</div></div><div class="spacer"></div>
       <div class="seg" style="width:auto"><button class="seg-btn ${chartMode==='year'?'active':''}" data-act="chartMode" data-mode="year">按年</button><button class="seg-btn ${chartMode==='month'?'active':''}" data-act="chartMode" data-mode="month">近 12 月</button></div>
     </div>
@@ -636,7 +668,7 @@ function renderStats(){
       <div class="card"><div class="card-head"><div class="card-title">🤝 关系分布</div></div><div class="card-body">${relBars}</div></div>
     </div>`;
   requestAnimationFrame(() => {
-    const bars = $('#barChart'), donut = $('#donutChart');
+    const bars = document.getElementById('barChart'), donut = document.getElementById('donutChart');
     if (bars) drawBars(bars, getBarData(chartMode));
     if (donut) drawDonut(donut, evArr.slice(0,8).map((it,i)=>({value:it.value,color:PALETTE[i%PALETTE.length]})));
   });
@@ -660,16 +692,16 @@ function getBarData(mode){
 }
 
 function renderData(){
-  const size = new Blob([JSON.stringify(db)]).size;
-  const sizeStr = size<1024 ? size+' B' : (size/1024).toFixed(1)+' KB';
+  const el = document.getElementById('view-data');
+  if (!el) return;
   const dates = db.records.map(r=>r.date).filter(Boolean).sort();
-  $('#view-data').innerHTML = `
+  el.innerHTML = `
     <div class="topbar"><div><div class="page-title">数据管理</div><div class="page-sub">备份与恢复</div></div></div>
     <div class="card mb16">
       <div class="card-head"><div class="card-title">👤 账户</div></div>
       <div class="card-body">
         <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">当前登录：<b>${esc(currentUserEmail||'—')}</b><br><span style="font-size:12px;color:var(--muted)">数据已自动云端同步，换设备登录同一账号即可查看。</span></p>
-        <button class="btn btn-danger" onclick="signOut()">退出登录</button>
+        <button class="btn btn-danger" id="btnSignOut">退出登录</button>
       </div>
     </div>
     <div class="data-grid">
@@ -701,6 +733,8 @@ function renderData(){
         </div>
       </div></div>
     </div>`;
+  const so = document.getElementById('btnSignOut');
+  if (so) so.addEventListener('click', signOut);
 }
 
 /* ============================================================
@@ -749,27 +783,27 @@ function drawDonut(cv,items){
 /* ============================================================
  *  8. 表单弹窗 & 辅助
  * ============================================================ */
-function fillSelect(el,options,placeholder){ el.innerHTML = (placeholder?`<option value="">${placeholder}</option>`:'') + options.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join(''); }
-function refreshNameList(){ const names = Array.from(new Set(db.records.map(r=>r.name).filter(Boolean))).sort(); $('#nameList').innerHTML = names.map(n=>`<option value="${esc(n)}">`).join(''); }
-function setDirection(dir){ formDirection=dir; $$('#dirSeg .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.dir===dir)); }
+function fillSelect(el,options,placeholder){ if (!el) return; el.innerHTML = (placeholder?`<option value="">${placeholder}</option>`:'') + options.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join(''); }
+function refreshNameList(){ const nl = document.getElementById('nameList'); if (!nl) return; const names = Array.from(new Set(db.records.map(r=>r.name).filter(Boolean))).sort(); nl.innerHTML = names.map(n=>`<option value="${esc(n)}">`).join(''); }
+function setDirection(dir){ formDirection=dir; document.querySelectorAll('#dirSeg .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.dir===dir)); }
 function openModal(id, preset){
   editingId = id||null;
   const rec = id ? db.records.find(r=>r.id===id) : null;
-  $('#modalTitle').textContent = rec ? '编辑记录' : '添加记录';
-  $('#f-name').value = rec ? rec.name : (preset?.name||'');
-  $('#f-relation').value = rec ? (rec.relation||'朋友') : (preset?.relation||'朋友');
-  $('#f-event').value = rec ? (rec.event||'婚礼') : (preset?.event||'婚礼');
-  $('#f-amount').value = rec ? rec.amount : '';
-  $('#f-date').value = rec ? (rec.date||today()) : today();
-  $('#f-method').value = rec ? (rec.method||'微信') : '微信';
-  $('#f-location').value = rec ? (rec.location||'') : '';
-  $('#f-note').value = rec ? (rec.note||'') : '';
+  const mt = document.getElementById('modalTitle'); if (mt) mt.textContent = rec ? '编辑记录' : '添加记录';
+  const fn = document.getElementById('f-name'); if (fn) fn.value = rec ? rec.name : (preset?.name||'');
+  const fr = document.getElementById('f-relation'); if (fr) fr.value = rec ? (rec.relation||'朋友') : (preset?.relation||'朋友');
+  const fe = document.getElementById('f-event'); if (fe) fe.value = rec ? (rec.event||'婚礼') : (preset?.event||'婚礼');
+  const fa = document.getElementById('f-amount'); if (fa) fa.value = rec ? rec.amount : '';
+  const fd = document.getElementById('f-date'); if (fd) fd.value = rec ? (rec.date||today()) : today();
+  const fm = document.getElementById('f-method'); if (fm) fm.value = rec ? (rec.method||'微信') : '微信';
+  const fl = document.getElementById('f-location'); if (fl) fl.value = rec ? (rec.location||'') : '';
+  const fo = document.getElementById('f-note'); if (fo) fo.value = rec ? (rec.note||'') : '';
   setDirection(rec ? rec.direction : (preset?.direction||'out'));
   refreshNameList();
-  $('#overlay').classList.add('show');
-  setTimeout(()=>{ if (!rec && !preset?.name) $('#f-name').focus(); },80);
+  const ov = document.getElementById('overlay'); if (ov) ov.classList.add('show');
+  setTimeout(()=>{ if (!rec && !preset?.name && fn) fn.focus(); },80);
 }
-function closeModal(){ $('#overlay').classList.remove('show'); editingId=null; $('#recordForm').reset(); }
+function closeModal(){ const ov = document.getElementById('overlay'); if (ov) ov.classList.remove('show'); editingId=null; const rf = document.getElementById('recordForm'); if (rf) rf.reset(); }
 
 function download(content,filename,type){ const blob=new Blob([content],{type:type||'application/octet-stream'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(url),1000); }
 function stamp(){ const d=new Date(),p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`; }
@@ -841,8 +875,8 @@ function setTheme(theme){
   document.documentElement.dataset.theme = theme;
   localStorage.setItem(THEME_KEY, theme);
   const icon = theme==='dark'?'☀️':'🌙'; const label = theme==='dark'?'浅色模式':'深色模式';
-  const tb = $('#themeToggle'); if (tb) tb.textContent = `${icon} ${label}`;
-  const tm = $('#themeToggleMobile'); if (tm) tm.textContent = icon;
+  const tb = document.getElementById('themeToggle'); if (tb) tb.textContent = `${icon} ${label}`;
+  const tm = document.getElementById('themeToggleMobile'); if (tm) tm.textContent = icon;
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute('content', theme==='dark'?'#1e1b17':'#f6f3ee');
   if (currentView==='stats') renderStats();
@@ -850,19 +884,25 @@ function setTheme(theme){
 function toggleTheme(){ const cur = document.documentElement.dataset.theme==='dark'?'light':'dark'; setTheme(cur); toast(cur==='dark'?'已切换到深色模式':'已切换到浅色模式'); }
 
 /* ============================================================
- *  10. 全局事件绑定
+ *  10. 全局事件绑定（带 null 保护）
  * ============================================================ */
 function bindEvents(){
-  $$('.nav-item, .mobile-nav-item').forEach(btn => btn.addEventListener('click', ()=>navigate(btn.dataset.view)));
-  $('#themeToggle').addEventListener('click', toggleTheme);
-  $('#themeToggleMobile').addEventListener('click', toggleTheme);
-  $('#modalClose').addEventListener('click', closeModal);
-  $('#btnCancel').addEventListener('click', closeModal);
-  $('#overlay').addEventListener('click', e=>{ if (e.target===$('#overlay')) closeModal(); });
-  $$('#dirSeg .seg-btn').forEach(btn=>btn.addEventListener('click', ()=>setDirection(btn.dataset.dir)));
-  $('#recordForm').addEventListener('submit', saveRecord);
+  const on = (sel, ev, fn) => { const el = document.querySelector(sel); if (el) el.addEventListener(ev, fn); };
+  const onAll = (sel, ev, fn) => { document.querySelectorAll(sel).forEach(el => el.addEventListener(ev, fn)); };
 
-  document.addEventListener('click', e=>{
+  onAll('.nav-item, .mobile-nav-item', 'click', e => navigate(e.currentTarget.dataset.view));
+  on('#themeToggle', 'click', toggleTheme);
+  on('#themeToggleMobile', 'click', toggleTheme);
+  on('#modalClose', 'click', closeModal);
+  on('#btnCancel', 'click', closeModal);
+  on('#overlay', 'click', e => { if (e.target === document.getElementById('overlay')) closeModal(); });
+  onAll('#dirSeg .seg-btn', 'click', e => setDirection(e.currentTarget.dataset.dir));
+  on('#recordForm', 'submit', saveRecord);
+
+  on('#btnSignin', 'click', () => handleAuth('signin'));
+  on('#btnSignup', 'click', () => handleAuth('signup'));
+
+  document.addEventListener('click', e => {
     const el = e.target.closest('[data-act]'); if (!el) return;
     const act = el.dataset.act;
     switch (act){
@@ -872,45 +912,52 @@ function bindEvents(){
       case 'goto': navigate(el.dataset.view); break;
       case 'togglePerson': { const n=el.dataset.name; if (expandedPeople.has(n)) expandedPeople.delete(n); else expandedPeople.add(n); renderPeople(); break; }
       case 'quickAdd': openModal(null, {name:el.dataset.name, relation:el.dataset.relation, direction:'out'}); break;
-      case 'filterByPerson': { navigate('records'); setTimeout(()=>{ const input=$('#searchInput'); if (input){ input.value=el.dataset.name; updateRecordsTable(); } },40); break; }
-      case 'clearFilter': { ['searchInput','filterDir','filterEvent','filterYear'].forEach(id=>{ const n=$('#'+id); if (n) n.value = id==='searchInput'?'':'all'; }); updateRecordsTable(); break; }
+      case 'filterByPerson': { navigate('records'); setTimeout(()=>{ const input=document.getElementById('searchInput'); if (input){ input.value=el.dataset.name; updateRecordsTable(); } },40); break; }
+      case 'clearFilter': { ['searchInput','filterDir','filterEvent','filterYear'].forEach(id=>{ const n=document.getElementById(id); if (n) n.value = id==='searchInput'?'':'all'; }); updateRecordsTable(); break; }
       case 'chartMode': chartMode=el.dataset.mode; renderStats(); break;
       case 'exportJSON': exportJSON(); break;
       case 'exportCSV': exportCSV(); break;
-      case 'importJSON': $('#importFile').click(); break;
+      case 'importJSON': { const f = document.getElementById('importFile'); if (f) f.click(); break; }
       case 'loadSample': if (confirm('载入 6 条示例数据？')) loadSample(); break;
       case 'clearAll': if (confirm('确定清空全部记录？不可撤销！') && confirm('再次确认：将永久删除所有数据。')){ sb.from('records').delete().neq('id',0).then(()=>loadRecordsFromSupabase()); } break;
     }
   });
 
-  $('#importFile').addEventListener('change', e=>{ const f=e.target.files&&e.target.files[0]; if (f) importJSONFile(f); e.target.value=''; });
-  document.addEventListener('keydown', e=>{
-    if (e.key==='Escape'){ if ($('#overlay').classList.contains('show')) closeModal(); }
+  on('#importFile', 'change', e => { const f = e.target.files && e.target.files[0]; if (f) importJSONFile(f); e.target.value=''; });
+
+  document.addEventListener('keydown', e => {
+    if (e.key==='Escape'){ const ov = document.getElementById('overlay'); if (ov && ov.classList.contains('show')) closeModal(); }
     if (e.key.toLowerCase()==='n' && !e.metaKey && !e.ctrlKey && !e.altKey){
       const tag = (document.activeElement.tagName||'').toLowerCase();
       if (tag==='input'||tag==='textarea'||tag==='select') return;
-      if ($('#overlay').classList.contains('show')) return;
+      const ov = document.getElementById('overlay');
+      if (ov && ov.classList.contains('show')) return;
       openModal(null);
     }
   });
+
   let rt;
-  window.addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(()=>{ if (currentView==='stats') renderStats(); },200); });
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(()=>{ if (currentView==='stats') renderStats(); }, 200); });
 }
 
 /* ============================================================
  *  11. 初始化
  * ============================================================ */
 async function init(){
-  const saved = localStorage.getItem(THEME_KEY);
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  setTheme(saved || (prefersDark ? 'dark' : 'light'));
-  fillSelect($('#f-relation'), RELATIONS);
-  fillSelect($('#f-event'), EVENT_TYPES);
-  fillSelect($('#f-method'), METHODS);
-  $('#f-date').value = today();
-  bindEvents();
-  navigate('dashboard');
-  await checkAuth();
+  try{
+    const saved = localStorage.getItem(THEME_KEY);
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(saved || (prefersDark ? 'dark' : 'light'));
+    fillSelect(document.getElementById('f-relation'), RELATIONS);
+    fillSelect(document.getElementById('f-event'), EVENT_TYPES);
+    fillSelect(document.getElementById('f-method'), METHODS);
+    const fd = document.getElementById('f-date'); if (fd) fd.value = today();
+    bindEvents();
+    navigate('dashboard');
+    await checkAuth();
+  }catch(e){
+    console.error('init 失败', e);
+  }
 }
 document.addEventListener('DOMContentLoaded', init);
 </script>
