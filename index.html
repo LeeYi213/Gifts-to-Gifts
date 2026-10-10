@@ -6,25 +6,10 @@
 <meta name="theme-color" content="#c0392b">
 <link rel="icon" href="data:,">
 <title>人情簿 · 份子钱与人情往来记录</title>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#f6f3ee;--panel:#fff;--panel-2:#fbf9f6;--text:#2a2521;--text-2:#6b6259;--muted:#9a9086;
-  --border:#ece6dd;--primary:#c0392b;--primary-2:#e2604f;--primary-soft:#fdeeeb;
-  --gold:#c8952f;--gold-soft:#fdf6e6;--green:#2f8f5b;--green-soft:#e9f6ef;
-  --blue:#3b6fb6;--blue-soft:#eaf1fb;
-  --shadow-sm:0 1px 2px rgba(70,50,30,.05),0 2px 8px rgba(70,50,30,.05);
-  --shadow-md:0 4px 16px rgba(70,50,30,.08),0 1px 3px rgba(70,50,30,.04);
-  --radius:16px;--nav-h:64px;
-}
-html[data-theme="dark"]{
-  --bg:#141210;--panel:#1e1b17;--panel-2:#252119;--text:#f2ece2;--text-2:#c3b8a9;--muted:#8d8377;
-  --border:#332d25;--primary:#e2685a;--primary-2:#f0836f;--primary-soft:#3a221e;
-  --gold:#e0b355;--gold-soft:#332a18;--green:#5cb98a;--green-soft:#1c2c23;
-  --blue:#7aa6e0;--blue-soft:#1b2430;
-  --shadow-sm:0 1px 2px rgba(0,0,0,.3);--shadow-md:0 6px 20px rgba(0,0,0,.35);
-}
+:root{--bg:#f6f3ee;--panel:#fff;--panel-2:#fbf9f6;--text:#2a2521;--text-2:#6b6259;--muted:#9a9086;--border:#ece6dd;--primary:#c0392b;--primary-2:#e2604f;--primary-soft:#fdeeeb;--gold:#c8952f;--gold-soft:#fdf6e6;--green:#2f8f5b;--green-soft:#e9f6ef;--blue:#3b6fb6;--blue-soft:#eaf1fb;--shadow-sm:0 1px 2px rgba(70,50,30,.05),0 2px 8px rgba(70,50,30,.05);--shadow-md:0 4px 16px rgba(70,50,30,.08),0 1px 3px rgba(70,50,30,.04);--radius:16px;--nav-h:64px}
+html[data-theme="dark"]{--bg:#141210;--panel:#1e1b17;--panel-2:#252119;--text:#f2ece2;--text-2:#c3b8a9;--muted:#8d8377;--border:#332d25;--primary:#e2685a;--primary-2:#f0836f;--primary-soft:#3a221e;--gold:#e0b355;--gold-soft:#332a18;--green:#5cb98a;--green-soft:#1c2c23;--blue:#7aa6e0;--blue-soft:#1b2430;--shadow-sm:0 1px 2px rgba(0,0,0,.3);--shadow-md:0 6px 20px rgba(0,0,0,.35)}
 html,body{height:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background-color:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.5;transition:background-color .25s,color .25s}
 .app{display:flex;min-height:100vh}
@@ -41,8 +26,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .sidebar-foot{padding-top:12px;border-top:1px solid var(--border);margin-top:8px;display:flex;flex-direction:column;gap:8px}
 .sync-label{font-size:11.5px;color:var(--muted);padding:0 8px 4px;display:flex;align-items:center}
 .sync-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
-.sync-dot.ok{background:var(--green)}.sync-dot.busy{background:var(--gold);animation:pulse 1s infinite}
-.sync-dot.idle{background:var(--muted)}
+.sync-dot.ok{background:var(--green)}.sync-dot.busy{background:var(--gold);animation:pulse 1s infinite}.sync-dot.idle{background:var(--muted)}.sync-dot.err{background:var(--primary)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 main{flex:1;min-width:0;padding:26px 30px 70px}
 .view[hidden]{display:none}.view{animation:fadeUp .26s ease}
@@ -53,11 +37,8 @@ main{flex:1;min-width:0;padding:26px 30px 70px}
 .spacer{flex:1}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;border-radius:11px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:13.5px;font-weight:550;cursor:pointer;transition:.18s;font-family:inherit;white-space:nowrap}
 .btn:hover{border-color:#d8cec1;transform:translateY(-1px);box-shadow:var(--shadow-sm)}
-.btn:active{transform:translateY(0)}
 .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(192,57,43,.26)}
-.btn-primary:hover{box-shadow:0 7px 20px rgba(192,57,43,.34)}
-.btn-ghost{background:transparent;border-color:transparent;color:var(--text-2)}
-.btn-ghost:hover{background:var(--panel-2);box-shadow:none;border-color:transparent}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--text-2)}.btn-ghost:hover{background:var(--panel-2);box-shadow:none;border-color:transparent}
 .btn-sm{padding:6px 11px;font-size:12.5px;border-radius:9px}
 .btn-danger{color:var(--primary)}.btn-danger:hover{background:var(--primary-soft);border-color:var(--primary)}
 .btn-block{width:100%;justify-content:center}
@@ -87,8 +68,6 @@ tbody tr{transition:background .14s}tbody tr:hover{background:var(--panel-2)}tbo
 .tag-in{background:var(--green-soft);color:var(--green)}
 .tag-out{background:var(--primary-soft);color:var(--primary)}
 .tag-plain{background:var(--panel-2);color:var(--text-2);border:1px solid var(--border)}
-.tag-gold{background:var(--gold-soft);color:var(--gold)}
-.tag-blue{background:var(--blue-soft);color:var(--blue)}
 .toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .search{position:relative;flex:1;min-width:190px}
 .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted);pointer-events:none}
@@ -155,7 +134,7 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
 .data-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
 .dl{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--border);font-size:13.5px}
 .dl:last-child{border-bottom:none}.dl dt{color:var(--muted)}.dl dd{font-weight:650;font-variant-numeric:tabular-nums}
-.kv-big{font-size:24px;font-weight:750;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.kv-big{font-size:24px;font-weight:750;font-variant-numeric:tabular-nums}
 .mobile-nav,.mobile-topbar{display:none}
 @media(max-width:860px){
   .sidebar{display:none}.app{flex-direction:column}
@@ -204,39 +183,15 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
   .mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;border-radius:12px;border:none;background:transparent;color:var(--text-2);font-size:10.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:.16s}
   .mobile-nav-item svg{width:21px;height:21px}
   .mobile-nav-item.active{color:var(--primary);background:var(--primary-soft)}
-  .mobile-nav-item:active{transform:scale(.95)}
 }
-.theme-fab{width:36px;height:36px;border-radius:12px;border:none;background:var(--panel-2);color:var(--text);cursor:pointer;display:grid;place-items:center;font-size:17px;line-height:1;transition:.18s;flex:0 0 36px}
-.theme-fab:hover{background:var(--primary-soft);color:var(--primary)}.theme-fab:active{transform:scale(.92)}
-.auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background-color:var(--bg)}
+.theme-fab{width:36px;height:36px;border-radius:12px;border:none;background:var(--panel-2);color:var(--text);cursor:pointer;display:grid;place-items:center;font-size:17px;transition:.18s;flex:0 0 36px}
+.theme-fab:hover{background:var(--primary-soft);color:var(--primary)}
 </style>
 </head>
 <body>
-
-<div id="authScreen" class="auth-screen">
-  <div class="card" style="width:100%;max-width:400px;padding:28px">
-    <div style="text-align:center;margin-bottom:22px">
-      <div class="brand-logo" style="margin:0 auto 12px;width:48px;height:48px;font-size:20px">簿</div>
-      <h2 style="font-size:20px;font-weight:750">人情簿</h2>
-      <p style="font-size:13px;color:var(--muted);margin-top:6px">登录后手机电脑自动同步</p>
-    </div>
-    <div class="field"><label>邮箱</label><input id="authEmail" type="email" placeholder="you@example.com" autocomplete="email"></div>
-    <div class="field" style="margin-top:12px"><label>密码</label><input id="authPassword" type="password" placeholder="至少 6 位密码" autocomplete="current-password"></div>
-    <div id="authError" style="color:var(--primary);font-size:12.5px;margin-top:10px;min-height:18px"></div>
-    <div style="display:flex;gap:10px;margin-top:18px">
-      <button type="button" class="btn btn-primary" style="flex:1" id="btnSignin">登录</button>
-      <button type="button" class="btn" style="flex:1" id="btnSignup">注册</button>
-    </div>
-    <div class="hint" style="margin-top:16px;text-align:center">首次使用请先点「注册」创建账号</div>
-  </div>
-</div>
-
-<div class="app" id="appContainer" style="display:none">
+<div class="app">
   <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-logo">簿</div>
-      <div><div class="brand-name">人情簿</div><div class="brand-sub">份子钱往来记录</div></div>
-    </div>
+    <div class="brand"><div class="brand-logo">簿</div><div><div class="brand-name">人情簿</div><div class="brand-sub">份子钱往来记录</div></div></div>
     <nav class="nav">
       <button class="nav-item active" data-view="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>概览</span></button>
       <button class="nav-item" data-view="records"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.6" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg><span>记录</span></button>
@@ -245,18 +200,12 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
       <button class="nav-item" data-view="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg><span>数据</span></button>
     </nav>
     <div class="sidebar-foot">
-      <div class="sync-label" id="syncLabel"><span class="sync-dot ok"></span>已登录</div>
+      <div class="sync-label" id="syncLabel"><span class="sync-dot idle"></span>未同步</div>
       <button class="btn btn-ghost btn-block btn-sm" id="themeToggle">🌙 深色模式</button>
     </div>
   </aside>
-
   <main>
-    <div class="mobile-topbar">
-      <div class="brand-logo">簿</div>
-      <div class="brand-name">人情簿</div>
-      <div class="spacer"></div>
-      <button class="theme-fab" id="themeToggleMobile">🌙</button>
-    </div>
+    <div class="mobile-topbar"><div class="brand-logo">簿</div><div class="brand-name">人情簿</div><div class="spacer"></div><button class="theme-fab" id="themeToggleMobile">🌙</button></div>
     <section class="view" id="view-dashboard"></section>
     <section class="view" id="view-records" hidden></section>
     <section class="view" id="view-people" hidden></section>
@@ -264,7 +213,6 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
     <section class="view" id="view-data" hidden></section>
   </main>
 </div>
-
 <nav class="mobile-nav">
   <button class="mobile-nav-item active" data-view="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>概览</span></button>
   <button class="mobile-nav-item" data-view="records"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.6" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="3.6" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg><span>记录</span></button>
@@ -272,694 +220,328 @@ canvas{width:100%;height:230px;display:block}canvas.donut{height:200px}
   <button class="mobile-nav-item" data-view="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg><span>统计</span></button>
   <button class="mobile-nav-item" data-view="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg><span>数据</span></button>
 </nav>
-
-<div class="overlay" id="overlay">
-  <div class="modal" role="dialog">
-    <div class="modal-head"><h3 id="modalTitle">添加记录</h3><div class="spacer"></div><button class="icon-btn" id="modalClose" type="button">&times;</button></div>
-    <form id="recordForm">
-      <div class="modal-body">
-        <div class="seg" id="dirSeg">
-          <button type="button" class="seg-btn" data-dir="in">收礼 · 别人送我</button>
-          <button type="button" class="seg-btn active" data-dir="out">送礼 · 我送别人</button>
-        </div>
-        <div class="form-grid">
-          <div class="field"><label>姓名 <span class="req">*</span></label><input id="f-name" list="nameList" placeholder="如：张三" required autocomplete="off"><datalist id="nameList"></datalist></div>
-          <div class="field"><label>关系</label><select id="f-relation"></select></div>
-          <div class="field"><label>事由</label><select id="f-event"></select></div>
-          <div class="field"><label>金额（元）<span class="req">*</span></label><input id="f-amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required></div>
-          <div class="field"><label>日期 <span class="req">*</span></label><input id="f-date" type="date" required></div>
-          <div class="field"><label>方式</label><select id="f-method"></select></div>
-          <div class="field full"><label>地点</label><input id="f-location" placeholder="如：金满楼酒店"></div>
-          <div class="field full"><label>备注</label><textarea id="f-note" placeholder="如：大学室友…"></textarea></div>
-        </div>
+<div class="overlay" id="overlay"><div class="modal">
+  <div class="modal-head"><h3 id="modalTitle">添加记录</h3><div class="spacer"></div><button class="icon-btn" id="modalClose" type="button">&times;</button></div>
+  <form id="recordForm">
+    <div class="modal-body">
+      <div class="seg" id="dirSeg"><button type="button" class="seg-btn" data-dir="in">收礼 · 别人送我</button><button type="button" class="seg-btn active" data-dir="out">送礼 · 我送别人</button></div>
+      <div class="form-grid">
+        <div class="field"><label>姓名 <span class="req">*</span></label><input id="f-name" list="nameList" placeholder="如：张三" required><datalist id="nameList"></datalist></div>
+        <div class="field"><label>关系</label><select id="f-relation"></select></div>
+        <div class="field"><label>事由</label><select id="f-event"></select></div>
+        <div class="field"><label>金额（元）<span class="req">*</span></label><input id="f-amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required></div>
+        <div class="field"><label>日期 <span class="req">*</span></label><input id="f-date" type="date" required></div>
+        <div class="field"><label>方式</label><select id="f-method"></select></div>
+        <div class="field full"><label>地点</label><input id="f-location" placeholder="如：金满楼酒店"></div>
+        <div class="field full"><label>备注</label><textarea id="f-note"></textarea></div>
       </div>
-      <div class="modal-foot"><button type="button" class="btn" id="btnCancel">取消</button><button type="submit" class="btn btn-primary">保存</button></div>
-    </form>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn" id="btnCancel">取消</button><button type="submit" class="btn btn-primary">保存</button></div>
+  </form>
+</div></div>
+<div class="overlay" id="syncOverlay"><div class="modal">
+  <div class="modal-head"><h3>☁️ 云同步设置</h3><div class="spacer"></div><button class="icon-btn" id="syncClose" type="button">&times;</button></div>
+  <div class="modal-body">
+    <p class="hint" style="margin-bottom:14px">到 <a href="https://jsonbin.io" target="_blank" style="color:var(--primary)">jsonbin.io</a> 免费注册，创建一个内容为 <code>{"records":[]}</code> 的 Bin，然后填入以下两项。</p>
+    <div class="field"><label>Bin ID</label><input id="s-binId" placeholder="65f8a1b2c3d4..."></div>
+    <div class="field" style="margin-top:12px"><label>Master Key</label><input id="s-key" placeholder="$2a$10$..." autocomplete="off"></div>
+    <div class="field" style="margin-top:12px"><label>自动同步</label><select id="s-auto"><option value="off">关闭（仅手动）</option><option value="on">开启（推荐）</option></select></div>
+    <div id="syncState" class="hint" style="margin-top:14px"></div>
   </div>
-</div>
+  <div class="modal-foot"><button type="button" class="btn" id="btnSyncPull">⬇️ 拉取</button><button type="button" class="btn" id="btnSyncPush">⬆️ 推送</button><button type="button" class="btn btn-primary" id="btnSyncSave">保存</button></div>
+</div></div>
 <div class="toast" id="toast"></div>
-
 <script>
-/* ============================================================
- *  1. Supabase 配置
- * ============================================================ */
-const SUPABASE_URL = 'https://nddrfzaraxvquxcmgpwk.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kZHJmemFyYXh2cXV4Y21ncHdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzA4MjksImV4cCI6MjEwNzEwNjgyOX0.RVtck8yUOLow4dlF1KrKBxZgNgOlW2-kVz_S2lnvwL8';  // ← 替换成你自己的 anon key
+const STORAGE_KEY='fenzi_db_v1',THEME_KEY='fenzi_theme',SYNC_KEY='fenzi_sync_cfg';
+const BIN_ID='6abc71f7ac6210605a03e7c0';   // ← 替换成你的 Bin ID
+const BIN_KEY='$2a$10$U7qrXQphnBtj53CCbffRf.qYrlYGTRzpo1qyuhNS/39h9zSXqbm6m';  // ← 替换成你的 Master Key
 
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const EVENT_TYPES=['婚礼','订婚','满月百日','生日寿宴','乔迁新居','升学升职','开业庆典','丧事白事','探病慰问','节日问候','其他'];
+const RELATIONS=['亲属','亲戚','朋友','同事','同学','邻居','客户生意','其他'];
+const METHODS=['现金','微信','支付宝','银行转账','实物礼品','其他'];
+const PALETTE=['#c0392b','#d97b2b','#c8a02e','#5b9e6b','#3b7fb6','#7a6bb5','#c2557f','#4fa3a3','#8d6e63','#9aa05b','#6c7a89'];
+let db={records:[],updatedAt:0},currentView='dashboard',editingId=null,formDirection='out',chartMode='year';
+const expandedPeople=new Set();
+const $=(s,p=document)=>p.querySelector(s),$$=(s,p=document)=>Array.from(p.querySelectorAll(s));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>{n=Number(n)||0;return(n<0?'-':'')+'¥'+Math.abs(n).toLocaleString('zh-CN',{maximumFractionDigits:2})};
+const shortNum=n=>{n=Number(n)||0;const a=Math.abs(n);if(a>=1e8)return(n/1e8).toFixed(2).replace(/\.?0+$/,'')+'亿';if(a>=1e4)return(n/1e4).toFixed(1).replace(/\.0$/,'')+'万';return n.toLocaleString('zh-CN',{maximumFractionDigits:0})};
+const today=()=>{const d=new Date(),p=n=>String(n).padStart(2,'0');return`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`};
+const cssVar=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const hashColor=s=>{let h=0;for(let i=0;i<String(s).length;i++)h=(h*31+String(s).charCodeAt(i))>>>0;return PALETTE[h%PALETTE.length]};
+let toastTimer;function toast(m){const t=$('#toast');if(!t)return;t.textContent=m;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2400)}
 
-/* ============================================================
- *  2. 常量与工具
- * ============================================================ */
-const THEME_KEY = 'fenzi_theme';
-const EVENT_TYPES = ['婚礼','订婚','满月百日','生日寿宴','乔迁新居','升学升职','开业庆典','丧事白事','探病慰问','节日问候','其他'];
-const RELATIONS = ['亲属','亲戚','朋友','同事','同学','邻居','客户生意','其他'];
-const METHODS = ['现金','微信','支付宝','银行转账','实物礼品','其他'];
-const PALETTE = ['#c0392b','#d97b2b','#c8a02e','#5b9e6b','#3b7fb6','#7a6bb5','#c2557f','#4fa3a3','#8d6e63','#9aa05b','#6c7a89'];
-let db = { records: [] };
-let currentView = 'dashboard', editingId = null, formDirection = 'out', chartMode = 'year';
-let currentUserEmail = '';
-const expandedPeople = new Set();
+function loadLocal(){try{const r=localStorage.getItem(STORAGE_KEY);if(r){const p=JSON.parse(r);if(p&&Array.isArray(p.records))db=p}}catch(e){}if(!Array.isArray(db.records))db.records=[]}
+function saveLocal(){db.updatedAt=Date.now();try{localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}catch(e){toast('存储空间不足')}}
 
-const $ = (s,p=document) => p.querySelector(s);
-const $$ = (s,p=document) => Array.from(p.querySelectorAll(s));
-const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money = n => { n = Number(n)||0; return (n<0?'-':'')+'¥'+Math.abs(n).toLocaleString('zh-CN',{maximumFractionDigits:2}); };
-const shortNum = n => { n=Number(n)||0; const a=Math.abs(n); if(a>=1e8) return (n/1e8).toFixed(2).replace(/\.?0+$/,'')+'亿'; if(a>=1e4) return (n/1e4).toFixed(1).replace(/\.0$/,'')+'万'; return n.toLocaleString('zh-CN',{maximumFractionDigits:0}); };
-const today = () => { const d=new Date(),p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; };
-const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const hashColor = s => { let h=0; for(let i=0;i<String(s).length;i++) h=(h*31+String(s).charCodeAt(i))>>>0; return PALETTE[h%PALETTE.length]; };
-let toastTimer;
-function toast(msg){ const t=$('#toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2400); }
+const Sync={busy:false,pushTimer:null,
+  enabled(){return!!(BIN_ID&&BIN_KEY)},
+  updateUI(){const el=$('#syncLabel');if(!el)return;if(!this.enabled()){el.innerHTML='<span class="sync-dot idle"></span>未开启云同步';return}
+    if(this.busy){el.innerHTML='<span class="sync-dot busy"></span>同步中…';return}
+    el.innerHTML='<span class="sync-dot ok"></span>已同步 · '+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})},
+  async _fetch(path,opts={}){const url=`https://api.jsonbin.io/v3/b/${BIN_ID}${path}`;const h=Object.assign({'X-Master-Key':BIN_KEY,'Content-Type':'application/json'},opts.headers||{});const r=await fetch(url,Object.assign({},opts,{headers:h}));if(!r.ok)throw new Error('HTTP '+r.status);return r.json()},
+  async pull(silent){if(!this.enabled()){if(!silent)toast('请先配置 Bin ID 和 Key');return}if(this.busy)return;this.busy=true;this.updateUI();
+    try{const d=await this._fetch('/latest',{headers:{'X-Bin-Meta':'false'}});const rec=d.record||d;const rrs=Array.isArray(rec.records)?rec.records:[];const rat=rec.updatedAt||0;
+      if(!db.records.length||rat>db.updatedAt){db.records=rrs;db.updatedAt=rat||Date.now();localStorage.setItem(STORAGE_KEY,JSON.stringify(db));render();if(!silent)toast(`已拉取 ${rrs.length} 条`)}
+      else if(db.updatedAt>rat){this.busy=false;await this.push(true);return}
+      else if(!silent)toast('云端已是最新')}catch(e){if(!silent)toast('拉取失败：'+e.message)}
+    finally{this.busy=false;this.updateUI()}},
+  async push(silent){if(!this.enabled()){if(!silent)toast('请先配置');return}if(this.busy)return;this.busy=true;this.updateUI();
+    try{await this._fetch('',{method:'PUT',body:JSON.stringify({records:db.records,updatedAt:db.updatedAt||Date.now()})});if(!silent)toast('已推送到云端')}
+    catch(e){if(!silent)toast('推送失败：'+e.message)}
+    finally{this.busy=false;this.updateUI()}},
+  schedulePush(){if(!this.enabled())return;clearTimeout(this.pushTimer);this.pushTimer=setTimeout(()=>this.push(true),1500)}
+};
 
-/* ============================================================
- *  3. 认证相关
- * ============================================================ */
-async function checkAuth(){
-  try{
-    const { data: { session } } = await sb.auth.getSession();
-    if (session){
-      currentUserEmail = session.user.email;
-      const a = document.getElementById('authScreen'); if (a) a.style.display = 'none';
-      const b = document.getElementById('appContainer'); if (b) b.style.display = 'flex';
-      await loadRecordsFromSupabase();
-      return true;
-    } else {
-      const a = document.getElementById('authScreen'); if (a) a.style.display = 'flex';
-      const b = document.getElementById('appContainer'); if (b) b.style.display = 'none';
-      return false;
-    }
-  }catch(e){
-    console.error('checkAuth 失败', e);
-    return false;
-  }
-}
+const sumBy=(rs,d)=>rs.filter(r=>r.direction===d).reduce((s,r)=>s+(Number(r.amount)||0),0);
+function personStats(){const m=new Map();db.records.forEach(r=>{const k=(r.name||'未知').trim();if(!m.has(k))m.set(k,{name:k,relation:r.relation||'其他',in:0,out:0,count:0,records:[],last:''});const p=m.get(k);p.records.push(r);p.count++;if(r.direction==='in')p.in+=Number(r.amount)||0;else p.out+=Number(r.amount)||0;if(r.relation)p.relation=r.relation;if(!p.last||(r.date||'')>p.last)p.last=r.date||''});return Array.from(m.values()).map(p=>Object.assign(p,{net:p.in-p.out})).sort((a,b)=>Math.abs(b.net)-Math.abs(a.net)||b.count-a.count)}
+const sortRecordsDesc=l=>l.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')||((b.createdAt||0)-(a.createdAt||0)));
 
-async function handleAuth(mode){
-  const emailEl = document.getElementById('authEmail');
-  const pwEl = document.getElementById('authPassword');
-  const errEl = document.getElementById('authError');
-  if (!emailEl || !pwEl || !errEl) return;
-  const email = emailEl.value.trim();
-  const password = pwEl.value;
-  errEl.textContent = '';
-  if (!email || !password){ errEl.textContent = '请填写邮箱和密码'; return; }
-  if (mode === 'signup' && password.length < 6){ errEl.textContent = '密码至少 6 位'; return; }
-  errEl.textContent = '处理中…';
-  try{
-    const { error } = mode === 'signup'
-      ? await sb.auth.signUp({ email, password })
-      : await sb.auth.signInWithPassword({ email, password });
-    if (error){ errEl.textContent = error.message; return; }
-    errEl.textContent = '';
-    await checkAuth();
-    if (mode === 'signup') toast('注册成功！如提示需要确认，请查收邮件');
-    else toast('登录成功');
-  }catch(e){
-    errEl.textContent = '网络错误：' + e.message;
-  }
-}
-
-async function signOut(){
-  await sb.auth.signOut();
-  location.reload();
-}
-
-sb.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_OUT'){
-    const a = document.getElementById('authScreen'); if (a) a.style.display = 'flex';
-    const b = document.getElementById('appContainer'); if (b) b.style.display = 'none';
-    db = { records: [] };
-  }
-});
-
-/* ============================================================
- *  4. Supabase 数据读写
- * ============================================================ */
-async function loadRecordsFromSupabase(){
-  try{
-    const { data, error } = await sb.from('records').select('*').order('date',{ascending:false});
-    if (error){ toast('加载失败：'+error.message); return; }
-    db.records = (data||[]).map(r => ({
-      id: r.id, name: r.name, relation: r.relation, event: r.event,
-      direction: r.direction, amount: Number(r.amount)||0, date: r.date,
-      method: r.method||'', location: r.location||'', note: r.note||'',
-      createdAt: new Date(r.created_at).getTime(), updatedAt: Date.now()
-    }));
-    render();
-  }catch(e){
-    toast('加载失败：' + e.message);
-  }
-}
-
-async function saveRecord(e){
-  e.preventDefault();
-  const nameEl = document.getElementById('f-name');
-  const amountEl = document.getElementById('f-amount');
-  if (!nameEl || !amountEl) return;
-  const name = nameEl.value.trim();
-  const amount = parseFloat(amountEl.value);
-  if (!name){ toast('请填写姓名'); return; }
-  if (!(amount >= 0)){ toast('请填写正确金额'); return; }
-  const payload = {
-    name, relation: document.getElementById('f-relation').value||'其他',
-    event: document.getElementById('f-event').value||'其他', direction: formDirection,
-    amount, date: document.getElementById('f-date').value||today(),
-    method: document.getElementById('f-method').value||'', location: document.getElementById('f-location').value.trim(),
-    note: document.getElementById('f-note').value.trim()
-  };
-  const btn = document.querySelector('#recordForm button[type="submit"]');
-  if (btn){ btn.disabled = true; btn.textContent = '保存中…'; }
-  let error;
-  if (editingId){
-    ({ error } = await sb.from('records').update(payload).eq('id', editingId));
-  } else {
-    ({ error } = await sb.from('records').insert(payload));
-  }
-  if (btn){ btn.disabled = false; btn.textContent = '保存'; }
-  if (error){ toast('保存失败：'+error.message); return; }
-  closeModal();
-  await loadRecordsFromSupabase();
-  toast(editingId ? '已更新' : '已添加');
-}
-
-async function deleteRecord(id){
-  const rec = db.records.find(r => r.id === id);
-  if (!rec) return;
-  if (!confirm(`确定删除「${rec.name} · ${rec.event} · ${money(rec.amount)}」？`)) return;
-  const { error } = await sb.from('records').delete().eq('id', id);
-  if (error){ toast('删除失败：'+error.message); return; }
-  await loadRecordsFromSupabase();
-  toast('已删除');
-}
-
-/* ============================================================
- *  5. 业务计算
- * ============================================================ */
-const sumBy = (rs,dir) => rs.filter(r=>r.direction===dir).reduce((s,r)=>s+(Number(r.amount)||0),0);
-function personStats(){
-  const map = new Map();
-  db.records.forEach(r => {
-    const k = (r.name||'未知').trim();
-    if (!map.has(k)) map.set(k,{name:k,relation:r.relation||'其他',in:0,out:0,count:0,records:[],last:''});
-    const p = map.get(k);
-    p.records.push(r); p.count++;
-    if (r.direction==='in') p.in += Number(r.amount)||0; else p.out += Number(r.amount)||0;
-    if (r.relation) p.relation = r.relation;
-    if (!p.last || (r.date||'')>p.last) p.last = r.date||'';
-  });
-  return Array.from(map.values()).map(p=>Object.assign(p,{net:p.in-p.out}))
-    .sort((a,b)=>Math.abs(b.net)-Math.abs(a.net)||b.count-a.count);
-}
-const sortRecordsDesc = list => list.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')||((b.createdAt||0)-(a.createdAt||0)));
-
-/* ============================================================
- *  6. 导航与渲染
- * ============================================================ */
-function navigate(view){
-  currentView = view;
-  document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === view));
-  document.querySelectorAll('.view').forEach(el => { el.hidden = (el.id !== 'view-'+view); });
-  render();
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-function render(){
-  if (currentView==='dashboard') renderDashboard();
-  else if (currentView==='records') renderRecords();
-  else if (currentView==='people') renderPeople();
-  else if (currentView==='stats') renderStats();
-  else if (currentView==='data') renderData();
-}
+function navigate(v){currentView=v;$$('.nav-item, .mobile-nav-item').forEach(el=>el.classList.toggle('active',el.dataset.view===v));$$('.view').forEach(el=>{el.hidden=(el.id!=='view-'+v)});render();window.scrollTo({top:0,behavior:'smooth'})}
+function render(){if(currentView==='dashboard')renderDashboard();else if(currentView==='records')renderRecords();else if(currentView==='people')renderPeople();else if(currentView==='stats')renderStats();else if(currentView==='data')renderData()}
 
 function renderDashboard(){
-  const recs = db.records;
-  const totalIn = sumBy(recs,'in'), totalOut = sumBy(recs,'out'), net = totalIn-totalOut;
-  const people = personStats();
-  const inCount = recs.filter(r=>r.direction==='in').length;
-  const outCount = recs.length - inCount;
-  const oweList = people.filter(p=>p.net>0.001).sort((a,b)=>b.net-a.net).slice(0,5);
-  const recent = sortRecordsDesc(recs).slice(0,8);
-
-  const oweHTML = oweList.length ? oweList.map(p=>`
-    <div class="pd-row" style="padding:11px 0">
-      <div class="avatar" style="width:34px;height:34px;flex:0 0 34px;font-size:13px;border-radius:11px;background:${hashColor(p.name)}">${esc(p.name.slice(0,1))}</div>
-      <div style="flex:1;min-width:0"><div style="font-weight:650;font-size:13.5px">${esc(p.name)}</div><div style="font-size:11.5px;color:var(--muted)">${esc(p.relation)} · ${p.count} 次往来</div></div>
-      <div style="text-align:right;margin-right:4px"><div class="amt amt-out" style="font-size:13.5px">${money(p.net)}</div></div>
-      <button class="btn btn-sm" data-act="quickAdd" data-name="${esc(p.name)}" data-relation="${esc(p.relation)}">记一笔</button>
-    </div>`).join('')
-    : `<div class="empty" style="padding:28px 10px"><div class="empty-icon">⚖️</div><div class="empty-title">人情两清</div><div class="empty-sub">目前没有需要偿还的人情</div></div>`;
-
-  const recentHTML = recent.length ? `
-    <div class="table-wrap"><table>
-      <thead><tr><th>日期</th><th>姓名</th><th>事由</th><th style="text-align:right">金额</th></tr></thead>
-      <tbody>${recent.map(r=>`
-        <tr data-act="edit" data-id="${r.id}" style="cursor:pointer">
-          <td data-label="日期" style="color:var(--muted);font-variant-numeric:tabular-nums">${esc((r.date||'').slice(5))}</td>
-          <td data-label="姓名" class="td-name">${esc(r.name)}</td>
-          <td data-label="事由"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收':'送'}</span> ${esc(r.event)}</td>
-          <td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td>
-        </tr>`).join('')}</tbody>
-    </table></div>`
-    : `<div class="empty" style="padding:34px 10px"><div class="empty-icon">📖</div><div class="empty-title">还没有记录</div><div class="empty-sub">点击右上角「添加记录」开始记账</div></div>`;
-
-  const el = document.getElementById('view-dashboard');
-  if (!el) return;
-  el.innerHTML = `
-    <div class="topbar">
-      <div><div class="page-title">概览</div><div class="page-sub">${recs.length?`已记录 ${recs.length} 笔 · ${people.length} 位亲友`:'记录每一份人情，往来有数'}</div></div>
-      <div class="spacer"></div>
-      <button class="btn btn-primary" data-act="add">＋ 添加记录</button>
-    </div>
-    <div class="stats">
-      <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--green)"></span>累计收礼</div><div class="stat-value" style="color:var(--green)">${money(totalIn)}</div><div class="stat-foot">共 ${inCount} 笔</div></div>
-      <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--primary)"></span>累计送礼</div><div class="stat-value" style="color:var(--primary)">${money(totalOut)}</div><div class="stat-foot">共 ${outCount} 笔</div></div>
-      <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--gold)"></span>净结余</div><div class="stat-value" style="color:${net>=0?'var(--green)':'var(--primary)'}">${net>=0?'+':''}${money(net)}</div><div class="stat-foot">${net>=0?'收大于送':'送大于收'}</div></div>
-      <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--blue)"></span>往来人数</div><div class="stat-value" style="color:var(--blue)">${people.length}<span style="font-size:15px;font-weight:600;color:var(--muted)"> 人</span></div><div class="stat-foot">${people.filter(p=>p.net>0.001).length} 人待还</div></div>
-    </div>
-    <div class="grid-2">
-      <div class="card"><div class="card-head"><div class="card-title">💌 待还人情</div><div class="spacer"></div><span class="tag tag-out">${people.filter(p=>p.net>0.001).length} 人</span></div><div class="card-body" style="padding:6px 20px 12px">${oweHTML}</div></div>
-      <div class="card"><div class="card-head"><div class="card-title">🕒 最近往来</div><div class="spacer"></div><button class="btn btn-sm btn-ghost" data-act="goto" data-view="records">全部 →</button></div><div class="card-body p0">${recentHTML}</div></div>
-    </div>`;
+  const recs=db.records,totalIn=sumBy(recs,'in'),totalOut=sumBy(recs,'out'),net=totalIn-totalOut,people=personStats();
+  const inCount=recs.filter(r=>r.direction==='in').length,outCount=recs.length-inCount;
+  const oweList=people.filter(p=>p.net>0.001).sort((a,b)=>b.net-a.net).slice(0,5),recent=sortRecordsDesc(recs).slice(0,8);
+  const oweHTML=oweList.length?oweList.map(p=>`<div class="pd-row" style="padding:11px 0"><div class="avatar" style="width:34px;height:34px;flex:0 0 34px;font-size:13px;border-radius:11px;background:${hashColor(p.name)}">${esc(p.name.slice(0,1))}</div><div style="flex:1;min-width:0"><div style="font-weight:650;font-size:13.5px">${esc(p.name)}</div><div style="font-size:11.5px;color:var(--muted)">${esc(p.relation)} · ${p.count} 次</div></div><div style="text-align:right;margin-right:4px"><div class="amt amt-out" style="font-size:13.5px">${money(p.net)}</div></div><button class="btn btn-sm" data-act="quickAdd" data-name="${esc(p.name)}" data-relation="${esc(p.relation)}">记一笔</button></div>`).join(''):`<div class="empty" style="padding:28px 10px"><div class="empty-icon">⚖️</div><div class="empty-title">人情两清</div></div>`;
+  const recentHTML=recent.length?`<div class="table-wrap"><table><thead><tr><th>日期</th><th>姓名</th><th>事由</th><th style="text-align:right">金额</th></tr></thead><tbody>${recent.map(r=>`<tr data-act="edit" data-id="${r.id}" style="cursor:pointer"><td data-label="日期" style="color:var(--muted)">${esc((r.date||'').slice(5))}</td><td data-label="姓名" class="td-name">${esc(r.name)}</td><td data-label="事由"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收':'送'}</span> ${esc(r.event)}</td><td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td></tr>`).join('')}</tbody></table></div>`:`<div class="empty" style="padding:34px 10px"><div class="empty-icon">📖</div><div class="empty-title">还没有记录</div><div class="empty-sub">点击右上角「添加记录」开始</div></div>`;
+  const el=$('#view-dashboard');if(!el)return;
+  el.innerHTML=`<div class="topbar"><div><div class="page-title">概览</div><div class="page-sub">${recs.length?`已记录 ${recs.length} 笔 · ${people.length} 位亲友`:'记录每一份人情'}</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加记录</button></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--green)"></span>累计收礼</div><div class="stat-value" style="color:var(--green)">${money(totalIn)}</div><div class="stat-foot">共 ${inCount} 笔</div></div>
+    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--primary)"></span>累计送礼</div><div class="stat-value" style="color:var(--primary)">${money(totalOut)}</div><div class="stat-foot">共 ${outCount} 笔</div></div>
+    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--gold)"></span>净结余</div><div class="stat-value" style="color:${net>=0?'var(--green)':'var(--primary)'}">${net>=0?'+':''}${money(net)}</div></div>
+    <div class="stat"><div class="stat-label"><span class="dot" style="background:var(--blue)"></span>往来人数</div><div class="stat-value" style="color:var(--blue)">${people.length}<span style="font-size:15px;font-weight:600;color:var(--muted)"> 人</span></div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><div class="card-head"><div class="card-title">💌 待还人情</div><div class="spacer"></div><span class="tag tag-out">${people.filter(p=>p.net>0.001).length} 人</span></div><div class="card-body" style="padding:6px 20px 12px">${oweHTML}</div></div>
+    <div class="card"><div class="card-head"><div class="card-title">🕒 最近往来</div><div class="spacer"></div><button class="btn btn-sm btn-ghost" data-act="goto" data-view="records">全部 →</button></div><div class="card-body p0">${recentHTML}</div></div>
+  </div>`;
 }
 
 function renderRecords(){
-  const all = db.records;
-  const years = Array.from(new Set(all.map(r=>(r.date||'').slice(0,4)).filter(Boolean))).sort().reverse();
-  const events = Array.from(new Set(all.map(r=>r.event).filter(Boolean)));
-  const el = document.getElementById('view-records');
-  if (!el) return;
-  el.innerHTML = `
-    <div class="topbar"><div><div class="page-title">往来记录</div><div class="page-sub" id="recCount">共 ${all.length} 条</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div>
-    <div class="toolbar">
-      <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="searchInput" placeholder="搜索姓名 / 事由 / 备注…" autocomplete="off"></div>
-      <select id="filterDir"><option value="all">全部方向</option><option value="in">收礼</option><option value="out">送礼</option></select>
-      <select id="filterEvent"><option value="all">全部事由</option>${events.map(e=>`<option value="${esc(e)}">${esc(e)}</option>`).join('')}</select>
-      <select id="filterYear"><option value="all">全部年份</option>${years.map(y=>`<option value="${esc(y)}">${esc(y)} 年</option>`).join('')}</select>
-      <button class="btn btn-sm" data-act="clearFilter">重置</button>
-    </div>
-    <div id="recTableWrap"></div>`;
-  let t;
-  const si = document.getElementById('searchInput');
-  if (si) si.addEventListener('input', () => { clearTimeout(t); t = setTimeout(updateRecordsTable, 180); });
-  ['filterDir','filterEvent','filterYear'].forEach(id => {
-    const n = document.getElementById(id);
-    if (n) n.addEventListener('change', updateRecordsTable);
-  });
+  const all=db.records;
+  const years=Array.from(new Set(all.map(r=>(r.date||'').slice(0,4)).filter(Boolean))).sort().reverse();
+  const events=Array.from(new Set(all.map(r=>r.event).filter(Boolean)));
+  const el=$('#view-records');if(!el)return;
+  el.innerHTML=`<div class="topbar"><div><div class="page-title">往来记录</div><div class="page-sub" id="recCount">共 ${all.length} 条</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div>
+  <div class="toolbar">
+    <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="searchInput" placeholder="搜索姓名 / 事由 / 备注…"></div>
+    <select id="filterDir"><option value="all">全部方向</option><option value="in">收礼</option><option value="out">送礼</option></select>
+    <select id="filterEvent"><option value="all">全部事由</option>${events.map(e=>`<option value="${esc(e)}">${esc(e)}</option>`).join('')}</select>
+    <select id="filterYear"><option value="all">全部年份</option>${years.map(y=>`<option value="${esc(y)}">${esc(y)} 年</option>`).join('')}</select>
+    <button class="btn btn-sm" data-act="clearFilter">重置</button>
+  </div><div id="recTableWrap"></div>`;
+  let t;const si=$('#searchInput');if(si)si.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(updateRecordsTable,180)});
+  ['filterDir','filterEvent','filterYear'].forEach(id=>{const n=$('#'+id);if(n)n.addEventListener('change',updateRecordsTable)});
   updateRecordsTable();
 }
 function filterRecords(){
-  const qEl = document.getElementById('searchInput');
-  const dEl = document.getElementById('filterDir');
-  const eEl = document.getElementById('filterEvent');
-  const yEl = document.getElementById('filterYear');
-  const q = (qEl?.value||'').trim().toLowerCase();
-  const dir = dEl?.value||'all';
-  const ev = eEl?.value||'all';
-  const yr = yEl?.value||'all';
-  return sortRecordsDesc(db.records.filter(r => {
-    if (dir!=='all' && r.direction!==dir) return false;
-    if (ev!=='all' && r.event!==ev) return false;
-    if (yr!=='all' && (r.date||'').slice(0,4)!==yr) return false;
-    if (q){ const hay=[r.name,r.relation,r.event,r.location,r.note,r.method].join(' ').toLowerCase(); if(!hay.includes(q)) return false; }
+  const q=($('#searchInput')?.value||'').trim().toLowerCase(),dir=$('#filterDir')?.value||'all',ev=$('#filterEvent')?.value||'all',yr=$('#filterYear')?.value||'all';
+  return sortRecordsDesc(db.records.filter(r=>{
+    if(dir!=='all'&&r.direction!==dir)return false;
+    if(ev!=='all'&&r.event!==ev)return false;
+    if(yr!=='all'&&(r.date||'').slice(0,4)!==yr)return false;
+    if(q){const hay=[r.name,r.relation,r.event,r.location,r.note,r.method].join(' ').toLowerCase();if(!hay.includes(q))return false}
     return true;
   }));
 }
 function updateRecordsTable(){
-  const wrap = document.getElementById('recTableWrap'); if (!wrap) return;
-  const list = filterRecords();
-  const sIn = sumBy(list,'in'), sOut = sumBy(list,'out');
-  const countEl = document.getElementById('recCount');
-  if (countEl) countEl.textContent = `筛选 ${list.length} 条 · 收 ${money(sIn)} · 送 ${money(sOut)}`;
-  if (!list.length){ wrap.innerHTML = `<div class="card"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">没有找到匹配的记录</div><div class="empty-sub">试试调整筛选条件</div></div></div>`; return; }
-  wrap.innerHTML = `
-    <div class="card"><div class="table-wrap"><table>
-      <thead><tr><th>日期</th><th>姓名</th><th>关系</th><th>事由</th><th>方向</th><th style="text-align:right">金额</th><th>方式</th><th>备注</th><th style="text-align:right">操作</th></tr></thead>
-      <tbody>${list.map(r=>`
-        <tr>
-          <td data-label="日期" style="color:var(--muted);font-variant-numeric:tabular-nums">${esc(r.date||'—')}</td>
-          <td data-label="姓名" class="td-name">${esc(r.name)}</td>
-          <td data-label="关系"><span class="tag tag-plain">${esc(r.relation||'其他')}</span></td>
-          <td data-label="事由">${esc(r.event||'—')}</td>
-          <td data-label="方向"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收礼':'送礼'}</span></td>
-          <td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td>
-          <td data-label="方式" style="color:var(--text-2);font-size:12.5px">${esc(r.method||'—')}</td>
-          <td data-label="备注" class="td-note">${esc(r.note||r.location||'')}</td>
-          <td class="td-actions"><button class="btn btn-sm btn-ghost" data-act="edit" data-id="${r.id}">编辑</button><button class="btn btn-sm btn-ghost btn-danger" data-act="del" data-id="${r.id}">删除</button></td>
-        </tr>`).join('')}</tbody>
-    </table></div></div>`;
+  const wrap=$('#recTableWrap');if(!wrap)return;
+  const list=filterRecords(),sIn=sumBy(list,'in'),sOut=sumBy(list,'out');
+  const ce=$('#recCount');if(ce)ce.textContent=`筛选 ${list.length} 条 · 收 ${money(sIn)} · 送 ${money(sOut)}`;
+  if(!list.length){wrap.innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">没有匹配的记录</div></div></div>`;return}
+  wrap.innerHTML=`<div class="card"><div class="table-wrap"><table><thead><tr><th>日期</th><th>姓名</th><th>关系</th><th>事由</th><th>方向</th><th style="text-align:right">金额</th><th>方式</th><th>备注</th><th style="text-align:right">操作</th></tr></thead><tbody>${list.map(r=>`<tr><td data-label="日期" style="color:var(--muted)">${esc(r.date||'—')}</td><td data-label="姓名" class="td-name">${esc(r.name)}</td><td data-label="关系"><span class="tag tag-plain">${esc(r.relation||'其他')}</span></td><td data-label="事由">${esc(r.event||'—')}</td><td data-label="方向"><span class="tag ${r.direction==='in'?'tag-in':'tag-out'}">${r.direction==='in'?'收礼':'送礼'}</span></td><td data-label="金额" class="td-amount amt ${r.direction==='in'?'amt-in':'amt-out'}">${r.direction==='in'?'+':'-'}${money(r.amount)}</td><td data-label="方式" style="color:var(--text-2);font-size:12.5px">${esc(r.method||'—')}</td><td data-label="备注" class="td-note">${esc(r.note||r.location||'')}</td><td class="td-actions"><button class="btn btn-sm btn-ghost" data-act="edit" data-id="${r.id}">编辑</button><button class="btn btn-sm btn-ghost btn-danger" data-act="del" data-id="${r.id}">删除</button></td></tr>`).join('')}</tbody></table></div></div>`;
 }
 
 function renderPeople(){
-  const people = personStats();
-  const el = document.getElementById('view-people');
-  if (!el) return;
-  if (!people.length){ el.innerHTML = `<div class="topbar"><div><div class="page-title">人情账簿</div><div class="page-sub">按人查看往来明细</div></div></div><div class="card"><div class="empty"><div class="empty-icon">👥</div><div class="empty-title">还没有往来对象</div><div class="empty-sub">添加记录后自动按人汇总</div></div></div>`; return; }
-  const cards = people.map(p => {
-    const open = expandedPeople.has(p.name);
-    const netCls = p.net>0.001?'amt-out':p.net<-0.001?'amt-in':'';
-    const status = p.net>0.001?`<span class="tag tag-out">我欠人情</span>`:p.net<-0.001?`<span class="tag tag-in">对方欠我</span>`:`<span class="tag tag-plain">人情已平</span>`;
-    const details = sortRecordsDesc(p.records).map(r=>`
-      <div class="pd-row"><span class="pd-date">${esc(r.date||'—')}</span><span class="pd-event">${esc(r.event||'—')}${r.note?` · <span style="color:var(--muted)">${esc(r.note)}</span>`:''}</span><span class="amt ${r.direction==='in'?'amt-in':'amt-out'}" style="font-size:12.5px">${r.direction==='in'?'+':'-'}${money(r.amount)}</span></div>`).join('');
-    return `<div class="person ${open?'open':''}">
-      <div class="person-head" data-act="togglePerson" data-name="${esc(p.name)}">
-        <div class="person-top"><div class="avatar" style="background:${hashColor(p.name)}">${esc(p.name.slice(0,1))}</div>
-        <div style="flex:1;min-width:0"><div class="person-name">${esc(p.name)}</div><div class="person-meta">${esc(p.relation)} · ${p.count} 次 · 最近 ${esc(p.last||'—')}</div></div>${status}</div>
-        <div class="person-nums"><div class="pnum"><div class="pnum-label">我收</div><div class="pnum-val amt-in">${money(p.in)}</div></div><div class="pnum"><div class="pnum-label">我送</div><div class="pnum-val amt-out">${money(p.out)}</div></div><div class="pnum"><div class="pnum-label">差额</div><div class="pnum-val ${netCls}">${p.net>0?'+':''}${money(p.net)}</div></div></div>
-      </div>
-      <div class="person-detail"><div class="person-detail-inner">${details}
-        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn btn-sm btn-primary" data-act="quickAdd" data-name="${esc(p.name)}" data-relation="${esc(p.relation)}">＋ 记一笔</button><button class="btn btn-sm" data-act="filterByPerson" data-name="${esc(p.name)}">筛选记录</button></div>
-      </div></div>
-    </div>`;
+  const people=personStats(),el=$('#view-people');if(!el)return;
+  if(!people.length){el.innerHTML=`<div class="topbar"><div><div class="page-title">人情账簿</div></div></div><div class="card"><div class="empty"><div class="empty-icon">👥</div><div class="empty-title">还没有往来对象</div></div></div>`;return}
+  const cards=people.map(p=>{
+    const open=expandedPeople.has(p.name);
+    const netCls=p.net>0.001?'amt-out':p.net<-0.001?'amt-in':'';
+    const status=p.net>0.001?`<span class="tag tag-out">我欠人情</span>`:p.net<-0.001?`<span class="tag tag-in">对方欠我</span>`:`<span class="tag tag-plain">人情已平</span>`;
+    const details=sortRecordsDesc(p.records).map(r=>`<div class="pd-row"><span class="pd-date">${esc(r.date||'—')}</span><span class="pd-event">${esc(r.event||'—')}${r.note?` · ${esc(r.note)}`:''}</span><span class="amt ${r.direction==='in'?'amt-in':'amt-out'}" style="font-size:12.5px">${r.direction==='in'?'+':'-'}${money(r.amount)}</span></div>`).join('');
+    return `<div class="person ${open?'open':''}"><div class="person-head" data-act="togglePerson" data-name="${esc(p.name)}"><div class="person-top"><div class="avatar" style="background:${hashColor(p.name)}">${esc(p.name.slice(0,1))}</div><div style="flex:1;min-width:0"><div class="person-name">${esc(p.name)}</div><div class="person-meta">${esc(p.relation)} · ${p.count} 次 · 最近 ${esc(p.last||'—')}</div></div>${status}</div><div class="person-nums"><div class="pnum"><div class="pnum-label">我收</div><div class="pnum-val amt-in">${money(p.in)}</div></div><div class="pnum"><div class="pnum-label">我送</div><div class="pnum-val amt-out">${money(p.out)}</div></div><div class="pnum"><div class="pnum-label">差额</div><div class="pnum-val ${netCls}">${p.net>0?'+':''}${money(p.net)}</div></div></div></div><div class="person-detail"><div class="person-detail-inner">${details}<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn btn-sm btn-primary" data-act="quickAdd" data-name="${esc(p.name)}" data-relation="${esc(p.relation)}">＋ 记一笔</button><button class="btn btn-sm" data-act="filterByPerson" data-name="${esc(p.name)}">筛选记录</button></div></div></div></div>`;
   }).join('');
-  el.innerHTML = `<div class="topbar"><div><div class="page-title">人情账簿</div><div class="page-sub">${people.length} 位亲友 · 点击展开明细</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div><div class="people">${cards}</div>`;
+  el.innerHTML=`<div class="topbar"><div><div class="page-title">人情账簿</div><div class="page-sub">${people.length} 位亲友 · 点击展开明细</div></div><div class="spacer"></div><button class="btn btn-primary" data-act="add">＋ 添加</button></div><div class="people">${cards}</div>`;
 }
 
 function renderStats(){
-  const el = document.getElementById('view-stats');
-  if (!el) return;
-  if (!db.records.length){ el.innerHTML = `<div class="topbar"><div><div class="page-title">统计分析</div><div class="page-sub">数据可视化</div></div></div><div class="card"><div class="empty"><div class="empty-icon">📊</div><div class="empty-title">暂无数据</div><div class="empty-sub">先添加几条记录吧</div></div></div>`; return; }
-  const evMap = new Map();
-  db.records.forEach(r => evMap.set(r.event||'其他', (evMap.get(r.event||'其他')||0) + (Number(r.amount)||0)));
-  const evArr = Array.from(evMap.entries()).map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);
-  const evTotal = evArr.reduce((s,i)=>s+i.value,0);
-  const legend = evArr.slice(0,8).map((it,i)=>`<div class="legend-item"><span class="dot" style="background:${PALETTE[i%PALETTE.length]}"></span><span>${esc(it.label)}</span><span class="legend-val">${money(it.value)} · ${(it.value/evTotal*100).toFixed(1)}%</span></div>`).join('');
-  const relMap = new Map();
-  db.records.forEach(r => relMap.set(r.relation||'其他', (relMap.get(r.relation||'其他')||0) + (Number(r.amount)||0)));
-  const relArr = Array.from(relMap.entries()).map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);
-  const relMax = Math.max(1, ...relArr.map(r=>r.value));
-  const relBars = relArr.map((r,i)=>`<div class="bar-row"><div style="color:var(--text-2)">${esc(r.label)}</div><div class="bar-track"><div class="bar-fill" style="width:${(r.value/relMax*100).toFixed(1)}%;background:${PALETTE[i%PALETTE.length]}"></div></div><div class="bar-value">${money(r.value)}</div></div>`).join('');
-  const totalIn = sumBy(db.records,'in'), totalOut = sumBy(db.records,'out');
-  const avgIn = totalIn / Math.max(1, db.records.filter(r=>r.direction==='in').length);
-  const avgOut = totalOut / Math.max(1, db.records.filter(r=>r.direction==='out').length);
-  const maxRec = sortRecordsDesc(db.records).slice().sort((a,b)=>(b.amount||0)-(a.amount||0))[0];
-  el.innerHTML = `
-    <div class="topbar"><div><div class="page-title">统计分析</div><div class="page-sub">从数据看清人情往来</div></div><div class="spacer"></div>
-      <div class="seg" style="width:auto"><button class="seg-btn ${chartMode==='year'?'active':''}" data-act="chartMode" data-mode="year">按年</button><button class="seg-btn ${chartMode==='month'?'active':''}" data-act="chartMode" data-mode="month">近 12 月</button></div>
-    </div>
-    <div class="stats">
-      <div class="stat"><div class="stat-label">收礼总额</div><div class="stat-value" style="color:var(--green);font-size:20px">${money(totalIn)}</div></div>
-      <div class="stat"><div class="stat-label">送礼总额</div><div class="stat-value" style="color:var(--primary);font-size:20px">${money(totalOut)}</div></div>
-      <div class="stat"><div class="stat-label">平均收 / 送</div><div class="stat-value" style="font-size:15px">${money(avgIn)} <span style="color:var(--muted)">/</span> ${money(avgOut)}</div></div>
-      <div class="stat"><div class="stat-label">单笔最大</div><div class="stat-value" style="font-size:15px">${money(maxRec?maxRec.amount:0)}</div><div class="stat-foot">${maxRec?esc(maxRec.name)+' · '+esc(maxRec.event):'—'}</div></div>
-    </div>
-    <div class="card mb16"><div class="card-head"><div class="card-title">📈 收支趋势</div><div class="spacer"></div><span class="tag tag-in">收礼</span><span class="tag tag-out">送礼</span></div><div class="card-body"><canvas id="barChart"></canvas></div></div>
-    <div class="grid-2-3">
-      <div class="card"><div class="card-head"><div class="card-title">🎯 事由分布</div></div><div class="card-body" style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center"><canvas id="donutChart" class="donut" style="width:150px"></canvas><div class="legend">${legend}</div></div></div>
-      <div class="card"><div class="card-head"><div class="card-title">🤝 关系分布</div></div><div class="card-body">${relBars}</div></div>
-    </div>`;
-  requestAnimationFrame(() => {
-    const bars = document.getElementById('barChart'), donut = document.getElementById('donutChart');
-    if (bars) drawBars(bars, getBarData(chartMode));
-    if (donut) drawDonut(donut, evArr.slice(0,8).map((it,i)=>({value:it.value,color:PALETTE[i%PALETTE.length]})));
-  });
+  const el=$('#view-stats');if(!el)return;
+  if(!db.records.length){el.innerHTML=`<div class="topbar"><div><div class="page-title">统计分析</div></div></div><div class="card"><div class="empty"><div class="empty-icon">📊</div><div class="empty-title">暂无数据</div></div></div>`;return}
+  const evMap=new Map();db.records.forEach(r=>evMap.set(r.event||'其他',(evMap.get(r.event||'其他')||0)+(Number(r.amount)||0)));
+  const evArr=Array.from(evMap.entries()).map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);
+  const evTotal=evArr.reduce((s,i)=>s+i.value,0);
+  const legend=evArr.slice(0,8).map((it,i)=>`<div class="legend-item"><span class="dot" style="background:${PALETTE[i%PALETTE.length]}"></span><span>${esc(it.label)}</span><span class="legend-val">${money(it.value)} · ${(it.value/evTotal*100).toFixed(1)}%</span></div>`).join('');
+  const relMap=new Map();db.records.forEach(r=>relMap.set(r.relation||'其他',(relMap.get(r.relation||'其他')||0)+(Number(r.amount)||0)));
+  const relArr=Array.from(relMap.entries()).map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);
+  const relMax=Math.max(1,...relArr.map(r=>r.value));
+  const relBars=relArr.map((r,i)=>`<div class="bar-row"><div style="color:var(--text-2)">${esc(r.label)}</div><div class="bar-track"><div class="bar-fill" style="width:${(r.value/relMax*100).toFixed(1)}%;background:${PALETTE[i%PALETTE.length]}"></div></div><div class="bar-value">${money(r.value)}</div></div>`).join('');
+  const totalIn=sumBy(db.records,'in'),totalOut=sumBy(db.records,'out');
+  const avgIn=totalIn/Math.max(1,db.records.filter(r=>r.direction==='in').length),avgOut=totalOut/Math.max(1,db.records.filter(r=>r.direction==='out').length);
+  const maxRec=sortRecordsDesc(db.records).slice().sort((a,b)=>(b.amount||0)-(a.amount||0))[0];
+  el.innerHTML=`<div class="topbar"><div><div class="page-title">统计分析</div></div><div class="spacer"></div><div class="seg" style="width:auto"><button class="seg-btn ${chartMode==='year'?'active':''}" data-act="chartMode" data-mode="year">按年</button><button class="seg-btn ${chartMode==='month'?'active':''}" data-act="chartMode" data-mode="month">近 12 月</button></div></div>
+  <div class="stats"><div class="stat"><div class="stat-label">收礼总额</div><div class="stat-value" style="color:var(--green);font-size:20px">${money(totalIn)}</div></div><div class="stat"><div class="stat-label">送礼总额</div><div class="stat-value" style="color:var(--primary);font-size:20px">${money(totalOut)}</div></div><div class="stat"><div class="stat-label">平均收 / 送</div><div class="stat-value" style="font-size:15px">${money(avgIn)} / ${money(avgOut)}</div></div><div class="stat"><div class="stat-label">单笔最大</div><div class="stat-value" style="font-size:15px">${money(maxRec?maxRec.amount:0)}</div><div class="stat-foot">${maxRec?esc(maxRec.name)+' · '+esc(maxRec.event):'—'}</div></div></div>
+  <div class="card mb16"><div class="card-head"><div class="card-title">📈 收支趋势</div></div><div class="card-body"><canvas id="barChart"></canvas></div></div>
+  <div class="grid-2-3"><div class="card"><div class="card-head"><div class="card-title">🎯 事由分布</div></div><div class="card-body" style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center"><canvas id="donutChart" class="donut" style="width:150px"></canvas><div class="legend">${legend}</div></div></div><div class="card"><div class="card-head"><div class="card-title">🤝 关系分布</div></div><div class="card-body">${relBars}</div></div></div>`;
+  requestAnimationFrame(()=>{const bars=$('#barChart'),donut=$('#donutChart');if(bars)drawBars(bars,getBarData(chartMode));if(donut)drawDonut(donut,evArr.slice(0,8).map((it,i)=>({value:it.value,color:PALETTE[i%PALETTE.length]})))});
 }
 function getBarData(mode){
-  const recs = db.records;
-  if (mode === 'year'){
-    const map = new Map();
-    recs.forEach(r => {
-      const y = (r.date||'').slice(0,4)||'未知';
-      if (!map.has(y)) map.set(y,{label:y,income:0,expense:0});
-      const o = map.get(y);
-      if (r.direction==='in') o.income += Number(r.amount)||0; else o.expense += Number(r.amount)||0;
-    });
-    return Array.from(map.values()).sort((a,b)=>a.label.localeCompare(b.label));
-  }
-  const now = new Date(); const arr = [];
-  for (let i=11;i>=0;i--){ const d=new Date(now.getFullYear(),now.getMonth()-i,1); const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; arr.push({label:key.slice(2).replace('-','/'),key,income:0,expense:0}); }
-  recs.forEach(r => { const k=(r.date||'').slice(0,7); const o=arr.find(a=>a.key===k); if(o){ if(r.direction==='in') o.income += Number(r.amount)||0; else o.expense += Number(r.amount)||0; } });
-  return arr;
+  const recs=db.records;
+  if(mode==='year'){const m=new Map();recs.forEach(r=>{const y=(r.date||'').slice(0,4)||'未知';if(!m.has(y))m.set(y,{label:y,income:0,expense:0});const o=m.get(y);if(r.direction==='in')o.income+=Number(r.amount)||0;else o.expense+=Number(r.amount)||0});return Array.from(m.values()).sort((a,b)=>a.label.localeCompare(b.label))}
+  const now=new Date(),arr=[];for(let i=11;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1),key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;arr.push({label:key.slice(2).replace('-','/'),key,income:0,expense:0})}
+  recs.forEach(r=>{const k=(r.date||'').slice(0,7),o=arr.find(a=>a.key===k);if(o){if(r.direction==='in')o.income+=Number(r.amount)||0;else o.expense+=Number(r.amount)||0}});return arr;
 }
 
 function renderData(){
-  const el = document.getElementById('view-data');
-  if (!el) return;
-  const dates = db.records.map(r=>r.date).filter(Boolean).sort();
-  el.innerHTML = `
-    <div class="topbar"><div><div class="page-title">数据管理</div><div class="page-sub">备份与恢复</div></div></div>
-    <div class="card mb16">
-      <div class="card-head"><div class="card-title">👤 账户</div></div>
-      <div class="card-body">
-        <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">当前登录：<b>${esc(currentUserEmail||'—')}</b><br><span style="font-size:12px;color:var(--muted)">数据已自动云端同步，换设备登录同一账号即可查看。</span></p>
-        <button class="btn btn-danger" id="btnSignOut">退出登录</button>
-      </div>
-    </div>
-    <div class="data-grid">
-      <div class="card"><div class="card-head"><div class="card-title">📦 数据概览</div></div><div class="card-body">
-        <div class="kv-big">${db.records.length} <span style="font-size:14px;font-weight:600;color:var(--muted)">条记录</span></div>
-        <div style="margin-top:14px">
-          <dl class="dl"><dt>往来人数</dt><dd>${personStats().length} 人</dd></dl>
-          <dl class="dl"><dt>收礼总额</dt><dd style="color:var(--green)">${money(sumBy(db.records,'in'))}</dd></dl>
-          <dl class="dl"><dt>送礼总额</dt><dd style="color:var(--primary)">${money(sumBy(db.records,'out'))}</dd></dl>
-          <dl class="dl"><dt>时间跨度</dt><dd>${dates.length?esc(dates[0])+' ~ '+esc(dates[dates.length-1]):'—'}</dd></dl>
-        </div>
-      </div></div>
-      <div class="card"><div class="card-head"><div class="card-title">💾 导出备份</div></div><div class="card-body">
-        <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">建议定期导出备份。</p>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <button class="btn" data-act="exportJSON">⬇️ 导出 JSON</button>
-          <button class="btn" data-act="exportCSV">📊 导出 CSV</button>
-        </div>
-      </div></div>
-      <div class="card"><div class="card-head"><div class="card-title">📥 导入数据</div></div><div class="card-body">
-        <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">选择之前导出的 JSON 文件，追加到当前账号。</p>
-        <input type="file" id="importFile" accept=".json,application/json" style="display:none">
-        <button class="btn btn-block" data-act="importJSON">选择文件导入</button>
-      </div></div>
-      <div class="card"><div class="card-head"><div class="card-title">🧪 示例与清理</div></div><div class="card-body">
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <button class="btn" data-act="loadSample">✨ 载入示例数据</button>
-          <button class="btn btn-danger" data-act="clearAll">🗑 清空全部数据</button>
-        </div>
-      </div></div>
-    </div>`;
-  const so = document.getElementById('btnSignOut');
-  if (so) so.addEventListener('click', signOut);
+  const el=$('#view-data');if(!el)return;
+  const dates=db.records.map(r=>r.date).filter(Boolean).sort();
+  el.innerHTML=`<div class="topbar"><div><div class="page-title">数据管理</div></div></div>
+  <div class="card mb16"><div class="card-head"><div class="card-title">☁️ 云同步</div><div class="spacer"></div><span class="tag ${Sync.enabled()?'tag-in':'tag-plain'}">${Sync.enabled()?'已开启':'未开启'}</span></div><div class="card-body"><p style="font-size:13px;color:var(--text-2);margin-bottom:14px">开启后手机与电脑共用一份数据。</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" data-act="openSync">${Sync.enabled()?'修改设置':'立即开启'}</button>${Sync.enabled()?'<button class="btn" data-act="syncNow">🔄 立即同步</button>':''}</div></div></div>
+  <div class="data-grid">
+    <div class="card"><div class="card-head"><div class="card-title">📦 数据概览</div></div><div class="card-body"><div class="kv-big">${db.records.length} <span style="font-size:14px;font-weight:600;color:var(--muted)">条记录</span></div><div style="margin-top:14px"><dl class="dl"><dt>往来人数</dt><dd>${personStats().length} 人</dd></dl><dl class="dl"><dt>收礼总额</dt><dd style="color:var(--green)">${money(sumBy(db.records,'in'))}</dd></dl><dl class="dl"><dt>送礼总额</dt><dd style="color:var(--primary)">${money(sumBy(db.records,'out'))}</dd></dl><dl class="dl"><dt>时间跨度</dt><dd>${dates.length?esc(dates[0])+' ~ '+esc(dates[dates.length-1]):'—'}</dd></dl></div></div></div>
+    <div class="card"><div class="card-head"><div class="card-title">💾 导出备份</div></div><div class="card-body"><div style="display:flex;flex-direction:column;gap:10px"><button class="btn" data-act="exportJSON">⬇️ 导出 JSON</button><button class="btn" data-act="exportCSV">📊 导出 CSV</button></div></div></div>
+    <div class="card"><div class="card-head"><div class="card-title">📥 导入数据</div></div><div class="card-body"><input type="file" id="importFile" accept=".json,application/json" style="display:none"><button class="btn btn-block" data-act="importJSON">选择文件导入</button></div></div>
+    <div class="card"><div class="card-head"><div class="card-title">🧪 示例与清理</div></div><div class="card-body"><div style="display:flex;flex-direction:column;gap:10px"><button class="btn" data-act="loadSample">✨ 载入示例数据</button><button class="btn btn-danger" data-act="clearAll">🗑 清空全部数据</button></div></div></div>
+  </div>`;
 }
 
-/* ============================================================
- *  7. 图表
- * ============================================================ */
-function prep(cv){ const dpr=window.devicePixelRatio||1; const rect=cv.getBoundingClientRect(); const w=Math.max(rect.width,100), h=Math.max(rect.height,80); cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr); const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h); return {ctx,w,h}; }
-function roundRect(ctx,x,y,w,h,r,color){ if(h<=0.5||w<=0) return; r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r); ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r); ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath(); ctx.fillStyle=color; ctx.fill(); }
-function niceCeil(v){ if(v<=0) return 100; const exp=Math.pow(10,Math.floor(Math.log10(v))); const f=v/exp; let nf; if(f<=1) nf=1; else if(f<=2) nf=2; else if(f<=2.5) nf=2.5; else if(f<=5) nf=5; else nf=10; return nf*exp; }
-function drawEmptyCanvas(ctx,w,h,text){ ctx.fillStyle=cssVar('--muted'); ctx.font='13px -apple-system,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(text||'暂无数据',w/2,h/2); }
+function prep(cv){const dpr=window.devicePixelRatio||1,rect=cv.getBoundingClientRect(),w=Math.max(rect.width,100),h=Math.max(rect.height,80);cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);return{ctx,w,h}}
+function roundRect(ctx,x,y,w,h,r,c){if(h<=0.5||w<=0)return;r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();ctx.fillStyle=c;ctx.fill()}
+function niceCeil(v){if(v<=0)return 100;const e=Math.pow(10,Math.floor(Math.log10(v))),f=v/e;let nf;if(f<=1)nf=1;else if(f<=2)nf=2;else if(f<=2.5)nf=2.5;else if(f<=5)nf=5;else nf=10;return nf*e}
+function drawEmpty(ctx,w,h,t){ctx.fillStyle=cssVar('--muted');ctx.font='13px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t||'暂无数据',w/2,h/2)}
 function drawBars(cv,data){
-  const {ctx,w,h} = prep(cv);
-  if (!data.length || data.every(d=>!d.income&&!d.expense)){ drawEmptyCanvas(ctx,w,h); return; }
-  const pad={t:18,r:14,b:36,l:54}; const cw=w-pad.l-pad.r, ch=h-pad.t-pad.b;
-  const max = Math.max(...data.map(d=>Math.max(d.income,d.expense))); const top=niceCeil(max);
-  ctx.font='11px -apple-system,sans-serif'; ctx.textAlign='right'; ctx.textBaseline='middle';
-  for (let i=0;i<=4;i++){ const y=pad.t+ch-ch*i/4; ctx.strokeStyle=cssVar('--border'); ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(pad.l,y+.5); ctx.lineTo(pad.l+cw,y+.5); ctx.stroke(); ctx.fillStyle=cssVar('--muted'); ctx.fillText(shortNum(top*i/4),pad.l-8,y); }
-  const n=data.length, slot=cw/n; const bw=Math.min(24,Math.max(7,slot*0.28)); const gap=4;
-  const green=cssVar('--green')||'#2f8f5b', red=cssVar('--primary')||'#c0392b';
-  data.forEach((d,i)=>{
-    const cx=pad.l+slot*i+slot/2;
-    roundRect(ctx,cx-bw-gap/2,pad.t+ch-ch*(d.income/top),bw,ch*(d.income/top),4,green);
-    roundRect(ctx,cx+gap/2,pad.t+ch-ch*(d.expense/top),bw,ch*(d.expense/top),4,red);
-    ctx.fillStyle=cssVar('--muted'); ctx.textAlign='center'; ctx.textBaseline='top';
-    const label = n>14 ? (i%2===0?d.label:'') : d.label;
-    ctx.fillText(label,cx,pad.t+ch+10);
-  });
+  const{ctx,w,h}=prep(cv);
+  if(!data.length||data.every(d=>!d.income&&!d.expense)){drawEmpty(ctx,w,h);return}
+  const pad={t:18,r:14,b:36,l:54},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
+  const max=Math.max(...data.map(d=>Math.max(d.income,d.expense))),top=niceCeil(max);
+  ctx.font='11px sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';
+  for(let i=0;i<=4;i++){const y=pad.t+ch-ch*i/4;ctx.strokeStyle=cssVar('--border');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,y+.5);ctx.lineTo(pad.l+cw,y+.5);ctx.stroke();ctx.fillStyle=cssVar('--muted');ctx.fillText(shortNum(top*i/4),pad.l-8,y)}
+  const n=data.length,slot=cw/n,bw=Math.min(24,Math.max(7,slot*0.28)),gap=4;
+  const green=cssVar('--green')||'#2f8f5b',red=cssVar('--primary')||'#c0392b';
+  data.forEach((d,i)=>{const cx=pad.l+slot*i+slot/2;roundRect(ctx,cx-bw-gap/2,pad.t+ch-ch*(d.income/top),bw,ch*(d.income/top),4,green);roundRect(ctx,cx+gap/2,pad.t+ch-ch*(d.expense/top),bw,ch*(d.expense/top),4,red);ctx.fillStyle=cssVar('--muted');ctx.textAlign='center';ctx.textBaseline='top';const l=n>14?(i%2===0?d.label:''):d.label;ctx.fillText(l,cx,pad.t+ch+10)});
 }
 function drawDonut(cv,items){
-  const {ctx,w,h} = prep(cv);
-  const total = items.reduce((s,i)=>s+i.value,0);
-  if (!total){ drawEmptyCanvas(ctx,w,h); return; }
-  const cx=w/2, cy=h/2, R=Math.min(w,h)/2-6, r=R*0.62;
-  let a=-Math.PI/2;
-  items.forEach(it=>{
-    const ang=(it.value/total)*Math.PI*2;
-    ctx.beginPath(); ctx.arc(cx,cy,R,a,a+ang); ctx.arc(cx,cy,r,a+ang,a,true); ctx.closePath();
-    ctx.fillStyle=it.color; ctx.fill();
-    ctx.strokeStyle=cssVar('--panel'); ctx.lineWidth=2; ctx.stroke();
-    a+=ang;
-  });
-  ctx.fillStyle=cssVar('--text'); ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.font='700 17px -apple-system,sans-serif'; ctx.fillText(shortNum(total),cx,cy-7);
-  ctx.font='11px -apple-system,sans-serif'; ctx.fillStyle=cssVar('--muted'); ctx.fillText('往来总额',cx,cy+12);
+  const{ctx,w,h}=prep(cv),total=items.reduce((s,i)=>s+i.value,0);
+  if(!total){drawEmpty(ctx,w,h);return}
+  const cx=w/2,cy=h/2,R=Math.min(w,h)/2-6,r=R*0.62;let a=-Math.PI/2;
+  items.forEach(it=>{const ang=(it.value/total)*Math.PI*2;ctx.beginPath();ctx.arc(cx,cy,R,a,a+ang);ctx.arc(cx,cy,r,a+ang,a,true);ctx.closePath();ctx.fillStyle=it.color;ctx.fill();ctx.strokeStyle=cssVar('--panel');ctx.lineWidth=2;ctx.stroke();a+=ang});
+  ctx.fillStyle=cssVar('--text');ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='700 17px sans-serif';ctx.fillText(shortNum(total),cx,cy-7);ctx.font='11px sans-serif';ctx.fillStyle=cssVar('--muted');ctx.fillText('往来总额',cx,cy+12);
 }
 
-/* ============================================================
- *  8. 表单弹窗 & 辅助
- * ============================================================ */
-function fillSelect(el,options,placeholder){ if (!el) return; el.innerHTML = (placeholder?`<option value="">${placeholder}</option>`:'') + options.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join(''); }
-function refreshNameList(){ const nl = document.getElementById('nameList'); if (!nl) return; const names = Array.from(new Set(db.records.map(r=>r.name).filter(Boolean))).sort(); nl.innerHTML = names.map(n=>`<option value="${esc(n)}">`).join(''); }
-function setDirection(dir){ formDirection=dir; document.querySelectorAll('#dirSeg .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.dir===dir)); }
-function openModal(id, preset){
-  editingId = id||null;
-  const rec = id ? db.records.find(r=>r.id===id) : null;
-  const mt = document.getElementById('modalTitle'); if (mt) mt.textContent = rec ? '编辑记录' : '添加记录';
-  const fn = document.getElementById('f-name'); if (fn) fn.value = rec ? rec.name : (preset?.name||'');
-  const fr = document.getElementById('f-relation'); if (fr) fr.value = rec ? (rec.relation||'朋友') : (preset?.relation||'朋友');
-  const fe = document.getElementById('f-event'); if (fe) fe.value = rec ? (rec.event||'婚礼') : (preset?.event||'婚礼');
-  const fa = document.getElementById('f-amount'); if (fa) fa.value = rec ? rec.amount : '';
-  const fd = document.getElementById('f-date'); if (fd) fd.value = rec ? (rec.date||today()) : today();
-  const fm = document.getElementById('f-method'); if (fm) fm.value = rec ? (rec.method||'微信') : '微信';
-  const fl = document.getElementById('f-location'); if (fl) fl.value = rec ? (rec.location||'') : '';
-  const fo = document.getElementById('f-note'); if (fo) fo.value = rec ? (rec.note||'') : '';
-  setDirection(rec ? rec.direction : (preset?.direction||'out'));
+function fillSelect(el,opt){if(!el)return;el.innerHTML=opt.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join('')}
+function refreshNameList(){const nl=$('#nameList');if(!nl)return;const names=Array.from(new Set(db.records.map(r=>r.name).filter(Boolean))).sort();nl.innerHTML=names.map(n=>`<option value="${esc(n)}">`).join('')}
+function setDirection(d){formDirection=d;$$('#dirSeg .seg-btn').forEach(b=>b.classList.toggle('active',b.dataset.dir===d))}
+function openModal(id,preset){
+  editingId=id||null;const rec=id?db.records.find(r=>r.id===id):null;
+  const mt=$('#modalTitle');if(mt)mt.textContent=rec?'编辑记录':'添加记录';
+  $('#f-name').value=rec?rec.name:(preset?.name||'');
+  $('#f-relation').value=rec?(rec.relation||'朋友'):(preset?.relation||'朋友');
+  $('#f-event').value=rec?(rec.event||'婚礼'):(preset?.event||'婚礼');
+  $('#f-amount').value=rec?rec.amount:'';
+  $('#f-date').value=rec?(rec.date||today()):today();
+  $('#f-method').value=rec?(rec.method||'微信'):'微信';
+  $('#f-location').value=rec?(rec.location||''):'';
+  $('#f-note').value=rec?(rec.note||''):'';
+  setDirection(rec?rec.direction:(preset?.direction||'out'));
   refreshNameList();
-  const ov = document.getElementById('overlay'); if (ov) ov.classList.add('show');
-  setTimeout(()=>{ if (!rec && !preset?.name && fn) fn.focus(); },80);
+  const ov=$('#overlay');if(ov)ov.classList.add('show');
+  setTimeout(()=>{if(!rec&&!preset?.name)$('#f-name').focus()},80);
 }
-function closeModal(){ const ov = document.getElementById('overlay'); if (ov) ov.classList.remove('show'); editingId=null; const rf = document.getElementById('recordForm'); if (rf) rf.reset(); }
+function closeModal(){const ov=$('#overlay');if(ov)ov.classList.remove('show');editingId=null;const rf=$('#recordForm');if(rf)rf.reset()}
 
-function download(content,filename,type){ const blob=new Blob([content],{type:type||'application/octet-stream'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(url),1000); }
-function stamp(){ const d=new Date(),p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`; }
-function exportJSON(){ if (!db.records.length){ toast('暂无数据'); return; } download(JSON.stringify(db,null,2),`人情簿_${stamp()}.json`,'application/json'); toast('JSON 已导出'); }
-function csvCell(v){ v=(v===null||v===undefined)?'':String(v); return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
-function exportCSV(){
-  if (!db.records.length){ toast('暂无数据'); return; }
-  const head=['日期','姓名','关系','事由','方向','金额','方式','地点','备注'];
-  const rows = sortRecordsDesc(db.records).map(r=>[r.date,r.name,r.relation,r.event,r.direction==='in'?'收礼':'送礼',r.amount,r.method,r.location,r.note]);
-  const csv = [head, ...rows].map(row=>row.map(csvCell).join(',')).join('\r\n');
-  download('\uFEFF'+csv,`人情簿_${stamp()}.csv`,'text/csv;charset=utf-8');
-  toast('CSV 已导出');
+function saveRecord(e){
+  e.preventDefault();
+  const name=$('#f-name').value.trim(),amount=parseFloat($('#f-amount').value);
+  if(!name){toast('请填写姓名');return}
+  if(!(amount>=0)){toast('请填写正确金额');return}
+  const rec={id:editingId||Date.now().toString(36)+Math.random().toString(36).slice(2,7),name,relation:$('#f-relation').value||'其他',event:$('#f-event').value||'其他',direction:formDirection,amount,date:$('#f-date').value||today(),method:$('#f-method').value||'',location:$('#f-location').value.trim(),note:$('#f-note').value.trim(),createdAt:Date.now()};
+  if(editingId){const i=db.records.findIndex(r=>r.id===editingId);if(i>=0)db.records[i]=rec}else db.records.push(rec);
+  saveLocal();Sync.schedulePush();closeModal();render();toast(editingId?'已更新':'已添加');
 }
-function normalizeRecord(r){
-  if (!r||typeof r!=='object') return null;
-  const dirRaw = r.direction ?? r.方向 ?? '';
-  const dir = (dirRaw==='in'||dirRaw==='收礼'||dirRaw==='收')?'in':'out';
-  return {
-    name: String(r.name ?? r.姓名 ?? '未知').trim() || '未知',
-    relation: r.relation ?? r.关系 ?? '其他',
-    event: r.event ?? r.事由 ?? r.事件 ?? '其他',
-    direction: dir,
-    amount: Number(r.amount ?? r.金额 ?? 0) || 0,
-    date: String(r.date ?? r.日期 ?? today()).slice(0,10),
-    method: r.method ?? r.方式 ?? '',
-    location: r.location ?? r.地点 ?? '',
-    note: r.note ?? r.备注 ?? ''
-  };
-}
-async function importJSONFile(file){
-  const reader = new FileReader();
-  reader.onload = async e => {
-    try{
-      const parsed = JSON.parse(e.target.result);
-      const arr = Array.isArray(parsed) ? parsed : (parsed && Array.isArray(parsed.records) ? parsed.records : null);
-      if (!arr) throw new Error('文件格式不正确');
-      const list = arr.map(normalizeRecord).filter(Boolean);
-      if (!list.length) throw new Error('没有可导入的记录');
-      if (!confirm(`解析到 ${list.length} 条记录，确定导入到当前账号？`)) return;
-      const { error } = await sb.from('records').insert(list);
-      if (error) throw error;
-      await loadRecordsFromSupabase();
-      toast(`已导入 ${list.length} 条`);
-    }catch(err){ toast('导入失败：'+err.message); }
-  };
-  reader.onerror = () => toast('文件读取失败');
-  reader.readAsText(file,'utf-8');
-}
-const SAMPLE = [
-  { name:'张伟', relation:'朋友', event:'婚礼', direction:'in', amount:800, date:'2023-05-12', method:'微信', location:'金满楼酒店', note:'大学室友结婚' },
-  { name:'李娜', relation:'同事', event:'满月百日', direction:'out', amount:500, date:'2023-08-03', method:'支付宝', location:'公司', note:'同事家宝宝满月' },
-  { name:'王强', relation:'亲戚', event:'乔迁新居', direction:'in', amount:1000, date:'2023-10-01', method:'现金', location:'新居', note:'表哥乔迁' },
-  { name:'刘敏', relation:'同学', event:'婚礼', direction:'out', amount:600, date:'2024-01-18', method:'微信', location:'香格里拉', note:'高中同学' },
-  { name:'张伟', relation:'朋友', event:'生日寿宴', direction:'out', amount:300, date:'2024-03-22', method:'微信', location:'海底捞', note:'回请生日' },
-  { name:'陈静', relation:'朋友', event:'升学升职', direction:'in', amount:500, date:'2024-06-15', method:'微信', location:'', note:'升职宴请' }
-];
-async function loadSample(){
-  const list = SAMPLE.map(s=>Object.assign({},s));
-  const { error } = await sb.from('records').insert(list);
-  if (error){ toast('载入失败：'+error.message); return; }
-  await loadRecordsFromSupabase();
-  toast(`已载入 ${list.length} 条示例`);
-}
+function deleteRecord(id){const rec=db.records.find(r=>r.id===id);if(!rec)return;if(!confirm(`确定删除「${rec.name} · ${rec.event} · ${money(rec.amount)}」？`))return;db.records=db.records.filter(r=>r.id!==id);saveLocal();Sync.schedulePush();render();toast('已删除')}
 
-/* ============================================================
- *  9. 主题切换
- * ============================================================ */
-function setTheme(theme){
-  document.documentElement.dataset.theme = theme;
-  localStorage.setItem(THEME_KEY, theme);
-  const icon = theme==='dark'?'☀️':'🌙'; const label = theme==='dark'?'浅色模式':'深色模式';
-  const tb = document.getElementById('themeToggle'); if (tb) tb.textContent = `${icon} ${label}`;
-  const tm = document.getElementById('themeToggleMobile'); if (tm) tm.textContent = icon;
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', theme==='dark'?'#1e1b17':'#f6f3ee');
-  if (currentView==='stats') renderStats();
-}
-function toggleTheme(){ const cur = document.documentElement.dataset.theme==='dark'?'light':'dark'; setTheme(cur); toast(cur==='dark'?'已切换到深色模式':'已切换到浅色模式'); }
+function download(c,f,t){const b=new Blob([c],{type:t||'application/octet-stream'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=f;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(u),1000)}
+function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return`${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`}
+function exportJSON(){if(!db.records.length){toast('暂无数据');return}download(JSON.stringify(db,null,2),`人情簿_${stamp()}.json`,'application/json');toast('JSON 已导出')}
+function csvCell(v){v=(v==null)?'':String(v);return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+function exportCSV(){if(!db.records.length){toast('暂无数据');return}const head=['日期','姓名','关系','事由','方向','金额','方式','地点','备注'];const rows=sortRecordsDesc(db.records).map(r=>[r.date,r.name,r.relation,r.event,r.direction==='in'?'收礼':'送礼',r.amount,r.method,r.location,r.note]);const csv=[head,...rows].map(row=>row.map(csvCell).join(',')).join('\r\n');download('\uFEFF'+csv,`人情簿_${stamp()}.csv`,'text/csv;charset=utf-8');toast('CSV 已导出')}
+function normalizeRecord(r){if(!r||typeof r!=='object')return null;const dR=r.direction??r.方向??'';return{name:String(r.name??r.姓名??'未知').trim()||'未知',relation:r.relation??r.关系??'其他',event:r.event??r.事由??r.事件??'其他',direction:(dR==='in'||dR==='收礼'||dR==='收')?'in':'out',amount:Number(r.amount??r.金额??0)||0,date:String(r.date??r.日期??today()).slice(0,10),method:r.method??r.方式??'',location:r.location??r.地点??'',note:r.note??r.备注??''}}
+function importJSONFile(file){const rd=new FileReader();rd.onload=e=>{try{const p=JSON.parse(e.target.result),arr=Array.isArray(p)?p:(p&&Array.isArray(p.records)?p.records:null);if(!arr)throw new Error('格式不正确');const list=arr.map(normalizeRecord).filter(Boolean);if(!list.length)throw new Error('无记录');const ow=confirm(`解析到 ${list.length} 条。\n确定=覆盖现有\n取消=追加`);db.records=ow?list:db.records.concat(list);saveLocal();Sync.schedulePush();render();toast(`已导入 ${list.length} 条`)}catch(err){toast('导入失败：'+err.message)}};rd.readAsText(file,'utf-8')}
+const SAMPLE=[{name:'张伟',relation:'朋友',event:'婚礼',direction:'in',amount:800,date:'2023-05-12',method:'微信',location:'金满楼',note:'大学室友'},{name:'李娜',relation:'同事',event:'满月百日',direction:'out',amount:500,date:'2023-08-03',method:'支付宝',location:'公司',note:'宝宝满月'},{name:'王强',relation:'亲戚',event:'乔迁新居',direction:'in',amount:1000,date:'2023-10-01',method:'现金',location:'新居',note:'表哥乔迁'},{name:'刘敏',relation:'同学',event:'婚礼',direction:'out',amount:600,date:'2024-01-18',method:'微信',location:'香格里拉',note:'高中同学'},{name:'陈静',relation:'朋友',event:'升学升职',direction:'in',amount:500,date:'2024-06-15',method:'微信',location:'',note:'升职宴请'}];
+function loadSample(){const list=SAMPLE.map(s=>Object.assign({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),createdAt:Date.now()},s));db.records=db.records.concat(list);saveLocal();Sync.schedulePush();render();toast(`已载入 ${list.length} 条示例`)}
 
-/* ============================================================
- *  10. 全局事件绑定（带 null 保护）
- * ============================================================ */
+function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem(THEME_KEY,t);const icon=t==='dark'?'☀️':'🌙',label=t==='dark'?'浅色模式':'深色模式';const tb=$('#themeToggle');if(tb)tb.textContent=`${icon} ${label}`;const tm=$('#themeToggleMobile');if(tm)tm.textContent=icon;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',t==='dark'?'#1e1b17':'#f6f3ee');if(currentView==='stats')renderStats()}
+function toggleTheme(){const cur=document.documentElement.dataset.theme==='dark'?'light':'dark';setTheme(cur);toast(cur==='dark'?'已切换到深色模式':'已切换到浅色模式')}
+
+function openSyncModal(){$('#s-binId').value=BIN_ID||'';$('#s-key').value=BIN_KEY||'';$('#s-auto').value='on';$('#syncState').innerHTML=Sync.enabled()?'当前状态：<b style="color:var(--green)">已配置</b>，可直接测试。':'填写后点击「保存」';$('#syncOverlay').classList.add('show')}
+function closeSyncModal(){$('#syncOverlay').classList.remove('show')}
+
 function bindEvents(){
-  const on = (sel, ev, fn) => { const el = document.querySelector(sel); if (el) el.addEventListener(ev, fn); };
-  const onAll = (sel, ev, fn) => { document.querySelectorAll(sel).forEach(el => el.addEventListener(ev, fn)); };
-
-  onAll('.nav-item, .mobile-nav-item', 'click', e => navigate(e.currentTarget.dataset.view));
-  on('#themeToggle', 'click', toggleTheme);
-  on('#themeToggleMobile', 'click', toggleTheme);
-  on('#modalClose', 'click', closeModal);
-  on('#btnCancel', 'click', closeModal);
-  on('#overlay', 'click', e => { if (e.target === document.getElementById('overlay')) closeModal(); });
-  onAll('#dirSeg .seg-btn', 'click', e => setDirection(e.currentTarget.dataset.dir));
-  on('#recordForm', 'submit', saveRecord);
-
-  on('#btnSignin', 'click', () => handleAuth('signin'));
-  on('#btnSignup', 'click', () => handleAuth('signup'));
-
-  document.addEventListener('click', e => {
-    const el = e.target.closest('[data-act]'); if (!el) return;
-    const act = el.dataset.act;
-    switch (act){
-      case 'add': openModal(null); break;
-      case 'edit': openModal(el.dataset.id); break;
-      case 'del': deleteRecord(el.dataset.id); break;
-      case 'goto': navigate(el.dataset.view); break;
-      case 'togglePerson': { const n=el.dataset.name; if (expandedPeople.has(n)) expandedPeople.delete(n); else expandedPeople.add(n); renderPeople(); break; }
-      case 'quickAdd': openModal(null, {name:el.dataset.name, relation:el.dataset.relation, direction:'out'}); break;
-      case 'filterByPerson': { navigate('records'); setTimeout(()=>{ const input=document.getElementById('searchInput'); if (input){ input.value=el.dataset.name; updateRecordsTable(); } },40); break; }
-      case 'clearFilter': { ['searchInput','filterDir','filterEvent','filterYear'].forEach(id=>{ const n=document.getElementById(id); if (n) n.value = id==='searchInput'?'':'all'; }); updateRecordsTable(); break; }
-      case 'chartMode': chartMode=el.dataset.mode; renderStats(); break;
-      case 'exportJSON': exportJSON(); break;
-      case 'exportCSV': exportCSV(); break;
-      case 'importJSON': { const f = document.getElementById('importFile'); if (f) f.click(); break; }
-      case 'loadSample': if (confirm('载入 6 条示例数据？')) loadSample(); break;
-      case 'clearAll': if (confirm('确定清空全部记录？不可撤销！') && confirm('再次确认：将永久删除所有数据。')){ sb.from('records').delete().neq('id',0).then(()=>loadRecordsFromSupabase()); } break;
-    }
+  const on=(s,e,f)=>{const el=$(s);if(el)el.addEventListener(e,f)};
+  const onAll=(s,e,f)=>{$$(s).forEach(el=>el.addEventListener(e,f))};
+  onAll('.nav-item, .mobile-nav-item','click',e=>navigate(e.currentTarget.dataset.view));
+  on('#themeToggle','click',toggleTheme);
+  on('#themeToggleMobile','click',toggleTheme);
+  on('#modalClose','click',closeModal);
+  on('#btnCancel','click',closeModal);
+  on('#overlay','click',e=>{if(e.target===$('#overlay'))closeModal()});
+  onAll('#dirSeg .seg-btn','click',e=>setDirection(e.currentTarget.dataset.dir));
+  on('#recordForm','submit',saveRecord);
+  on('#syncClose','click',closeSyncModal);
+  on('#syncOverlay','click',e=>{if(e.target===$('#syncOverlay'))closeSyncModal()});
+  on('#btnSyncSave','click',()=>{
+    toast('请到 GitHub 编辑 index.html 顶部修改 BIN_ID 和 BIN_KEY');
+    closeSyncModal();
   });
-
-  on('#importFile', 'change', e => { const f = e.target.files && e.target.files[0]; if (f) importJSONFile(f); e.target.value=''; });
-
-  document.addEventListener('keydown', e => {
-    if (e.key==='Escape'){ const ov = document.getElementById('overlay'); if (ov && ov.classList.contains('show')) closeModal(); }
-    if (e.key.toLowerCase()==='n' && !e.metaKey && !e.ctrlKey && !e.altKey){
-      const tag = (document.activeElement.tagName||'').toLowerCase();
-      if (tag==='input'||tag==='textarea'||tag==='select') return;
-      const ov = document.getElementById('overlay');
-      if (ov && ov.classList.contains('show')) return;
-      openModal(null);
-    }
+  on('#btnSyncPull','click',()=>Sync.pull(false));
+  on('#btnSyncPush','click',()=>Sync.push(false));
+  on('#importFile','change',e=>{const f=e.target.files&&e.target.files[0];if(f)importJSONFile(f);e.target.value=''});
+  document.addEventListener('click',e=>{
+    const el=e.target.closest('[data-act]');if(!el)return;
+    const act=el.dataset.act;
+    if(act==='add')openModal(null);
+    else if(act==='edit')openModal(el.dataset.id);
+    else if(act==='del')deleteRecord(el.dataset.id);
+    else if(act==='goto')navigate(el.dataset.view);
+    else if(act==='togglePerson'){const n=el.dataset.name;if(expandedPeople.has(n))expandedPeople.delete(n);else expandedPeople.add(n);renderPeople()}
+    else if(act==='quickAdd')openModal(null,{name:el.dataset.name,relation:el.dataset.relation,direction:'out'});
+    else if(act==='filterByPerson'){navigate('records');setTimeout(()=>{const i=$('#searchInput');if(i){i.value=el.dataset.name;updateRecordsTable()}},40)}
+    else if(act==='clearFilter'){['searchInput','filterDir','filterEvent','filterYear'].forEach(id=>{const n=$('#'+id);if(n)n.value=id==='searchInput'?'':'all'});updateRecordsTable()}
+    else if(act==='chartMode'){chartMode=el.dataset.mode;renderStats()}
+    else if(act==='exportJSON')exportJSON();
+    else if(act==='exportCSV')exportCSV();
+    else if(act==='importJSON')$('#importFile').click();
+    else if(act==='loadSample'){if(confirm('载入示例数据？'))loadSample()}
+    else if(act==='clearAll'){if(confirm('确定清空全部记录？不可撤销！')&&confirm('再次确认？')){db.records=[];saveLocal();Sync.schedulePush();render();toast('已清空')}}
+    else if(act==='openSync')openSyncModal();
+    else if(act==='syncNow')Sync.pull(false);
   });
-
-  let rt;
-  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(()=>{ if (currentView==='stats') renderStats(); }, 200); });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){const ov=$('#overlay');if(ov&&ov.classList.contains('show'))closeModal();const so=$('#syncOverlay');if(so&&so.classList.contains('show'))closeSyncModal()}
+    if(e.key.toLowerCase()==='n'&&!e.metaKey&&!e.ctrlKey&&!e.altKey){const tag=(document.activeElement.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea'||tag==='select')return;const ov=$('#overlay');if(ov&&ov.classList.contains('show'))return;openModal(null)}
+  });
+  let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(currentView==='stats')renderStats()},200)});
 }
 
-/* ============================================================
- *  11. 初始化
- * ============================================================ */
 async function init(){
   try{
-    const saved = localStorage.getItem(THEME_KEY);
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setTheme(saved || (prefersDark ? 'dark' : 'light'));
-    fillSelect(document.getElementById('f-relation'), RELATIONS);
-    fillSelect(document.getElementById('f-event'), EVENT_TYPES);
-    fillSelect(document.getElementById('f-method'), METHODS);
-    const fd = document.getElementById('f-date'); if (fd) fd.value = today();
+    const s=localStorage.getItem(THEME_KEY),pd=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(s||(pd?'dark':'light'));
+    loadLocal();
+    fillSelect($('#f-relation'),RELATIONS);
+    fillSelect($('#f-event'),EVENT_TYPES);
+    fillSelect($('#f-method'),METHODS);
+    const fd=$('#f-date');if(fd)fd.value=today();
     bindEvents();
+    Sync.updateUI();
     navigate('dashboard');
-    await checkAuth();
-  }catch(e){
-    console.error('init 失败', e);
-  }
+    if(Sync.enabled())Sync.pull(true);
+  }catch(e){console.error('init 失败',e)}
 }
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
 </html>
